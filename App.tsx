@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { MapPin, Eye, LayoutGrid } from 'lucide-react';
+import React, { useState } from 'react';
+import { MapPin, Eye, LayoutGrid, LogOut } from 'lucide-react';
 import {
   DndContext,
   closestCorners,
@@ -21,11 +21,14 @@ import {
   sortableKeyboardCoordinates,
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
+import { useNavigate } from 'react-router-dom';
 import SortableItem from './components/SortableItem';
 import BentoCard from './components/BentoCard';
 import Toolbar from './components/Toolbar';
 import { INITIAL_SECTIONS } from './constants';
 import { BentoItemData, ItemType, Section } from './types';
+import { useAuth } from './contexts/AuthContext';
+import { Button } from './components/ui/button';
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
@@ -39,16 +42,17 @@ const dropAnimationConfig: DropAnimation = {
   }),
 };
 
-function App() {
+interface AppProps {
+  isAdmin?: boolean;
+}
+
+function App({ isAdmin = false }: AppProps) {
+  const navigate = useNavigate();
+  const { isAuthenticated, isAdmin: authIsAdmin, logout } = useAuth();
+  const canEdit = isAdmin && isAuthenticated && authIsAdmin;
+  
   const [sections, setSections] = useState<Section[]>(INITIAL_SECTIONS);
   const [activeId, setActiveId] = useState<string | null>(null);
-
-  // #region agent log
-  useEffect(() => {
-    const imageSrc = `${import.meta.env.BASE_URL}image-assets/profile-pic/IMG_5823.jpg`;
-    fetch('http://127.0.0.1:7243/ingest/202e2174-18be-4cb4-92d9-b8f0e6bce2ff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:42',message:'App component mounted - checking image path configuration',data:{imageSrc,basePath:import.meta.env.BASE_URL,currentUrl:window.location.href,expectedUrl:import.meta.env.BASE_URL + 'image-assets/profile-pic/IMG_5823.jpg'},timestamp:Date.now(),sessionId:'debug-session',runId:'post-fix',hypothesisId:'A'})}).catch(()=>{});
-  }, []);
-  // #endregion
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -56,10 +60,13 @@ function App() {
   );
 
   const handleDragStart = (event: DragStartEvent) => {
+    if (!canEdit) return;
     setActiveId(event.active.id as string);
   };
 
   const handleDragOver = (event: DragOverEvent) => {
+    if (!canEdit) return;
+    
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
@@ -94,6 +101,8 @@ function App() {
   };
 
   const handleAddItem = (type: ItemType) => {
+    if (!canEdit) return;
+    
     const newItem: BentoItemData = {
       id: generateId(),
       type,
@@ -112,6 +121,8 @@ function App() {
   };
 
   const handleDeleteItem = (id: string) => {
+    if (!canEdit) return;
+    
     setSections(prev => prev.map(section => ({
       ...section,
       items: section.items.filter(item => item.id !== id)
@@ -119,10 +130,17 @@ function App() {
   };
 
   const handleUpdateItem = (id: string, updates: Partial<BentoItemData>) => {
+    if (!canEdit) return;
+    
     setSections(prev => prev.map(section => ({
       ...section,
       items: section.items.map(item => item.id === id ? { ...item, ...updates } : item)
     })));
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   const findActiveItem = () => {
@@ -137,6 +155,24 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#f7f6f3] text-gray-900 selection:bg-black selection:text-white pb-32">
+      {/* Admin Header */}
+      {canEdit && (
+        <div className="bg-black text-white py-3 px-6 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            Admin Mode - Editing Enabled
+          </div>
+          <Button
+            onClick={handleLogout}
+            variant="secondary"
+            size="sm"
+            className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+          >
+            <LogOut size={16} />
+            Logout
+          </Button>
+        </div>
+      )}
       
       <div className="flex flex-col lg:flex-row max-w-[1400px] mx-auto p-6 md:p-12 lg:p-20 gap-12 lg:gap-24 items-start">
         
@@ -144,20 +180,11 @@ function App() {
         <aside className="w-full lg:w-[340px] lg:sticky lg:top-20 shrink-0">
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
             <div className="w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden border-[8px] border-white mb-10 transition-transform hover:scale-[1.02] cursor-pointer duration-500 ease-out">
-              {/* #region agent log */}
               <img 
                 src={`${import.meta.env.BASE_URL}image-assets/profile-pic/IMG_5823.jpg`}
                 alt="Keith Vaz" 
                 className="w-full h-full object-cover"
-                onLoad={() => {
-                  fetch('http://127.0.0.1:7243/ingest/202e2174-18be-4cb4-92d9-b8f0e6bce2ff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:140',message:'Profile image loaded successfully',data:{src:`${import.meta.env.BASE_URL}image-assets/profile-pic/IMG_5823.jpg`,actualUrl:window.location.href,basePath:import.meta.env.BASE_URL},timestamp:Date.now(),sessionId:'debug-session',runId:'post-fix',hypothesisId:'A'})}).catch(()=>{});
-                }}
-                onError={(e) => {
-                  const img = e.target as HTMLImageElement;
-                  fetch('http://127.0.0.1:7243/ingest/202e2174-18be-4cb4-92d9-b8f0e6bce2ff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:140',message:'Profile image failed to load',data:{src:img.src,currentUrl:window.location.href,basePath:import.meta.env.BASE_URL,expectedUrl:import.meta.env.BASE_URL + 'image-assets/profile-pic/IMG_5823.jpg'},timestamp:Date.now(),sessionId:'debug-session',runId:'post-fix',hypothesisId:'A'})}).catch(()=>{});
-                }}
               />
-              {/* #endregion */}
             </div>
             
             <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-5 leading-tight">
@@ -221,7 +248,7 @@ function App() {
         </main>
       </div>
 
-      <Toolbar onAddItem={handleAddItem} />
+      {canEdit && <Toolbar onAddItem={handleAddItem} />}
     </div>
   );
 }

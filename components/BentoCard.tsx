@@ -6,6 +6,7 @@ import EditControls from './EditControls';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import { useAuth } from '../contexts/AuthContext';
 
 interface BentoCardProps {
   item: BentoItemData;
@@ -31,6 +32,9 @@ const SocialIcon = ({ name, className }: { name?: string; className?: string }) 
 };
 
 const BentoCard: React.FC<BentoCardProps> = ({ item, isOverlay, isDragging, onDelete, onResize, onUpdate }) => {
+  const { isAuthenticated, isAdmin } = useAuth();
+  const canEdit = isAuthenticated && isAdmin;
+  
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [tempData, setTempData] = useState(item);
@@ -242,7 +246,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, isOverlay, isDragging, onDe
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => !isEditing && setIsEditing(true)}
+      onClick={() => canEdit && !isEditing && setIsEditing(true)}
     >
       <Card className={cn(
         "h-full w-full overflow-hidden border-gray-100 shadow-card transition-[transform,box-shadow,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] p-0 border",
@@ -252,7 +256,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, isOverlay, isDragging, onDe
         {isEditing && renderEditor()}
       </Card>
 
-      {isHovered && !isDragging && !isOverlay && !isEditing && onDelete && onResize && (
+      {canEdit && isHovered && !isDragging && !isOverlay && !isEditing && onDelete && onResize && (
         <EditControls 
           onDelete={() => onDelete(item.id)}
           onResize={(size) => onResize(item.id, size)}
