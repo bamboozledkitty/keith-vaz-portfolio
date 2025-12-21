@@ -17,7 +17,7 @@ const buttonVariants = cva(
           "bg-gray-100 text-gray-900 hover:bg-gray-100/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        bento: "bg-[#4ade80] hover:bg-[#43c973] text-white shadow-sm active:scale-95",
+        primary: "bg-[#4ade80] hover:bg-[#43c973] text-white shadow-sm active:scale-95",
         icon: "hover:bg-gray-100 text-gray-600",
       },
       size: {
@@ -39,7 +39,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "bento" | "icon" | null
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "primary" | "icon" | null
   size?: "default" | "sm" | "lg" | "icon" | "xl" | null
 }
 

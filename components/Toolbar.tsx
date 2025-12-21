@@ -15,8 +15,8 @@ const Toolbar: React.FC<ToolbarProps> = ({ onAddItem }) => {
       <div className="flex items-center bg-white p-1.5 rounded-full shadow-2xl border border-gray-100">
         
         {/* Share Button (Primary) */}
-        <Button variant="bento" size="lg" className="rounded-full font-bold mr-2">
-          Share my Bento
+        <Button variant="primary" size="lg" className="rounded-full font-bold mr-2">
+          Share my Portfolio
         </Button>
 
         <div className="w-px h-8 bg-gray-200 mx-1"></div>

@@ -90,7 +90,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, isOverlay, isDragging, onDe
             <Input 
               value={tempData.subtitle || ''} 
               onChange={e => setTempData({...tempData, subtitle: e.target.value})}
-              placeholder="e.g. bento.me/keith"
+              placeholder="e.g. https://example.com/profile"
             />
           </div>
 
@@ -245,8 +245,8 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, isOverlay, isDragging, onDe
       onClick={() => !isEditing && setIsEditing(true)}
     >
       <Card className={cn(
-        "h-full w-full overflow-hidden border-gray-100 shadow-bento transition-[transform,box-shadow,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] p-0 border",
-        isDragging ? "shadow-bento-drag ring-1 ring-black/5" : "hover:shadow-bento-hover cursor-grab active:scale-[0.98]"
+        "h-full w-full overflow-hidden border-gray-100 shadow-card transition-[transform,box-shadow,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] p-0 border",
+        isDragging ? "shadow-card-drag ring-1 ring-black/5" : "hover:shadow-card-hover cursor-grab active:scale-[0.98]"
       )}>
         {renderContent()}
         {isEditing && renderEditor()}
