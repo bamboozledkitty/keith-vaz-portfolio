@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, Eye, LayoutGrid } from 'lucide-react';
 import {
   DndContext,
@@ -42,6 +42,13 @@ const dropAnimationConfig: DropAnimation = {
 function App() {
   const [sections, setSections] = useState<Section[]>(INITIAL_SECTIONS);
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  // #region agent log
+  useEffect(() => {
+    const imageSrc = '/image-assets/profile-pic/IMG_5823.jpg';
+    fetch('http://127.0.0.1:7243/ingest/202e2174-18be-4cb4-92d9-b8f0e6bce2ff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:42',message:'App component mounted - checking image path configuration',data:{imageSrc,basePath:import.meta.env.BASE_URL,currentUrl:window.location.href,expectedUrl:import.meta.env.BASE_URL + 'image-assets/profile-pic/IMG_5823.jpg'},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  }, []);
+  // #endregion
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -137,7 +144,20 @@ function App() {
         <aside className="w-full lg:w-[340px] lg:sticky lg:top-20 shrink-0">
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
             <div className="w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden border-[8px] border-white mb-10 transition-transform hover:scale-[1.02] cursor-pointer duration-500 ease-out">
-              <img src="/image-assets/profile-pic/IMG_5823.jpg" alt="Keith Vaz" className="w-full h-full object-cover" />
+              {/* #region agent log */}
+              <img 
+                src="/image-assets/profile-pic/IMG_5823.jpg" 
+                alt="Keith Vaz" 
+                className="w-full h-full object-cover"
+                onLoad={() => {
+                  fetch('http://127.0.0.1:7243/ingest/202e2174-18be-4cb4-92d9-b8f0e6bce2ff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:140',message:'Profile image loaded successfully',data:{src:'/image-assets/profile-pic/IMG_5823.jpg',actualUrl:window.location.href + 'image-assets/profile-pic/IMG_5823.jpg',basePath:import.meta.env.BASE_URL},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+                }}
+                onError={(e) => {
+                  const img = e.target as HTMLImageElement;
+                  fetch('http://127.0.0.1:7243/ingest/202e2174-18be-4cb4-92d9-b8f0e6bce2ff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:140',message:'Profile image failed to load',data:{src:img.src,currentUrl:window.location.href,basePath:import.meta.env.BASE_URL,expectedUrl:import.meta.env.BASE_URL + 'image-assets/profile-pic/IMG_5823.jpg'},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+                }}
+              />
+              {/* #endregion */}
             </div>
             
             <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-5 leading-tight">
