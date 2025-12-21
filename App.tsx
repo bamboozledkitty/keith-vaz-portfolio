@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { MapPin, Eye, LayoutGrid, LogOut } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { LogOut } from 'lucide-react';
 import {
   DndContext,
-  closestCorners,
-  pointerWithin,
+  closestCenter,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -25,12 +24,37 @@ import { useNavigate } from 'react-router-dom';
 import SortableItem from './components/SortableItem';
 import BentoCard from './components/BentoCard';
 import Toolbar from './components/Toolbar';
-import { INITIAL_SECTIONS } from './constants';
-import { BentoItemData, ItemType, Section } from './types';
+import CardEditorPopover, { EditorState } from './components/CardEditorPopover';
+import { INITIAL_ITEMS } from './constants';
+import { BentoItemData, ItemType, ItemSize, ViewMode, ViewLayout } from './types';
 import { useAuth } from './contexts/AuthContext';
 import { Button } from './components/ui/button';
+import { cn } from './lib/utils';
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
+
+// Helper to get view-specific layout or fallback to legacy size
+const getItemLayout = (item: BentoItemData, view: ViewMode): ViewLayout => {
+  const layout = view === 'desktop' ? item.desktopLayout : item.mobileLayout;
+  if (layout) return layout;
+  // Fallback for legacy items without view-specific layouts
+  return { size: item.size, order: 0 };
+};
+
+// Helper to get size for current view
+const getItemSize = (item: BentoItemData, view: ViewMode): ItemSize => {
+  return getItemLayout(item, view).size;
+};
+
+// Migrate legacy item to have view-specific layouts
+const migrateItem = (item: BentoItemData, index: number): BentoItemData => {
+  if (item.desktopLayout && item.mobileLayout) return item;
+  return {
+    ...item,
+    desktopLayout: item.desktopLayout || { size: item.size, order: index },
+    mobileLayout: item.mobileLayout || { size: item.size, order: index },
+  };
+};
 
 const dropAnimationConfig: DropAnimation = {
   sideEffects: defaultDropAnimationSideEffects({
@@ -51,8 +75,22 @@ function App({ isAdmin = false }: AppProps) {
   const { isAuthenticated, isAdmin: authIsAdmin, logout } = useAuth();
   const canEdit = isAdmin && isAuthenticated && authIsAdmin;
   
-  const [sections, setSections] = useState<Section[]>(INITIAL_SECTIONS);
+  // Flat list of all items (cards + headings) - migrated to have view-specific layouts
+  const [items, setItems] = useState<BentoItemData[]>(() => 
+    INITIAL_ITEMS.map((item, index) => migrateItem(item, index))
+  );
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [editorState, setEditorState] = useState<EditorState | null>(null);
+  const [currentView, setCurrentView] = useState<ViewMode>('desktop');
+  
+  // Sort items by current view's order
+  const sortedItems = useMemo(() => {
+    return [...items].sort((a, b) => {
+      const orderA = getItemLayout(a, currentView).order;
+      const orderB = getItemLayout(b, currentView).order;
+      return orderA - orderB;
+    });
+  }, [items, currentView]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -64,78 +102,134 @@ function App({ isAdmin = false }: AppProps) {
     setActiveId(event.active.id as string);
   };
 
-  const handleDragOver = (event: DragOverEvent) => {
-    if (!canEdit) return;
-    
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
-    const activeSectionIndex = sections.findIndex(section => section.items.find(item => item.id === active.id));
-    const overSectionIndex = sections.findIndex(section => section.items.find(item => item.id === over.id));
-
-    if (activeSectionIndex !== -1 && activeSectionIndex === overSectionIndex) {
-      setSections((prevSections) => {
-        const newSections = prevSections.map((s, idx) => 
-          idx === activeSectionIndex 
-            ? {
-                ...s,
-                items: (() => {
-                  const oldIndex = s.items.findIndex((item) => item.id === active.id);
-                  const newIndex = s.items.findIndex((item) => item.id === over.id);
-                  
-                  if (oldIndex !== newIndex) {
-                    return arrayMove(s.items, oldIndex, newIndex);
-                  }
-                  return s.items;
-                })()
-              }
-            : s
-        );
-        return newSections;
-      });
-    }
+  const handleDragOver = (_event: DragOverEvent) => {
+    // No-op: reordering handled in handleDragEnd to prevent state thrashing
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    
     setActiveId(null);
+    
+    if (!canEdit || !over || active.id === over.id) return;
+
+    // Find indices in sorted items (current view's order)
+    const oldIndex = sortedItems.findIndex(item => item.id === active.id);
+    const newIndex = sortedItems.findIndex(item => item.id === over.id);
+
+    if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
+      // Reorder and update order values for current view only
+      const reordered = arrayMove(sortedItems, oldIndex, newIndex);
+      const layoutKey = currentView === 'desktop' ? 'desktopLayout' : 'mobileLayout';
+      
+      // Update order for all items in current view
+      const updatedItems = items.map(item => {
+        const newOrder = reordered.findIndex(r => r.id === item.id);
+        const currentLayout = getItemLayout(item, currentView);
+        return {
+          ...item,
+          [layoutKey]: { ...currentLayout, order: newOrder },
+        };
+      });
+      
+      setItems(updatedItems);
+    }
   };
 
-  const handleAddItem = (type: ItemType) => {
+  // Open popover for creating a new card
+  const handleStartCreate = (type: ItemType, anchorRect: DOMRect) => {
     if (!canEdit) return;
-    
-    const newItem: BentoItemData = {
-      id: generateId(),
+    setEditorState({
+      mode: 'create',
       type,
-      size: '1x1',
-      title: 'New Content',
-      subtitle: 'Add a subtitle',
-      image: undefined,
-      icon: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png',
-    };
-    
-    setSections(prev => {
-      const newSections = [...prev];
-      if (newSections.length > 0) newSections[0].items = [newItem, ...newSections[0].items];
-      return newSections;
+      anchorRect,
     });
+  };
+
+  // Open popover for editing an existing card
+  const handleStartEdit = (id: string, anchorRect: DOMRect) => {
+    if (!canEdit) return;
+    const item = items.find(i => i.id === id);
+    if (!item) return;
+    setEditorState({
+      mode: 'edit',
+      type: item.type,
+      cardId: id,
+      anchorRect,
+      existingData: item,
+    });
+  };
+
+  // Handle save from popover
+  const handleEditorSave = (data: Partial<BentoItemData>) => {
+    if (!editorState) return;
+    
+    if (editorState.mode === 'create') {
+      // Create new item with both view layouts
+      const size = data.size || '1x1';
+      const newLayout: ViewLayout = { size, order: 0 };
+      const newItem: BentoItemData = {
+        id: generateId(),
+        type: editorState.type,
+        size, // Keep for backwards compatibility
+        ...data,
+        desktopLayout: newLayout,
+        mobileLayout: { ...newLayout }, // Copy for mobile
+      } as BentoItemData;
+      
+      // Shift existing items' order by 1 in both views
+      const updatedItems = items.map(item => ({
+        ...item,
+        desktopLayout: item.desktopLayout 
+          ? { ...item.desktopLayout, order: item.desktopLayout.order + 1 }
+          : { size: item.size, order: 1 },
+        mobileLayout: item.mobileLayout
+          ? { ...item.mobileLayout, order: item.mobileLayout.order + 1 }
+          : { size: item.size, order: 1 },
+      }));
+      
+      setItems([newItem, ...updatedItems]);
+    } else if (editorState.cardId) {
+      // Update existing item - content only (layout stays the same)
+      setItems(prev => prev.map(item =>
+        item.id === editorState.cardId ? { ...item, ...data } : item
+      ));
+    }
+    
+    setEditorState(null);
+  };
+
+  // Handle cancel from popover
+  const handleEditorCancel = () => {
+    setEditorState(null);
   };
 
   const handleDeleteItem = (id: string) => {
     if (!canEdit) return;
-    
-    setSections(prev => prev.map(section => ({
-      ...section,
-      items: section.items.filter(item => item.id !== id)
-    })));
+    setItems(prev => prev.filter(item => item.id !== id));
   };
 
   const handleUpdateItem = (id: string, updates: Partial<BentoItemData>) => {
     if (!canEdit) return;
+    setItems(prev => prev.map(item => 
+      item.id === id ? { ...item, ...updates } : item
+    ));
+  };
+  
+  // Handle resize for current view only
+  const handleResize = (id: string, size: ItemSize) => {
+    if (!canEdit) return;
+    const layoutKey = currentView === 'desktop' ? 'desktopLayout' : 'mobileLayout';
     
-    setSections(prev => prev.map(section => ({
-      ...section,
-      items: section.items.map(item => item.id === id ? { ...item, ...updates } : item)
-    })));
+    setItems(prev => prev.map(item => {
+      if (item.id !== id) return item;
+      const currentLayout = getItemLayout(item, currentView);
+      return {
+        ...item,
+        size, // Also update legacy size for backwards compatibility
+        [layoutKey]: { ...currentLayout, size },
+      };
+    }));
   };
 
   const handleLogout = () => {
@@ -143,15 +237,7 @@ function App({ isAdmin = false }: AppProps) {
     navigate('/');
   };
 
-  const findActiveItem = () => {
-    for (const section of sections) {
-      const item = section.items.find(i => i.id === activeId);
-      if (item) return item;
-    }
-    return null;
-  };
-
-  const activeItem = findActiveItem();
+  const activeItem = sortedItems.find(item => item.id === activeId) || null;
 
   return (
     <div className="min-h-screen bg-[#f7f6f3] text-gray-900 selection:bg-black selection:text-white pb-32">
@@ -208,39 +294,44 @@ function App({ isAdmin = false }: AppProps) {
           </div>
         </aside>
 
-        {/* Right Section - Grid Content */}
+        {/* Right Section - Single Flat Grid */}
         <main className="flex-1 w-full">
           <DndContext 
             sensors={sensors} 
-            collisionDetection={closestCorners} 
+            collisionDetection={closestCenter} 
             onDragStart={handleDragStart} 
             onDragOver={handleDragOver}
             onDragEnd={handleDragEnd}
           >
-            <div className="flex flex-col gap-24">
-              {sections.map((section) => (
-                <div key={section.id}>
-                  <h2 className="text-2xl font-black mb-10 text-gray-900 tracking-tight ml-2 opacity-90">{section.title}</h2>
-                  <SortableContext items={section.items.map(i => i.id)} strategy={rectSortingStrategy}>
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 grid-flow-dense">
-                      {section.items.map((item) => (
-                        <SortableItem 
-                          key={item.id} 
-                          item={item} 
-                          onDelete={handleDeleteItem}
-                          onResize={(id, size) => handleUpdateItem(id, { size })}
-                          onUpdate={handleUpdateItem}
-                        />
-                      ))}
-                    </div>
-                  </SortableContext>
-                </div>
-              ))}
-            </div>
+            <SortableContext 
+              items={sortedItems.map(item => item.id)} 
+              strategy={rectSortingStrategy}
+            >
+              <div 
+                className={cn(
+                  "bento-grid grid gap-4 md:gap-6 grid-flow-dense",
+                  currentView === 'desktop' ? "grid-cols-2 lg:grid-cols-4" : "grid-cols-2 max-w-[400px] mx-auto"
+                )}
+                style={{ gridAutoRows: 'var(--bento-row)' }}
+              >
+                {sortedItems.map((item) => (
+                  <SortableItem
+                    key={item.id}
+                    item={item}
+                    currentView={currentView}
+                    onDelete={handleDeleteItem}
+                    onResize={handleResize}
+                    onUpdate={handleUpdateItem}
+                    onStartEdit={handleStartEdit}
+                  />
+                ))}
+              </div>
+            </SortableContext>
+            
             <DragOverlay adjustScale={false} dropAnimation={dropAnimationConfig}>
               {activeItem ? (
                 <div className="w-full h-full scale-105 cursor-grabbing">
-                  <BentoCard item={activeItem} isOverlay isDragging />
+                  <BentoCard item={activeItem} currentView={currentView} isOverlay isDragging />
                 </div>
               ) : null}
             </DragOverlay>
@@ -248,7 +339,22 @@ function App({ isAdmin = false }: AppProps) {
         </main>
       </div>
 
-      {canEdit && <Toolbar onAddItem={handleAddItem} />}
+      {canEdit && (
+        <Toolbar 
+          onStartCreate={handleStartCreate} 
+          currentView={currentView}
+          onViewChange={setCurrentView}
+        />
+      )}
+      
+      {/* Card Editor Popover */}
+      {editorState && (
+        <CardEditorPopover
+          state={editorState}
+          onSave={handleEditorSave}
+          onCancel={handleEditorCancel}
+        />
+      )}
     </div>
   );
 }

@@ -46,6 +46,40 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
+      /* Bento grid row height - for perfect squares, account for gap between rows */
+      /* Formula: row_height = (column_width - gap) / 2 */
+      /* So that: 2 * row_height + gap = column_width (perfect square) */
+      
+      /* Mobile (2 cols, gap 16px, padding 24px each side) */
+      .bento-grid {
+        --bento-gap: 16px;
+        --bento-cols: 2;
+        --bento-container: calc(100vw - 48px);
+        --bento-col-width: calc((var(--bento-container) - var(--bento-gap)) / var(--bento-cols));
+        --bento-row: calc((var(--bento-col-width) - var(--bento-gap)) / 2);
+      }
+      
+      /* Tablet (2 cols, gap 24px, padding 48px each side) */
+      @media (min-width: 768px) {
+        .bento-grid {
+          --bento-gap: 24px;
+          --bento-cols: 2;
+          --bento-container: calc(100vw - 96px);
+          --bento-col-width: calc((var(--bento-container) - var(--bento-gap)) / var(--bento-cols));
+          --bento-row: calc((var(--bento-col-width) - var(--bento-gap)) / 2);
+        }
+      }
+      
+      /* Desktop (4 cols, gap 24px, padding 80px each side, sidebar 340px, sidebar gap 96px) */
+      @media (min-width: 1024px) {
+        .bento-grid {
+          --bento-gap: 24px;
+          --bento-cols: 4;
+          --bento-container: calc(min(100vw, 1400px) - 160px - 340px - 96px);
+          --bento-col-width: calc((var(--bento-container) - 3 * var(--bento-gap)) / var(--bento-cols));
+          --bento-row: calc((var(--bento-col-width) - var(--bento-gap)) / 2);
+        }
+      }
     </style>
   <script type="importmap">
 {
