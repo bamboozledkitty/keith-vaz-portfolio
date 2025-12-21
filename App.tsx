@@ -45,8 +45,8 @@ function App() {
 
   // #region agent log
   useEffect(() => {
-    const imageSrc = '/image-assets/profile-pic/IMG_5823.jpg';
-    fetch('http://127.0.0.1:7243/ingest/202e2174-18be-4cb4-92d9-b8f0e6bce2ff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:42',message:'App component mounted - checking image path configuration',data:{imageSrc,basePath:import.meta.env.BASE_URL,currentUrl:window.location.href,expectedUrl:import.meta.env.BASE_URL + 'image-assets/profile-pic/IMG_5823.jpg'},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+    const imageSrc = `${import.meta.env.BASE_URL}image-assets/profile-pic/IMG_5823.jpg`;
+    fetch('http://127.0.0.1:7243/ingest/202e2174-18be-4cb4-92d9-b8f0e6bce2ff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:42',message:'App component mounted - checking image path configuration',data:{imageSrc,basePath:import.meta.env.BASE_URL,currentUrl:window.location.href,expectedUrl:import.meta.env.BASE_URL + 'image-assets/profile-pic/IMG_5823.jpg'},timestamp:Date.now(),sessionId:'debug-session',runId:'post-fix',hypothesisId:'A'})}).catch(()=>{});
   }, []);
   // #endregion
 
@@ -146,15 +146,15 @@ function App() {
             <div className="w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden border-[8px] border-white mb-10 transition-transform hover:scale-[1.02] cursor-pointer duration-500 ease-out">
               {/* #region agent log */}
               <img 
-                src="/image-assets/profile-pic/IMG_5823.jpg" 
+                src={`${import.meta.env.BASE_URL}image-assets/profile-pic/IMG_5823.jpg`}
                 alt="Keith Vaz" 
                 className="w-full h-full object-cover"
                 onLoad={() => {
-                  fetch('http://127.0.0.1:7243/ingest/202e2174-18be-4cb4-92d9-b8f0e6bce2ff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:140',message:'Profile image loaded successfully',data:{src:'/image-assets/profile-pic/IMG_5823.jpg',actualUrl:window.location.href + 'image-assets/profile-pic/IMG_5823.jpg',basePath:import.meta.env.BASE_URL},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+                  fetch('http://127.0.0.1:7243/ingest/202e2174-18be-4cb4-92d9-b8f0e6bce2ff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:140',message:'Profile image loaded successfully',data:{src:`${import.meta.env.BASE_URL}image-assets/profile-pic/IMG_5823.jpg`,actualUrl:window.location.href,basePath:import.meta.env.BASE_URL},timestamp:Date.now(),sessionId:'debug-session',runId:'post-fix',hypothesisId:'A'})}).catch(()=>{});
                 }}
                 onError={(e) => {
                   const img = e.target as HTMLImageElement;
-                  fetch('http://127.0.0.1:7243/ingest/202e2174-18be-4cb4-92d9-b8f0e6bce2ff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:140',message:'Profile image failed to load',data:{src:img.src,currentUrl:window.location.href,basePath:import.meta.env.BASE_URL,expectedUrl:import.meta.env.BASE_URL + 'image-assets/profile-pic/IMG_5823.jpg'},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+                  fetch('http://127.0.0.1:7243/ingest/202e2174-18be-4cb4-92d9-b8f0e6bce2ff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:140',message:'Profile image failed to load',data:{src:img.src,currentUrl:window.location.href,basePath:import.meta.env.BASE_URL,expectedUrl:import.meta.env.BASE_URL + 'image-assets/profile-pic/IMG_5823.jpg'},timestamp:Date.now(),sessionId:'debug-session',runId:'post-fix',hypothesisId:'A'})}).catch(()=>{});
                 }}
               />
               {/* #endregion */}
