@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Github, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { getGitHubOAuthUrl, verifyState, fetchGitHubUser, saveAuthState } from '../lib/auth';
+import { getGitHubOAuthUrl, verifyState, fetchGitHubUser, saveAuthState, requestAccessToken } from '../lib/auth';
 import { ADMIN_USERNAME } from '../config/auth';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
@@ -38,14 +38,27 @@ const LoginPage: React.FC = () => {
       setIsLoading(true);
 
       try {
-        // Since we're on GitHub Pages (static), we need to use a workaround
-        // This demo uses localStorage to store a temporary token from GitHub's redirect
-        // In production, you should use a backend to securely exchange the code for a token
+        // Exchange code for access token via Cloudflare Worker
+        const token = await requestAccessToken(code, state);
 
-        // For now, we'll show an error with instructions
-        setError(
-          `OAuth callback received (code: ${code.substring(0, 10)}...). To complete authentication, you need a backend server to exchange the code for an access token. See the plan for details.`
-        );
+        // Fetch user info to verify admin status
+        const user = await fetchGitHubUser(token);
+
+        if (user.login !== ADMIN_USERNAME) {
+          setError(`User ${user.login} is not authorized as admin.`);
+          return;
+        }
+
+        // Save auth state and redirect to admin
+        saveAuthState(token, user);
+        setAuth(token, user);
+
+        // Clear URL params and navigate
+        window.history.replaceState({}, '', window.location.pathname);
+        navigate('/admin');
+      } catch (err) {
+        console.error('Auth error:', err);
+        setError(err instanceof Error ? err.message : 'Authentication failed');
       } finally {
         setIsLoading(false);
       }
@@ -56,7 +69,9 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async () => {
     setIsLoading(true);
-    const redirectUri = new URL('/admin/callback', window.location.origin).toString();
+    // Use BASE_URL to ensure correct path on GitHub Pages
+    const basePath = import.meta.env.BASE_URL || '/';
+    const redirectUri = new URL(`${basePath}#/admin/callback`, window.location.origin).toString();
     const oauthUrl = getGitHubOAuthUrl(redirectUri);
     window.location.href = oauthUrl;
   };
@@ -120,7 +135,7 @@ const LoginPage: React.FC = () => {
             <h3 className="font-bold text-sm text-blue-900 mb-2">Setup Instructions:</h3>
             <ol className="text-xs text-blue-800 space-y-2 list-decimal list-inside">
               <li>Create a GitHub OAuth App in your settings</li>
-              <li>Set redirect URI to: {new URL('/admin/callback', window.location.origin).toString()}</li>
+              <li>Set redirect URI to: {`${window.location.origin}${import.meta.env.BASE_URL || '/'}#/admin/callback`}</li>
               <li>Add Client ID to environment variable VITE_GITHUB_CLIENT_ID</li>
               <li>Setup a backend to exchange code for access token</li>
             </ol>
