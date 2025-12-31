@@ -1,5 +1,5 @@
-// Admin configuration - update with your GitHub username
-export const ADMIN_USERNAME = 'keithvaz';
+// Admin configuration - your GitHub username
+export const ADMIN_USERNAME = 'bamboozledkitty';
 
 // GitHub OAuth configuration
 // Client ID is safe to expose (only Client Secret must be kept private)
