@@ -79,7 +79,8 @@ export const clearAuthState = (): void => {
 };
 
 // Cloudflare Worker URL for token exchange
-const WORKER_URL = import.meta.env.VITE_CLOUDFLARE_WORKER_URL || '';
+// Hardcoded as fallback since .env.local is not available in GitHub Actions builds
+const WORKER_URL = import.meta.env.VITE_CLOUDFLARE_WORKER_URL || 'https://portfolio-auth.keith-klv.workers.dev';
 
 // Exchange OAuth code for access token via Cloudflare Worker
 export const requestAccessToken = async (
