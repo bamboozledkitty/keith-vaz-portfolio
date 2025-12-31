@@ -5,6 +5,7 @@ import BentoCard from './BentoCard';
 import { BentoItemData, ItemSize, ViewMode } from '../types';
 import { getSizeClasses, cn } from './utils';
 import { useAuth } from '../contexts/AuthContext';
+import { Squircle } from './ui/squircle';
 
 // Helper to get size for current view
 const getViewSize = (item: BentoItemData, view: ViewMode): ItemSize => {
@@ -57,8 +58,8 @@ const SortableItem: React.FC<SortableItemProps> = ({ item, currentView, onDelete
       )} 
     >
       {/* Drop Zone Placeholder */}
-      <div className={cn(
-        "absolute inset-0 bg-gray-200/50 rounded-[20px] border-2 border-dashed border-gray-300/50 transition-opacity duration-300",
+      <Squircle cornerRadius={20} className={cn(
+        "absolute inset-0 bg-gray-200/50 border-2 border-dashed border-gray-300/50 transition-opacity duration-300",
         isDragging ? "opacity-100" : "opacity-0 pointer-events-none"
       )} />
 

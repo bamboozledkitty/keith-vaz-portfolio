@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Check, Link2, Loader2, Upload, Trash2, Film, Type, Heading1, Globe, AlignLeft, AlignCenter, AlignRight, AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import { Squircle } from './ui/squircle';
 import { cn } from '../lib/utils';
 import { ItemType, BentoItemData, MediaType, TextAlign, TextVAlign, TextSize } from '../types';
 
@@ -328,13 +329,13 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Icon</label>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+                <Squircle cornerRadius={12} className="w-10 h-10 bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
                   {icon ? (
                     <img src={icon} alt="icon" className="w-6 h-6 object-contain" />
                   ) : (
                     <Globe size={18} className="text-gray-400" />
                   )}
-                </div>
+                </Squircle>
                 <Input 
                   value={icon} 
                   onChange={e => setIcon(e.target.value)}
@@ -376,7 +377,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
               </label>
               <div className="flex items-start gap-3">
                 {image ? (
-                  <div className="relative w-20 h-20 rounded-xl overflow-hidden group/img shadow-md shrink-0 bg-gray-100">
+                  <Squircle cornerRadius={12} className="relative w-20 h-20 overflow-hidden group/img shadow-md shrink-0 bg-gray-100">
                     {(mediaType === 'video' || isVideoUrl(image)) ? (
                       <video 
                         src={image} 
@@ -395,15 +396,17 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     >
                       <Trash2 size={20} />
                     </button>
-                  </div>
+                  </Squircle>
                 ) : (
-                  <button 
+                  <Squircle 
+                    cornerRadius={12}
+                    as="button"
                     onClick={() => mediaInputRef.current?.click()}
-                    className="w-20 h-20 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
+                    className="w-20 h-20 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
                   >
                     <Upload size={20} />
                     <span className="text-[9px] font-bold tracking-wide">UPLOAD</span>
-                  </button>
+                  </Squircle>
                 )}
                 <div className="flex-1 space-y-2">
                   <Input 
@@ -611,10 +614,11 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
         }
       `}</style>
       
-      <div
+      <Squircle
         ref={popoverRef}
+        cornerRadius={16}
         className={cn(
-          "fixed z-[100] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
+          "fixed z-[100] bg-white shadow-2xl border border-gray-100 overflow-hidden"
         )}
         style={{
           width: POPOVER_WIDTH,
@@ -667,7 +671,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
             {state.mode === 'create' ? 'Add' : 'Save'}
           </Button>
         </div>
-      </div>
+      </Squircle>
     </>
   );
 };

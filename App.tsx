@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { LogOut } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { LogOut, Loader2, AlertCircle, Save } from 'lucide-react';
 import {
   DndContext,
   closestCenter,
@@ -25,11 +25,14 @@ import SortableItem from './components/SortableItem';
 import BentoCard from './components/BentoCard';
 import Toolbar from './components/Toolbar';
 import CardEditorPopover, { EditorState } from './components/CardEditorPopover';
-import { INITIAL_ITEMS } from './constants';
 import { BentoItemData, ItemType, ItemSize, ViewMode, ViewLayout } from './types';
 import { useAuth } from './contexts/AuthContext';
 import { Button } from './components/ui/button';
 import { cn } from './lib/utils';
+import { saveContentToGitHub } from './lib/github';
+
+// Content data URL
+const CONTENT_URL = `${import.meta.env.BASE_URL}content/data.json`;
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
@@ -72,17 +75,45 @@ interface AppProps {
 
 function App({ isAdmin = false }: AppProps) {
   const navigate = useNavigate();
-  const { isAuthenticated, isAdmin: authIsAdmin, logout } = useAuth();
+  const { isAuthenticated, isAdmin: authIsAdmin, logout, token } = useAuth();
   const canEdit = isAdmin && isAuthenticated && authIsAdmin;
-  
-  // Flat list of all items (cards + headings) - migrated to have view-specific layouts
-  const [items, setItems] = useState<BentoItemData[]>(() => 
-    INITIAL_ITEMS.map((item, index) => migrateItem(item, index))
-  );
+
+  // Content loading states
+  const [items, setItems] = useState<BentoItemData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
   const [activeId, setActiveId] = useState<string | null>(null);
   const [editorState, setEditorState] = useState<EditorState | null>(null);
   const [currentView, setCurrentView] = useState<ViewMode>('desktop');
-  
+
+  // Load content from JSON on mount
+  useEffect(() => {
+    const loadContent = async () => {
+      try {
+        setIsLoading(true);
+        setLoadError(null);
+        const response = await fetch(CONTENT_URL);
+        if (!response.ok) {
+          throw new Error(`Failed to load content: ${response.status}`);
+        }
+        const data = await response.json();
+        const migratedItems = (data.items || []).map((item: BentoItemData, index: number) =>
+          migrateItem(item, index)
+        );
+        setItems(migratedItems);
+      } catch (error) {
+        console.error('Error loading content:', error);
+        setLoadError(error instanceof Error ? error.message : 'Failed to load content');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadContent();
+  }, []);
+
   // Sort items by current view's order
   const sortedItems = useMemo(() => {
     return [...items].sort((a, b) => {
@@ -108,9 +139,9 @@ function App({ isAdmin = false }: AppProps) {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    
+
     setActiveId(null);
-    
+
     if (!canEdit || !over || active.id === over.id) return;
 
     // Find indices in sorted items (current view's order)
@@ -121,7 +152,7 @@ function App({ isAdmin = false }: AppProps) {
       // Reorder and update order values for current view only
       const reordered = arrayMove(sortedItems, oldIndex, newIndex);
       const layoutKey = currentView === 'desktop' ? 'desktopLayout' : 'mobileLayout';
-      
+
       // Update order for all items in current view
       const updatedItems = items.map(item => {
         const newOrder = reordered.findIndex(r => r.id === item.id);
@@ -131,8 +162,9 @@ function App({ isAdmin = false }: AppProps) {
           [layoutKey]: { ...currentLayout, order: newOrder },
         };
       });
-      
+
       setItems(updatedItems);
+      setHasUnsavedChanges(true);
     }
   };
 
@@ -163,7 +195,7 @@ function App({ isAdmin = false }: AppProps) {
   // Handle save from popover
   const handleEditorSave = (data: Partial<BentoItemData>) => {
     if (!editorState) return;
-    
+
     if (editorState.mode === 'create') {
       // Create new item with both view layouts
       const size = data.size || '1x1';
@@ -176,26 +208,28 @@ function App({ isAdmin = false }: AppProps) {
         desktopLayout: newLayout,
         mobileLayout: { ...newLayout }, // Copy for mobile
       } as BentoItemData;
-      
+
       // Shift existing items' order by 1 in both views
       const updatedItems = items.map(item => ({
         ...item,
-        desktopLayout: item.desktopLayout 
+        desktopLayout: item.desktopLayout
           ? { ...item.desktopLayout, order: item.desktopLayout.order + 1 }
           : { size: item.size, order: 1 },
         mobileLayout: item.mobileLayout
           ? { ...item.mobileLayout, order: item.mobileLayout.order + 1 }
           : { size: item.size, order: 1 },
       }));
-      
+
       setItems([newItem, ...updatedItems]);
+      setHasUnsavedChanges(true);
     } else if (editorState.cardId) {
       // Update existing item - content only (layout stays the same)
       setItems(prev => prev.map(item =>
         item.id === editorState.cardId ? { ...item, ...data } : item
       ));
+      setHasUnsavedChanges(true);
     }
-    
+
     setEditorState(null);
   };
 
@@ -207,20 +241,22 @@ function App({ isAdmin = false }: AppProps) {
   const handleDeleteItem = (id: string) => {
     if (!canEdit) return;
     setItems(prev => prev.filter(item => item.id !== id));
+    setHasUnsavedChanges(true);
   };
 
   const handleUpdateItem = (id: string, updates: Partial<BentoItemData>) => {
     if (!canEdit) return;
-    setItems(prev => prev.map(item => 
+    setItems(prev => prev.map(item =>
       item.id === id ? { ...item, ...updates } : item
     ));
+    setHasUnsavedChanges(true);
   };
-  
+
   // Handle resize for current view only
   const handleResize = (id: string, size: ItemSize) => {
     if (!canEdit) return;
     const layoutKey = currentView === 'desktop' ? 'desktopLayout' : 'mobileLayout';
-    
+
     setItems(prev => prev.map(item => {
       if (item.id !== id) return item;
       const currentLayout = getItemLayout(item, currentView);
@@ -245,50 +281,82 @@ function App({ isAdmin = false }: AppProps) {
       {canEdit && (
         <div className="bg-black text-white py-3 px-6 flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm font-medium">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            Admin Mode - Editing Enabled
+            <div className={cn(
+              "w-2 h-2 rounded-full",
+              hasUnsavedChanges ? "bg-yellow-400" : "bg-green-400 animate-pulse"
+            )}></div>
+            Admin Mode {hasUnsavedChanges ? '- Unsaved Changes' : '- Editing Enabled'}
           </div>
-          <Button
-            onClick={handleLogout}
-            variant="secondary"
-            size="sm"
-            className="bg-white/10 hover:bg-white/20 text-white border-white/20"
-          >
-            <LogOut size={16} />
-            Logout
-          </Button>
+          <div className="flex items-center gap-2">
+            {hasUnsavedChanges && (
+              <Button
+                onClick={async () => {
+                  if (!token) {
+                    console.error('No auth token available');
+                    return;
+                  }
+                  setIsSaving(true);
+                  try {
+                    await saveContentToGitHub(token, items);
+                    setHasUnsavedChanges(false);
+                  } catch (error) {
+                    console.error('Failed to save:', error);
+                    alert('Failed to save changes. Please check your token permissions.');
+                  } finally {
+                    setIsSaving(false);
+                  }
+                }}
+                variant="secondary"
+                size="sm"
+                disabled={isSaving}
+                className="bg-green-500 hover:bg-green-600 text-white border-green-600"
+              >
+                {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                {isSaving ? 'Saving...' : 'Save'}
+              </Button>
+            )}
+            <Button
+              onClick={handleLogout}
+              variant="secondary"
+              size="sm"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+            >
+              <LogOut size={16} />
+              Logout
+            </Button>
+          </div>
         </div>
       )}
-      
+
       <div className="flex flex-col lg:flex-row max-w-[1400px] mx-auto p-6 md:p-12 lg:p-20 gap-12 lg:gap-24 items-start">
-        
+
         {/* Left Sidebar - Profile & Stats */}
         <aside className="w-full lg:w-[340px] lg:sticky lg:top-20 shrink-0">
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
             <div className="w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden border-[8px] border-white mb-10 transition-transform hover:scale-[1.02] cursor-pointer duration-500 ease-out">
-              <img 
+              <img
                 src={`${import.meta.env.BASE_URL}image-assets/profile-pic/IMG_5823.jpg`}
-                alt="Keith Vaz" 
+                alt="Keith Vaz"
                 className="w-full h-full object-cover"
               />
             </div>
-            
+
             <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-5 leading-tight">
               Keith Vaz <span className="inline-block hover:rotate-12 transition-transform cursor-default duration-500">👋</span>
             </h1>
-            
+
             <div className="flex flex-col gap-4 text-gray-500 text-lg font-medium mb-10">
               <div className="flex items-center gap-3">
-                 <span className="text-xl">👨🏽‍💻</span>
-                 <span>Design Systems Designer</span>
+                <span className="text-xl">👨🏽‍💻</span>
+                <span>Design Systems Designer</span>
               </div>
               <div className="flex items-center gap-3">
-                 <span className="text-xl">📍</span>
-                 <span>Bangalore</span>
+                <span className="text-xl">📍</span>
+                <span>Bangalore</span>
               </div>
               <div className="flex items-center gap-3">
-                 <span className="text-xl">🏡</span>
-                 <span>Goa</span>
+                <span className="text-xl">🏡</span>
+                <span>Goa</span>
               </div>
             </div>
           </div>
@@ -296,57 +364,84 @@ function App({ isAdmin = false }: AppProps) {
 
         {/* Right Section - Single Flat Grid */}
         <main className="flex-1 w-full">
-          <DndContext 
-            sensors={sensors} 
-            collisionDetection={closestCenter} 
-            onDragStart={handleDragStart} 
-            onDragOver={handleDragOver}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext 
-              items={sortedItems.map(item => item.id)} 
-              strategy={rectSortingStrategy}
-            >
-              <div 
-                className={cn(
-                  "bento-grid grid gap-4 md:gap-6 grid-flow-dense",
-                  currentView === 'desktop' ? "grid-cols-2 lg:grid-cols-4" : "grid-cols-2 max-w-[400px] mx-auto"
-                )}
-                style={{ gridAutoRows: 'var(--bento-row)' }}
+          {/* Loading State */}
+          {isLoading && (
+            <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+              <Loader2 size={48} className="animate-spin mb-4" />
+              <p className="text-lg font-medium">Loading content...</p>
+            </div>
+          )}
+
+          {/* Error State */}
+          {loadError && !isLoading && (
+            <div className="flex flex-col items-center justify-center py-20 text-red-500">
+              <AlertCircle size={48} className="mb-4" />
+              <p className="text-lg font-medium">Failed to load content</p>
+              <p className="text-sm text-gray-500 mt-2">{loadError}</p>
+              <Button
+                onClick={() => window.location.reload()}
+                variant="secondary"
+                className="mt-4"
               >
-                {sortedItems.map((item) => (
-                  <SortableItem
-                    key={item.id}
-                    item={item}
-                    currentView={currentView}
-                    onDelete={handleDeleteItem}
-                    onResize={handleResize}
-                    onUpdate={handleUpdateItem}
-                    onStartEdit={handleStartEdit}
-                  />
-                ))}
-              </div>
-            </SortableContext>
-            
-            <DragOverlay adjustScale={false} dropAnimation={dropAnimationConfig}>
-              {activeItem ? (
-                <div className="w-full h-full scale-105 cursor-grabbing">
-                  <BentoCard item={activeItem} currentView={currentView} isOverlay isDragging />
+                Retry
+              </Button>
+            </div>
+          )}
+
+          {/* Content */}
+          {!isLoading && !loadError && (
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragStart={handleDragStart}
+              onDragOver={handleDragOver}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={sortedItems.map(item => item.id)}
+                strategy={rectSortingStrategy}
+              >
+                <div
+                  className={cn(
+                    "bento-grid grid gap-4 md:gap-6 grid-flow-dense",
+                    currentView === 'desktop' ? "grid-cols-2 lg:grid-cols-4" : "grid-cols-2 max-w-[400px] mx-auto"
+                  )}
+                  style={{ gridAutoRows: 'var(--bento-row)' }}
+                >
+                  {sortedItems.map((item) => (
+                    <SortableItem
+                      key={item.id}
+                      item={item}
+                      currentView={currentView}
+                      onDelete={handleDeleteItem}
+                      onResize={handleResize}
+                      onUpdate={handleUpdateItem}
+                      onStartEdit={handleStartEdit}
+                    />
+                  ))}
                 </div>
-              ) : null}
-            </DragOverlay>
-          </DndContext>
+              </SortableContext>
+
+              <DragOverlay adjustScale={false} dropAnimation={dropAnimationConfig}>
+                {activeItem ? (
+                  <div className="w-full h-full scale-105 cursor-grabbing">
+                    <BentoCard item={activeItem} currentView={currentView} isOverlay isDragging />
+                  </div>
+                ) : null}
+              </DragOverlay>
+            </DndContext>
+          )}
         </main>
       </div>
 
       {canEdit && (
-        <Toolbar 
-          onStartCreate={handleStartCreate} 
+        <Toolbar
+          onStartCreate={handleStartCreate}
           currentView={currentView}
           onViewChange={setCurrentView}
         />
       )}
-      
+
       {/* Card Editor Popover */}
       {editorState && (
         <CardEditorPopover

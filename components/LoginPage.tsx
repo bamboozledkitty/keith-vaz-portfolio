@@ -5,6 +5,7 @@ import { getGitHubOAuthUrl, verifyState, fetchGitHubUser, saveAuthState } from '
 import { ADMIN_USERNAME } from '../config/auth';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
+import { Squircle } from './ui/squircle';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -78,7 +79,7 @@ const LoginPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f7f6f3] flex items-center justify-center p-6">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+        <Squircle cornerRadius={16} className="bg-white shadow-lg border border-gray-100 p-8">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
               <Github size={32} className="text-white" />
@@ -90,10 +91,10 @@ const LoginPage: React.FC = () => {
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex gap-3">
+            <Squircle cornerRadius={8} className="mb-6 p-4 bg-red-50 border border-red-200 flex gap-3">
               <AlertCircle size={20} className="text-red-500 flex-shrink-0 mt-0.5" />
               <p className="text-sm text-red-700">{error}</p>
-            </div>
+            </Squircle>
           )}
 
           <div className="space-y-4">
@@ -115,7 +116,7 @@ const LoginPage: React.FC = () => {
             </Button>
           </div>
 
-          <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <Squircle cornerRadius={8} className="mt-8 p-4 bg-blue-50 border border-blue-200">
             <h3 className="font-bold text-sm text-blue-900 mb-2">Setup Instructions:</h3>
             <ol className="text-xs text-blue-800 space-y-2 list-decimal list-inside">
               <li>Create a GitHub OAuth App in your settings</li>
@@ -123,8 +124,8 @@ const LoginPage: React.FC = () => {
               <li>Add Client ID to environment variable VITE_GITHUB_CLIENT_ID</li>
               <li>Setup a backend to exchange code for access token</li>
             </ol>
-          </div>
-        </div>
+          </Squircle>
+        </Squircle>
       </div>
     </div>
   );

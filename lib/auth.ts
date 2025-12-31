@@ -78,20 +78,37 @@ export const clearAuthState = (): void => {
   localStorage.removeItem(USER_KEY);
 };
 
-// Note: In a real application, you would NOT exchange the code for a token on the client
-// This is a simplified implementation for GitHub Pages. For production, use a backend.
-// The GitHub OAuth flow requires a server to exchange the code for an access token.
-// See: https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps
+// Cloudflare Worker URL for token exchange
+const WORKER_URL = import.meta.env.VITE_CLOUDFLARE_WORKER_URL || '';
+
+// Exchange OAuth code for access token via Cloudflare Worker
 export const requestAccessToken = async (
   code: string,
   state: string
 ): Promise<string> => {
-  // This demonstrates the client-side limitation
-  // In production with a backend, you would call:
-  // POST /api/github/callback with { code, state }
-  // The backend exchanges the code for an access token
-  throw new Error(
-    'Access token exchange requires a backend. See: https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps'
-  );
+  if (!WORKER_URL) {
+    throw new Error('Cloudflare Worker URL not configured');
+  }
+
+  const response = await fetch(WORKER_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ code, state }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error(error.error || 'Failed to exchange token');
+  }
+
+  const data = await response.json();
+
+  if (!data.access_token) {
+    throw new Error('No access token received');
+  }
+
+  return data.access_token;
 };
 

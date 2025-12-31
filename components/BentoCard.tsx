@@ -30,6 +30,7 @@ const getTextSizeClass = (size?: TextSize): string => {
 import EditControls from './EditControls';
 import { Card } from './ui/card';
 import { Input } from './ui/input';
+import { Squircle } from './ui/squircle';
 import { useAuth } from '../contexts/AuthContext';
 
 // Video file extensions
@@ -271,9 +272,9 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     if (currentSize === '1x1') {
       return (
         <div className="h-full w-full flex flex-col justify-between p-4 group bg-white">
-          <div className="w-10 h-10 rounded-[12px] bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-800 shrink-0 group-hover:scale-110 transition-transform duration-300">
+          <Squircle cornerRadius={12} className="w-10 h-10 bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-800 shrink-0 group-hover:scale-110 transition-transform duration-300">
             <SocialIcon name={item.icon || item.image} className="w-5 h-5" />
-          </div>
+          </Squircle>
           <div className="min-w-0 w-full">
             <h3 className="font-bold text-gray-900 leading-snug text-[13px] line-clamp-2">{item.title}</h3>
             {item.subtitle && <p className="text-[10px] text-gray-400 mt-1 font-medium line-clamp-1">{item.subtitle}</p>}
@@ -286,9 +287,9 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     if (currentSize === '1x0.5') {
       return (
         <div className="flex items-center h-full w-full px-4 gap-3 bg-white">
-          <div className="w-8 h-8 rounded-[10px] bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0">
+          <Squircle cornerRadius={12} className="w-8 h-8 bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0">
             <SocialIcon name={item.icon || item.image} className="w-4 h-4" />
-          </div>
+          </Squircle>
           <div className="min-w-0 flex-1">
             <h3 className="font-bold text-gray-900 text-sm leading-tight truncate">{item.title}</h3>
             {item.subtitle && <p className="text-[10px] text-gray-400 mt-0.5 font-medium truncate">{item.subtitle}</p>}
@@ -302,19 +303,19 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
       return (
         <div className="flex h-full w-full bg-white group">
           <div className="flex-1 p-5 flex flex-col justify-between min-w-0">
-            <div className="w-10 h-10 rounded-[12px] overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100">
+            <Squircle cornerRadius={12} className="w-10 h-10 overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100">
               <SocialIcon name={item.icon} className="w-5 h-5" />
-            </div>
+            </Squircle>
             <div className="mt-2">
               <h3 className="font-bold text-gray-900 leading-tight text-base tracking-tight line-clamp-2">{item.title}</h3>
               <p className="text-xs text-gray-400 mt-1 font-medium truncate">{item.subtitle}</p>
             </div>
           </div>
           {item.image && (
-            <div className="w-[38%] h-full p-2.5 pl-0 shrink-0">
-              <div className="w-full h-full rounded-[12px] overflow-hidden relative bg-gray-50 shadow-inner">
+            <div className="w-[38%] h-full p-5 pl-0 shrink-0">
+              <Squircle cornerRadius={12} className="w-full h-full overflow-hidden relative bg-gray-50 shadow-inner">
                 <img src={item.image} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-              </div>
+              </Squircle>
             </div>
           )}
         </div>
@@ -326,17 +327,17 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
       return (
         <div className="flex flex-col h-full w-full bg-white group">
           <div className="p-5 pb-3">
-            <div className="w-10 h-10 rounded-[14px] overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100 mb-3">
+            <Squircle cornerRadius={12} className="w-10 h-10 overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100 mb-3">
               <SocialIcon name={item.icon} className="w-5 h-5" />
-            </div>
+            </Squircle>
             <h3 className="font-bold text-gray-900 leading-tight text-base tracking-tight line-clamp-2">{item.title}</h3>
             <p className="text-xs text-gray-400 mt-1.5 font-medium line-clamp-2">{item.subtitle}</p>
           </div>
           {item.image && (
-            <div className="flex-1 p-2.5 pt-0">
-              <div className="w-full h-full rounded-[12px] overflow-hidden relative bg-gray-50 shadow-inner">
+            <div className="flex-1 p-5 pt-0">
+              <Squircle cornerRadius={12} className="w-full h-full overflow-hidden relative bg-gray-50 shadow-inner">
                 <img src={item.image} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-              </div>
+              </Squircle>
             </div>
           )}
         </div>
@@ -351,18 +352,18 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
             <>
               <img src={item.image} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-6">
-                <div className="w-10 h-10 rounded-[14px] overflow-hidden flex items-center justify-center bg-white/20 backdrop-blur-sm mb-3">
+                <Squircle cornerRadius={12} className="w-10 h-10 overflow-hidden flex items-center justify-center bg-white/20 backdrop-blur-sm mb-3">
                   <SocialIcon name={item.icon} className="w-5 h-5 text-white" />
-                </div>
+                </Squircle>
                 <h3 className="text-white font-bold text-xl leading-tight tracking-tight">{item.title}</h3>
                 <p className="text-white/70 text-sm mt-2 font-medium">{item.subtitle}</p>
               </div>
             </>
           ) : (
             <div className="h-full flex flex-col p-6 justify-between">
-              <div className="w-14 h-14 rounded-[18px] bg-gray-100 border border-gray-200 flex items-center justify-center">
+              <Squircle cornerRadius={12} className="w-14 h-14 bg-gray-100 border border-gray-200 flex items-center justify-center">
                 <SocialIcon name={item.icon} className="w-8 h-8" />
-              </div>
+              </Squircle>
               <div>
                 <h3 className="font-bold text-2xl text-gray-900 leading-tight tracking-tight">{item.title}</h3>
                 <p className="text-sm text-gray-400 mt-3 font-medium">{item.subtitle}</p>
@@ -411,7 +412,6 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
         <EditControls 
           onDelete={() => onDelete(item.id)}
           onResize={isHeading ? undefined : (onResize ? (size) => onResize(item.id, size) : undefined)}
-          onEdit={handleCardClick}
           currentSize={currentSize}
           isHeading={isHeading}
         />

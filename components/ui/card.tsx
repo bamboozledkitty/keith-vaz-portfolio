@@ -1,14 +1,17 @@
 import * as React from "react"
 import { cn } from "../../lib/utils"
+import { Squircle } from "./squircle"
 
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div
+  <Squircle
     ref={ref}
+    cornerRadius={24}
+    cornerSmoothing={0.6}
     className={cn(
-      "rounded-[20px] border bg-white text-gray-950 shadow-sm",
+      "border bg-white text-gray-950 shadow-sm",
       className
     )}
     {...props}
