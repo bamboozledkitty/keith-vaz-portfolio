@@ -81,13 +81,13 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
   const { isAuthenticated, isAdmin } = useAuth();
   const canEdit = isAuthenticated && isAdmin;
   const cardRef = useRef<HTMLDivElement>(null);
-  
+
   // Get size for current view
   const currentSize: ItemSize = (() => {
     const layout = currentView === 'desktop' ? item.desktopLayout : item.mobileLayout;
     return layout?.size || item.size;
   })();
-  
+
   const [isHovered, setIsHovered] = useState(false);
   const [isEditingCaption, setIsEditingCaption] = useState(false);
   const [tempCaption, setTempCaption] = useState(item.caption || '');
@@ -105,11 +105,23 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     }
   }, [isEditingCaption]);
 
-  // Handle click to open editor popover
-  const handleCardClick = () => {
+  // Handle click - navigate to URL or open editor
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Prevent navigation if clicking on edit controls, caption, or other interactive elements
+    if ((e.target as HTMLElement).closest('.edit-controls, input, button')) {
+      return;
+    }
+
+    // In edit mode, open the editor popover
     if (canEdit && onStartEdit && cardRef.current) {
       const rect = cardRef.current.getBoundingClientRect();
       onStartEdit(item.id, rect);
+      return;
+    }
+
+    // Not in edit mode - navigate to URL if present
+    if (item.url) {
+      window.open(item.url, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -144,10 +156,10 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
             playsInline
           />
         ) : hasMedia ? (
-          <img 
-            src={mediaUrl} 
-            alt={item.caption || item.title || 'Media'} 
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+          <img
+            src={mediaUrl}
+            alt={item.caption || item.title || 'Media'}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-100">
@@ -157,7 +169,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
 
         {/* Caption Overlay - Bottom Left (always visible when caption exists) */}
         {!isEditingCaption && (
-          <div 
+          <div
             className={cn(
               "absolute bottom-0 left-0 right-0 p-3 transition-opacity duration-200",
               // Always show if caption exists, otherwise only on hover for edit mode
@@ -189,7 +201,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
 
         {/* Inline Caption Editor */}
         {isEditingCaption && (
-          <div 
+          <div
             className="absolute bottom-0 left-0 right-0 p-3"
             onClick={(e) => e.stopPropagation()}
           >
@@ -220,7 +232,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
 
   // Check if this is a media-only card (edge-to-edge media with caption)
   const isMediaCard = item.variant === 'media' || item.type === 'image';
-  
+
   // Check if this is a text card
   const isTextCard = item.type === 'text';
 
@@ -229,7 +241,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     const alignClass = getTextAlignClass(item.textAlign);
     const vAlignClass = getTextVAlignClass(item.textVAlign);
     const sizeClass = getTextSizeClass(item.textSize);
-    
+
     return (
       <div className={cn(
         "h-full w-full flex flex-col p-4 bg-white",
@@ -262,7 +274,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     if (isMediaCard) {
       return renderMediaCard();
     }
-    
+
     // Text card - no icon, just text with alignment
     if (isTextCard) {
       return renderTextCard();
@@ -409,7 +421,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
       )}
 
       {canEdit && isHovered && !isDragging && !isOverlay && onDelete && (
-        <EditControls 
+        <EditControls
           onDelete={() => onDelete(item.id)}
           onResize={isHeading ? undefined : (onResize ? (size) => onResize(item.id, size) : undefined)}
           currentSize={currentSize}
