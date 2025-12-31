@@ -50,7 +50,7 @@ const fetchUrlMetadata = async (url: string): Promise<{
     const fullUrl = url.startsWith('http') ? url : `https://${url}`;
     const response = await fetch(`https://api.microlink.io?url=${encodeURIComponent(fullUrl)}`);
     const data: MicrolinkResponse = await response.json();
-    
+
     if (data.status === 'success' && data.data) {
       return {
         title: data.data.title,
@@ -104,7 +104,7 @@ const popoverAnimationStyle = {
 const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, onCancel }) => {
   const popoverRef = useRef<HTMLDivElement>(null);
   const mediaInputRef = useRef<HTMLInputElement>(null);
-  
+
   // Form state
   const [title, setTitle] = useState(state.existingData?.title || '');
   const [subtitle, setSubtitle] = useState(state.existingData?.subtitle || '');
@@ -114,21 +114,21 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
   const [caption, setCaption] = useState(state.existingData?.caption || '');
   const [mediaType, setMediaType] = useState<MediaType | undefined>(state.existingData?.mediaType);
   const [isFetchingMeta, setIsFetchingMeta] = useState(false);
-  
+
   // Text card specific state
   const [textAlign, setTextAlign] = useState<TextAlign>(state.existingData?.textAlign || 'left');
   const [textVAlign, setTextVAlign] = useState<TextVAlign>(state.existingData?.textVAlign || 'middle');
   const [textSize, setTextSize] = useState<TextSize>(state.existingData?.textSize || 'medium');
-  
+
   // Calculate position
   const [position, setPosition] = useState({ top: 0, left: 0 });
-  
+
   useEffect(() => {
     const calculatePosition = () => {
       const { anchorRect } = state;
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
-      
+
       if (state.mode === 'create') {
         // Position above the toolbar, centered
         const left = Math.max(POPOVER_GAP, Math.min(
@@ -141,25 +141,25 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
         // Position to the right of the card, or left if no space
         const spaceOnRight = viewportWidth - anchorRect.right;
         const popoverHeight = popoverRef.current?.offsetHeight || 300;
-        
+
         let left: number;
         if (spaceOnRight >= POPOVER_WIDTH + POPOVER_GAP) {
           left = anchorRect.right + POPOVER_GAP;
         } else {
           left = anchorRect.left - POPOVER_WIDTH - POPOVER_GAP;
         }
-        
+
         // Vertically center with the card, but keep within viewport
         let top = anchorRect.top + (anchorRect.height / 2) - (popoverHeight / 2);
         top = Math.max(POPOVER_GAP, Math.min(top, viewportHeight - popoverHeight - POPOVER_GAP));
-        
+
         // Ensure left is within bounds
         left = Math.max(POPOVER_GAP, Math.min(left, viewportWidth - POPOVER_WIDTH - POPOVER_GAP));
-        
+
         setPosition({ top, left });
       }
     };
-    
+
     calculatePosition();
     window.addEventListener('resize', calculatePosition);
     return () => window.removeEventListener('resize', calculatePosition);
@@ -168,11 +168,11 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
   // Handle URL fetch for link type
   const handleUrlFetch = async (inputUrl: string) => {
     if (!inputUrl || inputUrl.length < 5) return;
-    
+
     setIsFetchingMeta(true);
     const metadata = await fetchUrlMetadata(inputUrl);
     setIsFetchingMeta(false);
-    
+
     if (metadata) {
       if (!title && metadata.title) setTitle(metadata.title);
       if (!icon && metadata.logo) setIcon(metadata.logo);
@@ -198,7 +198,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
   // Handle save
   const handleSave = () => {
     const data: Partial<BentoItemData> = { type: state.type };
-    
+
     switch (state.type) {
       case 'heading':
         data.title = title || 'New Section';
@@ -230,7 +230,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
         data.title = title;
         data.size = state.existingData?.size || '1x1';
     }
-    
+
     onSave(data);
   };
 
@@ -279,7 +279,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
             />
           </div>
         );
-      
+
       case 'link':
         return (
           <div className="space-y-4">
@@ -289,8 +289,8 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
               <div className="flex gap-2">
                 <div className="relative flex-1">
                   <Link2 size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <Input 
-                    value={url} 
+                  <Input
+                    value={url}
                     onChange={e => setUrl(e.target.value)}
                     onBlur={e => handleUrlFetch(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && handleUrlFetch(url)}
@@ -299,8 +299,8 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     autoFocus
                   />
                 </div>
-                <Button 
-                  variant="secondary" 
+                <Button
+                  variant="secondary"
                   size="icon"
                   onClick={() => handleUrlFetch(url)}
                   disabled={isFetchingMeta || !url}
@@ -317,8 +317,8 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
             {/* Title */}
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Title</label>
-              <Input 
-                value={title} 
+              <Input
+                value={title}
                 onChange={e => setTitle(e.target.value)}
                 placeholder="Display title"
                 className="font-bold"
@@ -336,15 +336,15 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     <Globe size={18} className="text-gray-400" />
                   )}
                 </Squircle>
-                <Input 
-                  value={icon} 
+                <Input
+                  value={icon}
                   onChange={e => setIcon(e.target.value)}
                   placeholder="Icon URL (auto-fetched)"
                   className="flex-1 text-sm"
                 />
                 {icon && (
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="icon"
                     onClick={() => setIcon('')}
                     className="shrink-0 text-gray-400 hover:text-red-500"
@@ -355,18 +355,55 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
               </div>
             </div>
 
+            {/* Cover Image */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Cover Image</label>
+              <div className="flex items-start gap-3">
+                {image ? (
+                  <Squircle cornerRadius={12} className="relative w-16 h-16 overflow-hidden group/img shadow-md shrink-0 bg-gray-100">
+                    <img src={image} className="w-full h-full object-cover" alt="preview" />
+                    <button
+                      onClick={() => setImage('')}
+                      className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity text-white"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </Squircle>
+                ) : (
+                  <Squircle
+                    cornerRadius={12}
+                    as="button"
+                    onClick={() => mediaInputRef.current?.click()}
+                    className="w-16 h-16 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
+                  >
+                    <Upload size={16} />
+                    <span className="text-[8px] font-bold tracking-wide">UPLOAD</span>
+                  </Squircle>
+                )}
+                <div className="flex-1">
+                  <Input
+                    value={image}
+                    onChange={e => setImage(e.target.value)}
+                    placeholder="Image URL (auto-fetched)"
+                    className="text-sm"
+                  />
+                  <p className="text-[10px] text-gray-400 mt-1">Used as card background</p>
+                </div>
+              </div>
+            </div>
+
             {/* Subtitle */}
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Subtitle</label>
-              <Input 
-                value={subtitle} 
+              <Input
+                value={subtitle}
                 onChange={e => setSubtitle(e.target.value)}
                 placeholder="e.g. notion.so"
               />
             </div>
           </div>
         );
-      
+
       case 'image':
         return (
           <div className="space-y-4">
@@ -379,8 +416,8 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                 {image ? (
                   <Squircle cornerRadius={12} className="relative w-20 h-20 overflow-hidden group/img shadow-md shrink-0 bg-gray-100">
                     {(mediaType === 'video' || isVideoUrl(image)) ? (
-                      <video 
-                        src={image} 
+                      <video
+                        src={image}
                         className="w-full h-full object-cover"
                         muted
                         loop
@@ -390,7 +427,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     ) : (
                       <img src={image} className="w-full h-full object-cover" alt="preview" />
                     )}
-                    <button 
+                    <button
                       onClick={() => { setImage(''); setMediaType(undefined); }}
                       className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity text-white"
                     >
@@ -398,7 +435,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     </button>
                   </Squircle>
                 ) : (
-                  <Squircle 
+                  <Squircle
                     cornerRadius={12}
                     as="button"
                     onClick={() => mediaInputRef.current?.click()}
@@ -409,8 +446,8 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                   </Squircle>
                 )}
                 <div className="flex-1 space-y-2">
-                  <Input 
-                    value={image} 
+                  <Input
+                    value={image}
                     onChange={e => {
                       const val = e.target.value;
                       setImage(val);
@@ -422,12 +459,12 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                   />
                   <p className="text-[10px] text-gray-400">Paste URL or upload file</p>
                 </div>
-                <input 
-                  type="file" 
-                  ref={mediaInputRef} 
-                  onChange={handleMediaFileChange} 
-                  className="hidden" 
-                  accept="image/*,video/mp4,video/webm,video/quicktime" 
+                <input
+                  type="file"
+                  ref={mediaInputRef}
+                  onChange={handleMediaFileChange}
+                  className="hidden"
+                  accept="image/*,video/mp4,video/webm,video/quicktime"
                 />
               </div>
             </div>
@@ -435,8 +472,8 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
             {/* Caption */}
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Caption</label>
-              <Input 
-                value={caption} 
+              <Input
+                value={caption}
                 onChange={e => setCaption(e.target.value.slice(0, CAPTION_MAX_LENGTH))}
                 placeholder="Optional caption"
                 className="text-sm"
@@ -446,7 +483,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
             </div>
           </div>
         );
-      
+
       case 'text':
         return (
           <div className="space-y-4">
@@ -461,7 +498,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                 className="font-medium"
               />
             </div>
-            
+
             {/* Alignment Controls */}
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Alignment</label>
@@ -502,9 +539,9 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     <AlignRight size={16} />
                   </button>
                 </div>
-                
+
                 <div className="w-px h-6 bg-gray-200" />
-                
+
                 {/* Vertical Alignment */}
                 <div className="flex items-center bg-gray-100 rounded-lg p-1 gap-0.5">
                   <button
@@ -543,7 +580,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                 </div>
               </div>
             </div>
-            
+
             {/* Font Size Controls */}
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Size</label>
@@ -582,7 +619,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
             </div>
           </div>
         );
-      
+
       default:
         return (
           <div className="space-y-2">
@@ -613,7 +650,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
           }
         }
       `}</style>
-      
+
       <Squircle
         ref={popoverRef}
         cornerRadius={16}
@@ -623,7 +660,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
         style={{
           width: POPOVER_WIDTH,
           ...popoverAnimationStyle,
-          ...(state.mode === 'create' 
+          ...(state.mode === 'create'
             ? { bottom: window.innerHeight - state.anchorRect.top + POPOVER_GAP, left: position.left }
             : { top: position.top, left: position.left }
           ),
