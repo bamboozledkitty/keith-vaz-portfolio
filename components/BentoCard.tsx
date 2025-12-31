@@ -112,7 +112,14 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
       return;
     }
 
-    // In edit mode, open the editor popover
+    // Cmd/Ctrl + Click always opens URL (even in admin mode) for testing links
+    if ((e.metaKey || e.ctrlKey) && item.url) {
+      e.preventDefault();
+      window.open(item.url, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    // In edit mode, regular click opens the editor popover
     if (canEdit && onStartEdit && cardRef.current) {
       const rect = cardRef.current.getBoundingClientRect();
       onStartEdit(item.id, rect);
