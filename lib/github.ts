@@ -8,7 +8,7 @@
 import { BentoItemData } from '../types';
 
 // Repository configuration
-const REPO_OWNER = 'keithvaz';
+const REPO_OWNER = 'bamboozledkitty';
 const REPO_NAME = 'keith-vaz-portfolio';
 const CONTENT_PATH = 'public/content/data.json';
 const MEDIA_PATH = 'public/media';

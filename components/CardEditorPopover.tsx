@@ -459,13 +459,6 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                   />
                   <p className="text-[10px] text-gray-400">Paste URL or upload file</p>
                 </div>
-                <input
-                  type="file"
-                  ref={mediaInputRef}
-                  onChange={handleMediaFileChange}
-                  className="hidden"
-                  accept="image/*,video/mp4,video/webm,video/quicktime"
-                />
               </div>
             </div>
 
@@ -687,6 +680,15 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
         <div className="p-4">
           {renderFormFields()}
         </div>
+
+        {/* Hidden file input - available for all card types */}
+        <input
+          type="file"
+          ref={mediaInputRef}
+          onChange={handleMediaFileChange}
+          className="hidden"
+          accept="image/*,video/mp4,video/webm,video/quicktime"
+        />
 
         {/* Footer */}
         <div className="flex items-center justify-end gap-2 px-4 py-3 border-t border-gray-100 bg-gray-50/50">
