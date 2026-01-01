@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { LogOut, Loader2, AlertCircle, Save } from 'lucide-react';
 import {
   DndContext,
@@ -113,6 +113,26 @@ function App({ isAdmin = false }: AppProps) {
     };
     loadContent();
   }, []);
+
+  // Auto-detect viewport size for public view (non-admin)
+  useEffect(() => {
+    // Only auto-detect on public page (non-admin)
+    // Admin page uses manual toggle via toolbar
+    if (isAdmin) return;
+
+    const handleResize = () => {
+      // Use 768px as breakpoint (matching Tailwind's md)
+      const isMobile = window.innerWidth < 768;
+      setCurrentView(isMobile ? 'mobile' : 'desktop');
+    };
+
+    // Set initial value
+    handleResize();
+
+    // Listen for resize events
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isAdmin]);
 
   // Sort items by current view's order
   const sortedItems = useMemo(() => {
@@ -333,9 +353,15 @@ function App({ isAdmin = false }: AppProps) {
         {/* Left Sidebar - Profile & Stats */}
         <aside className="w-full lg:w-[340px] lg:sticky lg:top-20 shrink-0">
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-            <div className="w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden border-[8px] border-white mb-10 transition-transform hover:scale-[1.02] cursor-pointer duration-500 ease-out">
+            <div
+              className={cn(
+                "w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden border-[8px] border-white mb-10 transition-transform duration-500 ease-out",
+                canEdit && "hover:scale-[1.02] cursor-pointer hover:ring-4 hover:ring-black/20"
+              )}
+              onClick={canEdit ? () => alert('Profile picture editing coming soon! For now, replace the file at public/media/profile/profile-pic/IMG_5823.jpg') : undefined}
+            >
               <img
-                src={`${import.meta.env.BASE_URL}image-assets/profile-pic/IMG_5823.jpg`}
+                src={`${import.meta.env.BASE_URL}media/profile/profile-pic/IMG_5823.jpg`}
                 alt="Keith Vaz"
                 className="w-full h-full object-cover"
               />
