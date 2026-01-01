@@ -16,16 +16,18 @@ const getViewSize = (item: BentoItemData, view: ViewMode): ItemSize => {
 interface SortableItemProps {
   item: BentoItemData;
   currentView: ViewMode;
+  isAdminRoute?: boolean; // Whether we're on the admin route
   onDelete: (id: string) => void;
   onResize: (id: string, size: ItemSize) => void;
   onUpdate: (id: string, updates: Partial<BentoItemData>) => void;
   onStartEdit?: (id: string, anchorRect: DOMRect) => void;
 }
 
-const SortableItem: React.FC<SortableItemProps> = ({ item, currentView, onDelete, onResize, onUpdate, onStartEdit }) => {
+const SortableItem: React.FC<SortableItemProps> = ({ item, currentView, isAdminRoute = false, onDelete, onResize, onUpdate, onStartEdit }) => {
   const { isAuthenticated, isAdmin } = useAuth();
-  const canEdit = isAuthenticated && isAdmin;
-  
+  // canEdit requires BOTH route context (isAdminRoute) AND auth state
+  const canEdit = isAdminRoute && isAuthenticated && isAdmin;
+
   const {
     attributes,
     listeners,
@@ -53,9 +55,9 @@ const SortableItem: React.FC<SortableItemProps> = ({ item, currentView, onDelete
       data-item-size={currentSize}
       data-item-id={item.id}
       className={cn(
-        getSizeClasses(currentSize), 
+        getSizeClasses(currentSize),
         "touch-none relative hover:z-50 h-full w-full"
-      )} 
+      )}
     >
       {/* Drop Zone Placeholder */}
       <Squircle cornerRadius={20} className={cn(
@@ -65,17 +67,18 @@ const SortableItem: React.FC<SortableItemProps> = ({ item, currentView, onDelete
 
       {/* Actual Content */}
       <div className={cn(
-        "h-full w-full transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]", 
+        "h-full w-full transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
         isDragging ? "opacity-0" : "opacity-100"
       )}>
-         <BentoCard 
-           item={item} 
-           currentView={currentView}
-           onDelete={onDelete} 
-           onResize={onResize} 
-           onUpdate={onUpdate}
-           onStartEdit={onStartEdit}
-         />
+        <BentoCard
+          item={item}
+          currentView={currentView}
+          isAdminRoute={isAdminRoute}
+          onDelete={onDelete}
+          onResize={onResize}
+          onUpdate={onUpdate}
+          onStartEdit={onStartEdit}
+        />
       </div>
     </div>
   );

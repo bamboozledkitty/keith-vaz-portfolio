@@ -55,6 +55,7 @@ const CAPTION_MAX_LENGTH = 50;
 interface BentoCardProps {
   item: BentoItemData;
   currentView?: ViewMode;
+  isAdminRoute?: boolean; // Whether we're on the admin route (not just authenticated)
   isOverlay?: boolean;
   isDragging?: boolean;
   onDelete?: (id: string) => void;
@@ -77,9 +78,10 @@ const SocialIcon = ({ name, className }: { name?: string; className?: string }) 
   }
 };
 
-const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', isOverlay, isDragging, onDelete, onResize, onUpdate, onStartEdit }) => {
+const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', isAdminRoute = false, isOverlay, isDragging, onDelete, onResize, onUpdate, onStartEdit }) => {
   const { isAuthenticated, isAdmin } = useAuth();
-  const canEdit = isAuthenticated && isAdmin;
+  // canEdit requires BOTH route context (isAdminRoute) AND auth state
+  const canEdit = isAdminRoute && isAuthenticated && isAdmin;
   const cardRef = useRef<HTMLDivElement>(null);
 
   // Get size for current view

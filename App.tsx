@@ -413,6 +413,7 @@ function App({ isAdmin = false }: AppProps) {
                       key={item.id}
                       item={item}
                       currentView={currentView}
+                      isAdminRoute={isAdmin}
                       onDelete={handleDeleteItem}
                       onResize={handleResize}
                       onUpdate={handleUpdateItem}
@@ -425,7 +426,7 @@ function App({ isAdmin = false }: AppProps) {
               <DragOverlay adjustScale={false} dropAnimation={dropAnimationConfig}>
                 {activeItem ? (
                   <div className="w-full h-full scale-105 cursor-grabbing">
-                    <BentoCard item={activeItem} currentView={currentView} isOverlay isDragging />
+                    <BentoCard item={activeItem} currentView={currentView} isAdminRoute={isAdmin} isOverlay isDragging />
                   </div>
                 ) : null}
               </DragOverlay>
