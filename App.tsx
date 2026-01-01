@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { LogOut, Loader2, AlertCircle, Save } from 'lucide-react';
+import { LogOut, Loader2, AlertCircle, Save, Camera } from 'lucide-react';
 import {
   DndContext,
   closestCenter,
@@ -25,6 +25,7 @@ import SortableItem from './components/SortableItem';
 import BentoCard from './components/BentoCard';
 import Toolbar from './components/Toolbar';
 import CardEditorPopover, { EditorState } from './components/CardEditorPopover';
+import ProfilePictureCropperModal from './components/ProfilePictureCropperModal';
 import { BentoItemData, ItemType, ItemSize, ViewMode, ViewLayout } from './types';
 import { useAuth } from './contexts/AuthContext';
 import { Button } from './components/ui/button';
@@ -88,6 +89,12 @@ function App({ isAdmin = false }: AppProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [editorState, setEditorState] = useState<EditorState | null>(null);
   const [currentView, setCurrentView] = useState<ViewMode>('desktop');
+
+  // Profile picture editing state
+  const profileInputRef = useRef<HTMLInputElement>(null);
+  const [profileImageSrc, setProfileImageSrc] = useState<string | null>(null);
+  const [showProfileCropper, setShowProfileCropper] = useState(false);
+  const [croppedProfilePicture, setCroppedProfilePicture] = useState<string | null>(null);
 
   // Load content from JSON on mount
   useEffect(() => {
@@ -348,30 +355,55 @@ function App({ isAdmin = false }: AppProps) {
         </div>
       )}
 
-      <div className="flex flex-col lg:flex-row max-w-[1400px] mx-auto p-6 md:p-12 lg:p-20 gap-12 lg:gap-24 items-start">
+      <div className="flex flex-col lg:flex-row max-w-[1400px] mx-auto p-4 md:p-8 lg:p-16 gap-10 lg:gap-20 items-start">
 
         {/* Left Sidebar - Profile & Stats */}
         <aside className="w-full lg:w-[340px] lg:sticky lg:top-20 shrink-0">
           <div className="flex flex-col items-start text-left">
             <div
               className={cn(
-                "w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden border-[8px] border-white mb-10 transition-transform duration-500 ease-out",
+                "w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden mb-8 transition-transform duration-500 ease-out relative group",
                 canEdit && "hover:scale-[1.02] cursor-pointer hover:ring-4 hover:ring-black/20"
               )}
-              onClick={canEdit ? () => alert('Profile picture editing coming soon! For now, replace the file at public/media/profile/profile-pic/IMG_5823.jpg') : undefined}
+              onClick={canEdit ? () => profileInputRef.current?.click() : undefined}
             >
               <img
-                src={`${import.meta.env.BASE_URL}media/profile/profile-pic/IMG_5823.jpg`}
+                src={croppedProfilePicture || `${import.meta.env.BASE_URL}media/profile/profile-pic/IMG_5823.jpg`}
                 alt="Keith Vaz"
                 className="w-full h-full object-cover"
               />
+              {canEdit && (
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Camera size={32} className="text-white" />
+                </div>
+              )}
             </div>
+            {/* Hidden file input for profile picture */}
+            <input
+              type="file"
+              ref={profileInputRef}
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setProfileImageSrc(reader.result as string);
+                    setShowProfileCropper(true);
+                  };
+                  reader.readAsDataURL(file);
+                }
+                // Reset input so same file can be selected again
+                e.target.value = '';
+              }}
+            />
 
             <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-5 leading-tight">
               Keith Vaz <span className="inline-block hover:rotate-12 transition-transform cursor-default duration-500">👋</span>
             </h1>
 
-            <div className="flex flex-col gap-4 text-gray-500 text-lg font-medium mb-10">
+            <div className="flex flex-col gap-2 text-gray-500 text-xl font-medium mb-8">
               <div className="flex items-center gap-3">
                 <span className="text-xl">👨🏽‍💻</span>
                 <span>Design Systems Designer</span>
@@ -475,6 +507,23 @@ function App({ isAdmin = false }: AppProps) {
           state={editorState}
           onSave={handleEditorSave}
           onCancel={handleEditorCancel}
+        />
+      )}
+
+      {/* Profile Picture Cropper Modal */}
+      {showProfileCropper && profileImageSrc && (
+        <ProfilePictureCropperModal
+          imageSrc={profileImageSrc}
+          onSave={(croppedImage) => {
+            setCroppedProfilePicture(croppedImage);
+            setShowProfileCropper(false);
+            setProfileImageSrc(null);
+            setHasUnsavedChanges(true);
+          }}
+          onCancel={() => {
+            setShowProfileCropper(false);
+            setProfileImageSrc(null);
+          }}
         />
       )}
     </div>
