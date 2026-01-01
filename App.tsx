@@ -355,7 +355,7 @@ function App({ isAdmin = false }: AppProps) {
         </div>
       )}
 
-      <div className="flex flex-col lg:flex-row max-w-[1400px] mx-auto p-4 md:p-8 lg:p-16 gap-10 lg:gap-20 items-start">
+      <div className="flex flex-col lg:flex-row w-full max-w-[1400px] mx-auto p-4 md:p-8 lg:p-16 lg:justify-between gap-6 items-start">
 
         {/* Left Sidebar - Profile & Stats */}
         <aside className="w-full lg:w-[340px] lg:sticky lg:top-20 shrink-0">
@@ -420,8 +420,8 @@ function App({ isAdmin = false }: AppProps) {
           </div>
         </aside>
 
-        {/* Right Section - Single Flat Grid */}
-        <main className="flex-1 w-full">
+        {/* Right Section - Bento Grid (anchored to right edge) */}
+        <main className="w-full lg:w-auto lg:max-w-[800px] shrink">
           {/* Loading State */}
           {isLoading && (
             <div className="flex flex-col items-center justify-center py-20 text-gray-500">
