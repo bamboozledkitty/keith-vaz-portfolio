@@ -56,7 +56,8 @@
         --bento-cols: 2;
         --bento-container: calc(100vw - 48px);
         --bento-col-width: calc((var(--bento-container) - var(--bento-gap)) / var(--bento-cols));
-        --bento-row: calc((var(--bento-col-width) - var(--bento-gap)) / 2);
+        /* Ensure minimum row height of 60px for usability, prevents cards from becoming too small */
+        --bento-row: max(60px, calc((var(--bento-col-width) - var(--bento-gap)) / 2));
       }
       
       /* Tablet (2 cols, gap 24px, padding 48px each side) */
@@ -66,7 +67,7 @@
           --bento-cols: 2;
           --bento-container: calc(100vw - 96px);
           --bento-col-width: calc((var(--bento-container) - var(--bento-gap)) / var(--bento-cols));
-          --bento-row: calc((var(--bento-col-width) - var(--bento-gap)) / 2);
+          --bento-row: max(70px, calc((var(--bento-col-width) - var(--bento-gap)) / 2));
         }
       }
       
@@ -77,9 +78,16 @@
           --bento-cols: 4;
           --bento-container: calc(min(100vw, 1400px) - 160px - 340px - 96px);
           --bento-col-width: calc((var(--bento-container) - 3 * var(--bento-gap)) / var(--bento-cols));
-          --bento-row: calc((var(--bento-col-width) - var(--bento-gap)) / 2);
+          --bento-row: max(60px, calc((var(--bento-col-width) - var(--bento-gap)) / 2));
         }
       }
+      
+      /* Card aspect ratio enforcement - ensures consistent proportions during resize */
+      [data-item-size="1x1"] { aspect-ratio: 1 / 1; }
+      [data-item-size="1x0.5"] { aspect-ratio: 2 / 1; }
+      [data-item-size="2x1"] { aspect-ratio: 2 / 1; }
+      [data-item-size="1x2"] { aspect-ratio: 1 / 2; }
+      [data-item-size="2x2"] { aspect-ratio: 1 / 1; }
     </style>
   <script type="importmap">
 {
