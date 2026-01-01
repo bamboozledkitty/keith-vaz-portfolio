@@ -461,10 +461,16 @@ function App({ isAdmin = false }: AppProps) {
               >
                 <div
                   className={cn(
-                    "bento-grid grid gap-4 md:gap-6 grid-flow-dense",
-                    currentView === 'desktop' ? "grid-cols-2 lg:grid-cols-4" : "grid-cols-2 max-w-[400px] mx-auto"
+                    "bento-grid grid grid-flow-dense",
+                    currentView === 'mobile' && "max-w-[400px] mx-auto"
                   )}
-                  style={{ gridAutoRows: 'var(--bento-row)' }}
+                  style={{
+                    gridTemplateColumns: currentView === 'desktop'
+                      ? 'repeat(4, 180px)'
+                      : 'repeat(2, 160px)',
+                    gridAutoRows: 'var(--bento-row)',
+                    gap: currentView === 'desktop' ? '20px' : '12px'
+                  }}
                 >
                   {sortedItems.map((item) => (
                     <SortableItem
