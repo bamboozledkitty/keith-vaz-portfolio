@@ -50,46 +50,15 @@
       scrollbar-width: none;
     }
 
-    /* Bento grid - FIXED card sizes, no resizing */
-    /* Cards maintain fixed dimensions regardless of viewport */
-
-    /* Mobile & Tablet (2 cols, fixed card sizes) */
+    /* Bento grid - row heights for card proportions */
     .bento-grid {
-      --bento-gap: 12px;
       --bento-row: 75px;
-      --bento-card-width: 160px;
-      /* Fixed card width */
     }
 
-    /* Desktop (4 cols at lg breakpoint, fixed card sizes) */
     @media (min-width: 1024px) {
       .bento-grid {
-        --bento-gap: 20px;
         --bento-row: 80px;
-        --bento-card-width: 180px;
-        /* Fixed card width on desktop */
       }
-    }
-
-    /* Fixed card widths based on size type */
-    [data-item-size="1x1"] {
-      width: var(--bento-card-width);
-    }
-
-    [data-item-size="1x0.5"] {
-      width: var(--bento-card-width);
-    }
-
-    [data-item-size="2x1"] {
-      width: calc(var(--bento-card-width) * 2 + var(--bento-gap));
-    }
-
-    [data-item-size="1x2"] {
-      width: var(--bento-card-width);
-    }
-
-    [data-item-size="2x2"] {
-      width: calc(var(--bento-card-width) * 2 + var(--bento-gap));
     }
 
     /* Card aspect ratio enforcement - ensures consistent proportions */
