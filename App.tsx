@@ -352,7 +352,7 @@ function App({ isAdmin = false }: AppProps) {
 
         {/* Left Sidebar - Profile & Stats */}
         <aside className="w-full lg:w-[340px] lg:sticky lg:top-20 shrink-0">
-          <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
+          <div className="flex flex-col items-start text-left">
             <div
               className={cn(
                 "w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden border-[8px] border-white mb-10 transition-transform duration-500 ease-out",

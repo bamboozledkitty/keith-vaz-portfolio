@@ -1,94 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Keith Vaz Portfolio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['"Geist Sans"', 'sans-serif'],
-            },
-            colors: {
-              card: {
-                bg: '#f7f6f3',
-                card: '#ffffff',
-                border: '#e5e5e5',
-                primary: '#2d2d2d',
-                green: '#4ade80',
-              }
-            },
-            boxShadow: {
-              'card': '0 2px 4px rgba(0,0,0,0.02), 0 8px 16px rgba(0,0,0,0.04)',
-              'card-hover': '0 4px 8px rgba(0,0,0,0.04), 0 12px 24px rgba(0,0,0,0.08)',
-              'card-drag': '0 20px 40px rgba(0,0,0,0.15)',
-            },
-            animation: {
-              "accordion-down": "accordion-down 0.2s ease-out",
-              "accordion-up": "accordion-up 0.2s ease-out",
-            },
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keith Vaz Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Geist Sans"', 'sans-serif'],
+          },
+          colors: {
+            card: {
+              bg: '#f7f6f3',
+              card: '#ffffff',
+              border: '#e5e5e5',
+              primary: '#2d2d2d',
+              green: '#4ade80',
+            }
+          },
+          boxShadow: {
+            'card': '0 2px 4px rgba(0,0,0,0.02), 0 8px 16px rgba(0,0,0,0.04)',
+            'card-hover': '0 4px 8px rgba(0,0,0,0.04), 0 12px 24px rgba(0,0,0,0.08)',
+            'card-drag': '0 20px 40px rgba(0,0,0,0.15)',
+          },
+          animation: {
+            "accordion-down": "accordion-down 0.2s ease-out",
+            "accordion-up": "accordion-up 0.2s ease-out",
           },
         },
-      }
-    </script>
-    <link href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/style.css" rel="stylesheet">
-    <style>
-      body {
-        background-color: #f7f6f3;
-      }
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      /* Bento grid row height - for perfect squares, account for gap between rows */
-      /* Formula: row_height = (column_width - gap) / 2 */
-      /* So that: 2 * row_height + gap = column_width (perfect square) */
-      
-      /* Mobile (2 cols, gap 16px, padding 24px each side) */
+      },
+    }
+  </script>
+  <link href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/style.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f7f6f3;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Bento grid - FIXED card sizes, no resizing until breakpoint */
+    /* Cards maintain fixed dimensions, only the layout changes at lg breakpoint */
+
+    /* Mobile & Tablet (2 cols, fixed card sizes) */
+    .bento-grid {
+      --bento-gap: 16px;
+      --bento-row: 75px;
+      /* Fixed row height for consistent card proportions */
+    }
+
+    /* Desktop (4 cols at lg breakpoint, fixed card sizes) */
+    @media (min-width: 1024px) {
       .bento-grid {
-        --bento-gap: 16px;
-        --bento-cols: 2;
-        --bento-container: calc(100vw - 48px);
-        --bento-col-width: calc((var(--bento-container) - var(--bento-gap)) / var(--bento-cols));
-        /* Ensure minimum row height of 60px for usability, prevents cards from becoming too small */
-        --bento-row: max(60px, calc((var(--bento-col-width) - var(--bento-gap)) / 2));
+        --bento-gap: 24px;
+        --bento-row: 80px;
+        /* Slightly larger on desktop */
       }
-      
-      /* Tablet (2 cols, gap 24px, padding 48px each side) */
-      @media (min-width: 768px) {
-        .bento-grid {
-          --bento-gap: 24px;
-          --bento-cols: 2;
-          --bento-container: calc(100vw - 96px);
-          --bento-col-width: calc((var(--bento-container) - var(--bento-gap)) / var(--bento-cols));
-          --bento-row: max(70px, calc((var(--bento-col-width) - var(--bento-gap)) / 2));
-        }
-      }
-      
-      /* Desktop (4 cols, gap 24px, padding 80px each side, sidebar 340px, sidebar gap 96px) */
-      @media (min-width: 1024px) {
-        .bento-grid {
-          --bento-gap: 24px;
-          --bento-cols: 4;
-          --bento-container: calc(min(100vw, 1400px) - 160px - 340px - 96px);
-          --bento-col-width: calc((var(--bento-container) - 3 * var(--bento-gap)) / var(--bento-cols));
-          --bento-row: max(60px, calc((var(--bento-col-width) - var(--bento-gap)) / 2));
-        }
-      }
-      
-      /* Card aspect ratio enforcement - ensures consistent proportions during resize */
-      [data-item-size="1x1"] { aspect-ratio: 1 / 1; }
-      [data-item-size="1x0.5"] { aspect-ratio: 2 / 1; }
-      [data-item-size="2x1"] { aspect-ratio: 2 / 1; }
-      [data-item-size="1x2"] { aspect-ratio: 1 / 2; }
-      [data-item-size="2x2"] { aspect-ratio: 1 / 1; }
-    </style>
+    }
+
+    /* Card aspect ratio enforcement - ensures consistent proportions */
+    [data-item-size="1x1"] {
+      aspect-ratio: 1 / 1;
+    }
+
+    [data-item-size="1x0.5"] {
+      aspect-ratio: 2 / 1;
+    }
+
+    [data-item-size="2x1"] {
+      aspect-ratio: 2 / 1;
+    }
+
+    [data-item-size="1x2"] {
+      aspect-ratio: 1 / 2;
+    }
+
+    [data-item-size="2x2"] {
+      aspect-ratio: 1 / 1;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -108,10 +109,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="root"></div>
+
+<body>
+  <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>

@@ -56,7 +56,9 @@ const SortableItem: React.FC<SortableItemProps> = ({ item, currentView, isAdminR
       data-item-id={item.id}
       className={cn(
         getSizeClasses(currentSize),
-        "touch-none relative hover:z-50 h-full w-full"
+        // Only apply touch-none in edit mode to allow scrolling on public page
+        canEdit && "touch-none",
+        "relative hover:z-50 h-full w-full"
       )}
     >
       {/* Drop Zone Placeholder */}
