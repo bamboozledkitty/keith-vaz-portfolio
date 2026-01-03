@@ -153,28 +153,30 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     const hasMedia = !!mediaUrl;
 
     return (
-      <div className="h-full w-full relative group overflow-hidden bg-gray-100">
-        {/* Media - Edge to Edge */}
-        {hasMedia && mediaType === 'video' ? (
-          <video
-            src={mediaUrl}
-            className="w-full h-full object-cover"
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
-        ) : hasMedia ? (
-          <img
-            src={mediaUrl}
-            alt={item.caption || item.title || 'Media'}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-100">
-            <Film size={48} className="text-gray-300" />
-          </div>
-        )}
+      <div className="h-full w-full relative group overflow-hidden bg-gray-100 flex items-center justify-center">
+        {/* Media - 4:3 Aspect Ratio Container */}
+        <div className="relative w-full aspect-[4/3]">
+          {hasMedia && mediaType === 'video' ? (
+            <video
+              src={mediaUrl}
+              className="absolute inset-0 w-full h-full object-cover"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          ) : hasMedia ? (
+            <img
+              src={mediaUrl}
+              alt={item.caption || item.title || 'Media'}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100">
+              <Film size={48} className="text-gray-300" />
+            </div>
+          )}
+        </div>
 
         {/* Caption Overlay - Bottom Left (always visible when caption exists) */}
         {!isEditingCaption && (
@@ -333,10 +335,12 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
             </div>
           </div>
           {item.image && (
-            <div className="w-[38%] h-full p-5 pl-0 shrink-0">
-              <Squircle cornerRadius={12} className="w-full h-full overflow-hidden relative bg-gray-50 shadow-inner">
-                <img src={item.image} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-              </Squircle>
+            <div className="w-[45%] p-5 pl-0 shrink-0 flex items-center">
+              <div className="w-full aspect-[4/3] relative">
+                <Squircle cornerRadius={12} className="absolute inset-0 overflow-hidden bg-gray-50 shadow-inner">
+                  <img src={item.image} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                </Squircle>
+              </div>
             </div>
           )}
         </div>
@@ -355,10 +359,12 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
             <p className="text-xs text-gray-400 mt-1.5 font-medium line-clamp-2">{item.subtitle}</p>
           </div>
           {item.image && (
-            <div className="flex-1 p-5 pt-0">
-              <Squircle cornerRadius={12} className="w-full h-full overflow-hidden relative bg-gray-50 shadow-inner">
-                <img src={item.image} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-              </Squircle>
+            <div className="flex-1 p-5 pt-0 flex items-end">
+              <div className="w-full aspect-[4/3] relative">
+                <Squircle cornerRadius={12} className="absolute inset-0 overflow-hidden bg-gray-50 shadow-inner">
+                  <img src={item.image} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                </Squircle>
+              </div>
             </div>
           )}
         </div>
@@ -368,10 +374,12 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     // 5. Large Square (2x2) - Hero-style card for featured case studies or media
     if (currentSize === '2x2') {
       return (
-        <div className="h-full w-full relative group overflow-hidden bg-gray-50">
+        <div className="h-full w-full relative group overflow-hidden bg-gray-50 flex items-center justify-center">
           {item.image ? (
             <>
-              <img src={item.image} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="relative w-full aspect-[4/3]">
+                <img src={item.image} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-6">
                 <Squircle cornerRadius={12} className="w-10 h-10 overflow-hidden flex items-center justify-center bg-white/20 backdrop-blur-sm mb-3">
                   <SocialIcon name={item.icon} className="w-5 h-5 text-white" />

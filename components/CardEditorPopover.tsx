@@ -51,20 +51,28 @@ const fetchUrlMetadata = async (url: string): Promise<{
     const response = await fetch(`https://api.microlink.io?url=${encodeURIComponent(fullUrl)}`);
     const data: MicrolinkResponse = await response.json();
 
+    // Google Favicon Service as fallback
+    const faviconFallback = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128` : undefined;
+
     if (data.status === 'success' && data.data) {
       return {
         title: data.data.title,
-        logo: data.data.logo?.url,
+        logo: data.data.logo?.url || faviconFallback,
         image: data.data.image?.url,
         domain: domain || undefined,
       };
     }
-    return { domain: domain || undefined };
+    return {
+      domain: domain || undefined,
+      logo: faviconFallback,
+    };
   } catch {
     const domain = getDomain(url);
-    return domain ? { domain } : null;
+    const faviconFallback = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128` : undefined;
+    return domain ? { domain, logo: faviconFallback } : null;
   }
 };
+
 
 // Caption character limit
 const CAPTION_MAX_LENGTH = 50;
@@ -360,7 +368,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
               <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Cover Image</label>
               <div className="flex items-start gap-3">
                 {image ? (
-                  <Squircle cornerRadius={12} className="relative w-16 h-16 overflow-hidden group/img shadow-md shrink-0 bg-gray-100">
+                  <Squircle cornerRadius={12} className="relative w-24 aspect-[4/3] overflow-hidden group/img shadow-md shrink-0 bg-gray-100">
                     <img src={image} className="w-full h-full object-cover" alt="preview" />
                     <button
                       onClick={() => setImage('')}
@@ -374,7 +382,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     cornerRadius={12}
                     as="button"
                     onClick={() => mediaInputRef.current?.click()}
-                    className="w-16 h-16 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
+                    className="w-24 aspect-[4/3] border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
                   >
                     <Upload size={16} />
                     <span className="text-[8px] font-bold tracking-wide">UPLOAD</span>
@@ -414,7 +422,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
               </label>
               <div className="flex items-start gap-3">
                 {image ? (
-                  <Squircle cornerRadius={12} className="relative w-20 h-20 overflow-hidden group/img shadow-md shrink-0 bg-gray-100">
+                  <Squircle cornerRadius={12} className="relative w-28 aspect-[4/3] overflow-hidden group/img shadow-md shrink-0 bg-gray-100">
                     {(mediaType === 'video' || isVideoUrl(image)) ? (
                       <video
                         src={image}
@@ -439,7 +447,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     cornerRadius={12}
                     as="button"
                     onClick={() => mediaInputRef.current?.click()}
-                    className="w-20 h-20 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
+                    className="w-28 aspect-[4/3] border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
                   >
                     <Upload size={20} />
                     <span className="text-[9px] font-bold tracking-wide">UPLOAD</span>
