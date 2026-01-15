@@ -5,6 +5,7 @@ import { Input } from './ui/input';
 import { Squircle } from './ui/squircle';
 import { cn } from '../lib/utils';
 import { ItemType, BentoItemData, MediaType, TextAlign, TextVAlign, TextSize } from '../types';
+import { uploadMediaToGitHub } from '../lib/github';
 
 // Video file extensions
 const VIDEO_EXTENSIONS = ['.mp4', '.webm', '.mov', '.m4v', '.ogg'];
@@ -89,10 +90,13 @@ interface CardEditorPopoverProps {
   state: EditorState;
   onSave: (data: Partial<BentoItemData>) => void;
   onCancel: () => void;
+  token?: string; // Optional token for GitHub uploads
 }
 
 const POPOVER_WIDTH = 320;
 const POPOVER_GAP = 16;
+const MAX_FILE_SIZE_MB = 20; // Safe limit for GitHub API uploads
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 // Type labels and icons
 const TYPE_CONFIG: Record<ItemType, { label: string; icon: React.ReactNode }> = {
@@ -109,7 +113,7 @@ const popoverAnimationStyle = {
   animation: 'popover-fade-in 200ms ease-out forwards',
 };
 
-const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, onCancel }) => {
+const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, onCancel, token }) => {
   const popoverRef = useRef<HTMLDivElement>(null);
   const mediaInputRef = useRef<HTMLInputElement>(null);
 
@@ -122,6 +126,8 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
   const [caption, setCaption] = useState(state.existingData?.caption || '');
   const [mediaType, setMediaType] = useState<MediaType | undefined>(state.existingData?.mediaType);
   const [isFetchingMeta, setIsFetchingMeta] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   // Text card specific state
   const [textAlign, setTextAlign] = useState<TextAlign>(state.existingData?.textAlign || 'left');
@@ -190,10 +196,39 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
   };
 
   // Handle media file upload
-  const handleMediaFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMediaFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const isVideo = file.type.startsWith('video/');
+    if (!file) return;
+
+    // Check file size
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      setUploadError(`File too large. Max size is ${MAX_FILE_SIZE_MB}MB.`);
+      return;
+    }
+
+    setUploadError(null);
+    const isVideo = file.type.startsWith('video/');
+    
+    // If we have a token, upload to GitHub immediately
+    if (token) {
+      setIsUploading(true);
+      try {
+        // Determine folder based on card type
+        let folder: any = 'visual-design/images';
+        if (state.type === 'image' && isVideo) folder = 'visual-design/videos';
+        else if (state.type === 'link') folder = 'case-studies';
+        
+        const uploadedUrl = await uploadMediaToGitHub(token, file, folder);
+        setImage(uploadedUrl);
+        setMediaType(isVideo ? 'video' : 'image');
+      } catch (error) {
+        console.error('Upload failed:', error);
+        setUploadError('Failed to upload to GitHub. Please try again.');
+      } finally {
+        setIsUploading(false);
+      }
+    } else {
+      // Fallback to base64 if no token (preview mode)
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result as string);
@@ -380,10 +415,14 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                 ) : (
                   <button
                     onClick={() => mediaInputRef.current?.click()}
-                    className="w-24 aspect-[4/3] border-2 border-dashed border-[#efefef] rounded-[4px] flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
+                    disabled={isUploading}
+                    className={cn(
+                      "w-24 aspect-[4/3] border-2 border-dashed border-[#efefef] rounded-[4px] flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0",
+                      isUploading && "animate-pulse cursor-wait"
+                    )}
                   >
-                    <Upload size={16} />
-                    <span className="text-[8px] font-bold tracking-wide">UPLOAD</span>
+                    {isUploading ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+                    <span className="text-[8px] font-bold tracking-wide">{isUploading ? 'UPLOADING...' : 'UPLOAD'}</span>
                   </button>
                 )}
                 <div className="flex-1">
@@ -393,7 +432,11 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     placeholder="Image URL (auto-fetched)"
                     className="text-sm"
                   />
-                  <p className="text-[10px] text-gray-400 mt-1">Used as card background</p>
+                  {uploadError ? (
+                    <p className="text-[10px] text-red-500 mt-1">{uploadError}</p>
+                  ) : (
+                    <p className="text-[10px] text-gray-400 mt-1">Used as card background</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -443,10 +486,14 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                 ) : (
                   <button
                     onClick={() => mediaInputRef.current?.click()}
-                    className="w-28 aspect-[4/3] border-2 border-dashed border-[#efefef] rounded-[4px] flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
+                    disabled={isUploading}
+                    className={cn(
+                      "w-28 aspect-[4/3] border-2 border-dashed border-[#efefef] rounded-[4px] flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0",
+                      isUploading && "animate-pulse cursor-wait"
+                    )}
                   >
-                    <Upload size={20} />
-                    <span className="text-[9px] font-bold tracking-wide">UPLOAD</span>
+                    {isUploading ? <Loader2 size={20} className="animate-spin" /> : <Upload size={20} />}
+                    <span className="text-[9px] font-bold tracking-wide">{isUploading ? 'UPLOADING...' : 'UPLOAD'}</span>
                   </button>
                 )}
                 <div className="flex-1 space-y-2">
@@ -461,7 +508,11 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     className="text-sm"
                     autoFocus={!image}
                   />
-                  <p className="text-[10px] text-gray-400">Paste URL or upload file</p>
+                  {uploadError ? (
+                    <p className="text-[10px] text-red-500 mt-1">{uploadError}</p>
+                  ) : (
+                    <p className="text-[10px] text-gray-400">Paste URL or upload file (max {MAX_FILE_SIZE_MB}MB)</p>
+                  )}
                 </div>
               </div>
             </div>
