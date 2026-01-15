@@ -326,13 +326,20 @@ function App({ isAdmin = false }: AppProps) {
                     console.error('No auth token available');
                     return;
                   }
+                  
+                  if (token.startsWith('test-token-')) {
+                    alert('You are currently using a Test Account. Changes cannot be saved to GitHub in test mode. Please log out and sign in with your GitHub account to save changes.');
+                    return;
+                  }
+
                   setIsSaving(true);
                   try {
                     await saveContentToGitHub(token, items);
                     setHasUnsavedChanges(false);
                   } catch (error) {
                     console.error('Failed to save:', error);
-                    alert('Failed to save changes. Please check your token permissions.');
+                    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                    alert(`Failed to save changes: ${errorMessage}\n\nPlease check your token permissions or try logging in again.`);
                   } finally {
                     setIsSaving(false);
                   }

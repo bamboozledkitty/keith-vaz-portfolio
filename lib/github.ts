@@ -47,7 +47,8 @@ export async function fetchContentFromGitHub(token: string): Promise<ContentData
     }
 
     const data: GitHubFileResponse = await response.json();
-    const content = atob(data.content);
+    // UTF-8 safe base64 decoding
+    const content = decodeURIComponent(escape(atob(data.content)));
     return JSON.parse(content);
 }
 
@@ -83,7 +84,9 @@ export async function saveContentToGitHub(
         items,
     };
 
-    const contentBase64 = btoa(JSON.stringify(newContent, null, 2));
+    // UTF-8 safe base64 encoding
+    const jsonString = JSON.stringify(newContent, null, 2);
+    const contentBase64 = btoa(unescape(encodeURIComponent(jsonString)));
 
     // Update the file
     const response = await fetch(
