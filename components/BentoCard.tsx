@@ -154,8 +154,8 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
 
     return (
       <div className="h-full w-full relative group overflow-hidden bg-gray-100 flex items-center justify-center">
-        {/* Media - 4:3 Aspect Ratio Container */}
-        <div className="relative w-full aspect-[4/3]">
+        {/* Media - Container should fill the card */}
+        <div className="relative w-full h-full">
           {hasMedia && mediaType === 'video' ? (
             <video
               src={mediaUrl}
