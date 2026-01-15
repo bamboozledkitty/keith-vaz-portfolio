@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-01-15T18:23:33.311Z",
+  "lastUpdated": "2026-01-15T18:24:48.382Z",
   "items": [
     {
       "id": "3cgxucje1",
@@ -239,7 +239,7 @@
       "variant": "media",
       "title": "Order History",
       "subtitle": "dribbble.com",
-      "image": "",
+      "image": "/media-assets/users_cle5sqmlo00spo20yg6c5rwye_njoUbihT7jtMrOqH-00652772892709fa5fe06f445aa7a0b2.mp4",
       "desktopLayout": {
         "size": "2x2",
         "order": 13
@@ -252,53 +252,22 @@
       "mediaType": "video"
     },
     {
-      "id": "vd-2",
-      "type": "image",
-      "size": "1x2",
-      "variant": "media",
-      "title": "Home Banking",
-      "subtitle": "dribbble.com",
-      "image": "https://cdn.dribbble.com/userupload/6418873/file/original-4394460f37c3746671048b1156828551.jpg?resize=1024x768",
-      "desktopLayout": {
-        "size": "1x2",
-        "order": 14
-      },
-      "mobileLayout": {
-        "size": "1x2",
-        "order": 14
-      }
-    },
-    {
-      "id": "vd-3",
-      "type": "image",
-      "size": "1x1",
-      "variant": "media",
-      "title": "",
-      "image": "https://cdn.dribbble.com/users/1615584/screenshots/15694247/media/16c310433722513f56b9c9f456108159.jpg?resize=1000x750&vertical=center",
-      "desktopLayout": {
-        "size": "1x1",
-        "order": 15
-      },
-      "mobileLayout": {
-        "size": "1x1",
-        "order": 15
-      }
-    },
-    {
       "id": "vd-4",
       "type": "image",
-      "size": "1x1",
+      "size": "2x2",
       "variant": "media",
       "title": "Welcome, Keith!",
-      "image": "https://cdn.dribbble.com/users/4189231/screenshots/14467008/media/6738942b0c36082d614838031d904790.png?resize=1000x750&vertical=center",
+      "image": "/media-assets/users_cle5sqmlo00spo20yg6c5rwye_JB0qEtAQv2IrNF3N-image.png",
       "desktopLayout": {
-        "size": "1x1",
+        "size": "2x2",
         "order": 16
       },
       "mobileLayout": {
         "size": "1x1",
         "order": 16
-      }
+      },
+      "caption": "",
+      "mediaType": "image"
     },
     {
       "id": "vd-5",
