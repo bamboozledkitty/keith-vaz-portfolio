@@ -180,6 +180,11 @@
         height: 60px;
       }
     }
+
+    /* Proximity grouping: more space above section titles than below them */
+    .bento-grid > .bento-card-full:not(:first-child) {
+      margin-top: 40px; /* 40px extra + 20px gap = 60px total spacing above */
+    }
   </style>
   <script type="importmap">
 {
