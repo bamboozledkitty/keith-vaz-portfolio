@@ -98,11 +98,11 @@ const ProfilePictureCropperModal: React.FC<ProfilePictureCropperModalProps> = ({
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                     <h2 className="text-lg font-bold text-gray-900">Edit Profile Picture</h2>
-                    <Button
+                        <Button
                         variant="ghost"
                         size="icon"
                         onClick={onCancel}
-                        className="h-8 w-8 rounded-full text-gray-400 hover:text-gray-700"
+                        className="h-8 w-8 rounded-[4px] text-gray-400 hover:text-gray-700"
                     >
                         <X size={18} />
                     </Button>
@@ -131,7 +131,7 @@ const ProfilePictureCropperModal: React.FC<ProfilePictureCropperModalProps> = ({
                             size="icon"
                             onClick={() => handleZoomChange(-0.1)}
                             disabled={zoom <= 1}
-                            className="h-9 w-9 rounded-full"
+                            className="h-9 w-9 rounded-[4px]"
                         >
                             <ZoomOut size={18} />
                         </Button>
@@ -144,7 +144,7 @@ const ProfilePictureCropperModal: React.FC<ProfilePictureCropperModalProps> = ({
                                 step={0.01}
                                 value={zoom}
                                 onChange={(e) => setZoom(parseFloat(e.target.value))}
-                                className="w-full h-2 bg-gray-200 rounded-full appearance-none cursor-pointer accent-black"
+                                className="w-full h-2 bg-gray-200 rounded-[4px] appearance-none cursor-pointer accent-black"
                             />
                         </div>
 
@@ -153,7 +153,7 @@ const ProfilePictureCropperModal: React.FC<ProfilePictureCropperModalProps> = ({
                             size="icon"
                             onClick={() => handleZoomChange(0.1)}
                             disabled={zoom >= 3}
-                            className="h-9 w-9 rounded-full"
+                            className="h-9 w-9 rounded-[4px]"
                         >
                             <ZoomIn size={18} />
                         </Button>

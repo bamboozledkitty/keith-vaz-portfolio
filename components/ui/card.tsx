@@ -5,17 +5,23 @@ import { Squircle } from "./squircle"
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <Squircle
+>(({ className, children, ...props }, ref) => (
+  <div
     ref={ref}
-    cornerRadius={24}
-    cornerSmoothing={0.6}
     className={cn(
-      "border bg-white text-gray-950 shadow-sm",
+      "bg-white text-gray-950 rounded-[24px] border border-[#efefef] isolate",
       className
     )}
     {...props}
-  />
+  >
+    <Squircle
+      cornerRadius={24}
+      cornerSmoothing={0.6}
+      className="h-full w-full relative overflow-hidden"
+    >
+      {children}
+    </Squircle>
+  </div>
 ))
 Card.displayName = "Card"
 

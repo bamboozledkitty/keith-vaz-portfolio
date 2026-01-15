@@ -169,7 +169,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
             <img
               src={mediaUrl}
               alt={item.caption || item.title || 'Media'}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
             />
           ) : (
             <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100">
@@ -270,11 +270,11 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
   };
 
   const renderContent = () => {
-    // 0. Heading - Full width section title
+    // 0. Heading - Section title (380×60px like bento.me)
     if (item.type === 'heading' || currentSize === 'full') {
       return (
-        <div className="h-full w-full flex items-center px-2 bg-transparent">
-          <h2 className="text-2xl font-black text-gray-900 tracking-tight opacity-90">
+        <div className="h-full w-full flex items-center px-4 bg-transparent">
+          <h2 className="text-lg font-bold text-gray-900 tracking-tight">
             {item.title}
           </h2>
         </div>
@@ -291,95 +291,105 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
       return renderTextCard();
     }
 
-    // 1. Small Square (1x1) - Icon Top, Text Bottom
+    // 1. Small Square (1x1) - Icon Top, Text Bottom with uniform padding
     if (currentSize === '1x1') {
       return (
-        <div className="h-full w-full flex flex-col justify-between p-4 group bg-white">
-          <Squircle cornerRadius={12} className="w-10 h-10 bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-800 shrink-0 group-hover:scale-110 transition-transform duration-300">
+        <div className="h-full w-full flex flex-col justify-between p-5 group bg-white">
+          <Squircle cornerRadius={12} className="w-10 h-10 bg-gray-50 border border-[#f3f3f3] flex items-center justify-center text-gray-800 shrink-0 group-hover:scale-110 transition-transform duration-300">
             <SocialIcon name={item.icon || item.image} className="w-5 h-5" />
           </Squircle>
           <div className="min-w-0 w-full">
-            <h3 className="font-bold text-gray-900 leading-snug text-[13px] line-clamp-2">{item.title}</h3>
-            {item.subtitle && <p className="text-[10px] text-gray-400 mt-1 font-medium line-clamp-1">{item.subtitle}</p>}
+            <h3 className="font-bold text-gray-900 leading-snug text-sm line-clamp-2">{item.title}</h3>
+            {item.subtitle && <p className="text-xs text-gray-400 mt-1 font-medium line-clamp-1">{item.subtitle}</p>}
           </div>
         </div>
       );
     }
 
-    // 2. Narrow Rectangle (1x0.5) - Horizontal strip for quick links/stats (no image)
+    // 2. Narrow Rectangle (1x0.5) - Horizontal strip for quick links/stats
     if (currentSize === '1x0.5') {
       return (
-        <div className="flex items-center h-full w-full px-4 gap-3 bg-white">
-          <Squircle cornerRadius={12} className="w-8 h-8 bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0">
-            <SocialIcon name={item.icon || item.image} className="w-4 h-4" />
+        <div className="flex items-center h-full w-full px-5 gap-4 bg-white">
+          <Squircle cornerRadius={10} className="w-10 h-10 bg-gray-50 border border-[#efefef] flex items-center justify-center shrink-0">
+            <SocialIcon name={item.icon || item.image} className="w-5 h-5" />
           </Squircle>
           <div className="min-w-0 flex-1">
             <h3 className="font-bold text-gray-900 text-sm leading-tight truncate">{item.title}</h3>
-            {item.subtitle && <p className="text-[10px] text-gray-400 mt-0.5 font-medium truncate">{item.subtitle}</p>}
+            {item.subtitle && <p className="text-xs text-gray-400 mt-0.5 font-medium truncate">{item.subtitle}</p>}
           </div>
         </div>
       );
     }
 
-    // 3. Wide Rectangle (2x1) - More space for text
+    // 3. Wide Rectangle (2x1) - bento.me style: icon + text grouped at top-left, image right
     if (currentSize === '2x1') {
       return (
-        <div className="flex h-full w-full bg-white group">
-          <div className="flex-1 p-5 flex flex-col justify-between min-w-0">
-            <Squircle cornerRadius={12} className="w-10 h-10 overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100">
+        <div className="flex h-full w-full bg-white group p-5 gap-4">
+          {/* Text content - left side, icon + text grouped at top */}
+          <div className="flex-1 flex flex-col justify-start min-w-0 gap-3">
+            <Squircle cornerRadius={12} className="w-10 h-10 overflow-hidden flex items-center justify-center bg-gray-50 border border-[#efefef] shrink-0">
               <SocialIcon name={item.icon} className="w-5 h-5" />
             </Squircle>
-            <div className="mt-2">
+            <div>
               <h3 className="font-bold text-gray-900 leading-tight text-base tracking-tight line-clamp-2">{item.title}</h3>
               <p className="text-xs text-gray-400 mt-1 font-medium truncate">{item.subtitle}</p>
             </div>
           </div>
+          {/* Image - right side, 100% height, ~48% width like bento.me */}
           {item.image && (
-            <div className="w-[45%] p-5 pl-0 shrink-0 flex items-center">
-              <div className="w-full aspect-[4/3] relative">
-                <Squircle cornerRadius={12} className="absolute inset-0 overflow-hidden bg-gray-50 shadow-inner">
-                  <img src={item.image} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                </Squircle>
-              </div>
-            </div>
+            <Squircle cornerRadius={12} className="w-[48%] h-full overflow-hidden bg-gray-50 shrink-0">
+              <img 
+                src={item.image} 
+                alt={item.title || ''} 
+                className="h-full w-full object-cover transition-transform duration-500" 
+              />
+            </Squircle>
           )}
         </div>
       );
     }
 
-    // 4. Vertical Rectangle (1x2) - Stacked layout with text on top and image on bottom
+    // 4. Vertical Rectangle (1x2) - icon + text grouped at top, image at bottom (48% height)
     if (currentSize === '1x2') {
       return (
-        <div className="flex flex-col h-full w-full bg-white group">
-          <div className="p-5 pb-3">
-            <Squircle cornerRadius={12} className="w-10 h-10 overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100 mb-3">
+        <div className="flex flex-col h-full w-full bg-white group p-5 gap-4">
+          {/* Text content - top, icon + text grouped together */}
+          <div className="flex-1 flex flex-col justify-start gap-3">
+            <Squircle cornerRadius={12} className="w-10 h-10 overflow-hidden flex items-center justify-center bg-gray-50 border border-[#efefef] shrink-0">
               <SocialIcon name={item.icon} className="w-5 h-5" />
             </Squircle>
-            <h3 className="font-bold text-gray-900 leading-tight text-base tracking-tight line-clamp-2">{item.title}</h3>
-            <p className="text-xs text-gray-400 mt-1.5 font-medium line-clamp-2">{item.subtitle}</p>
-          </div>
-          {item.image && (
-            <div className="flex-1 p-5 pt-0 flex items-end">
-              <div className="w-full aspect-[4/3] relative">
-                <Squircle cornerRadius={12} className="absolute inset-0 overflow-hidden bg-gray-50 shadow-inner">
-                  <img src={item.image} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                </Squircle>
-              </div>
+            <div>
+              <h3 className="font-bold text-gray-900 leading-tight text-base tracking-tight line-clamp-2">{item.title}</h3>
+              <p className="text-xs text-gray-400 mt-1.5 font-medium line-clamp-2">{item.subtitle}</p>
             </div>
+          </div>
+          {/* Image - bottom, 48% height to match 2x1's 48% width ratio */}
+          {item.image && (
+            <Squircle cornerRadius={12} className="h-[48%] w-full overflow-hidden bg-gray-50 shrink-0">
+              <img 
+                src={item.image} 
+                alt={item.title || ''} 
+                className="h-full w-full object-cover transition-transform duration-500" 
+              />
+            </Squircle>
           )}
         </div>
       );
     }
 
-    // 5. Large Square (2x2) - Hero-style card for featured case studies or media
+    // 5. Large Square (2x2) - Hero-style card with full bleed image
     if (currentSize === '2x2') {
       return (
-        <div className="h-full w-full relative group overflow-hidden bg-gray-50 flex items-center justify-center">
+        <div className="h-full w-full relative group overflow-hidden bg-gray-50">
           {item.image ? (
             <>
-              <div className="relative w-full aspect-[4/3]">
-                <img src={item.image} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-              </div>
+              {/* Full bleed image */}
+              <img 
+                src={item.image} 
+                alt={item.title || ''} 
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500" 
+              />
+              {/* Overlay with text */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-6">
                 <Squircle cornerRadius={12} className="w-10 h-10 overflow-hidden flex items-center justify-center bg-white/20 backdrop-blur-sm mb-3">
                   <SocialIcon name={item.icon} className="w-5 h-5 text-white" />
@@ -389,7 +399,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
               </div>
             </>
           ) : (
-            <div className="h-full flex flex-col p-6 justify-between">
+            <div className="h-full w-full flex flex-col p-6 justify-between bg-white">
               <Squircle cornerRadius={12} className="w-14 h-14 bg-gray-100 border border-gray-200 flex items-center justify-center">
                 <SocialIcon name={item.icon} className="w-8 h-8" />
               </Squircle>
@@ -413,7 +423,8 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
       ref={cardRef}
       className={cn(
         "relative h-full w-full group select-none transition-[transform,box-shadow,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-        isDragging ? "z-[100]" : ""
+        isDragging ? "z-[100]" : "",
+        isOverlay ? "rotate-[3deg] scale-[1.02]" : "rotate-0"
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -430,8 +441,8 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
         </div>
       ) : (
         <Card className={cn(
-          "h-full w-full overflow-hidden border-gray-100 shadow-card transition-[transform,box-shadow,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] p-0 border",
-          isDragging ? "shadow-card-drag ring-1 ring-black/5" : "hover:shadow-card-hover cursor-grab active:scale-[0.98]"
+          "h-full w-full shadow-card transition-[transform,box-shadow,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] p-0 relative",
+          isDragging ? "shadow-card-drag" : "hover:shadow-card-hover cursor-grab active:scale-[0.98]"
         )}>
           {renderContent()}
         </Card>

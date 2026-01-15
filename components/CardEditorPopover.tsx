@@ -337,13 +337,13 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Icon</label>
               <div className="flex items-center gap-3">
-                <Squircle cornerRadius={12} className="w-10 h-10 bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+                <div className="w-10 h-10 bg-gray-50 border border-[#efefef] rounded-[4px] flex items-center justify-center overflow-hidden shrink-0">
                   {icon ? (
                     <img src={icon} alt="icon" className="w-6 h-6 object-contain" />
                   ) : (
                     <Globe size={18} className="text-gray-400" />
                   )}
-                </Squircle>
+                </div>
                 <Input
                   value={icon}
                   onChange={e => setIcon(e.target.value)}
@@ -368,7 +368,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
               <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Cover Image</label>
               <div className="flex items-start gap-3">
                 {image ? (
-                  <Squircle cornerRadius={12} className="relative w-24 aspect-[4/3] overflow-hidden group/img shadow-md shrink-0 bg-gray-100">
+                  <div className="relative w-24 aspect-[4/3] rounded-[4px] overflow-hidden group/img shadow-md shrink-0 bg-gray-100 border border-[#efefef]">
                     <img src={image} className="w-full h-full object-cover" alt="preview" />
                     <button
                       onClick={() => setImage('')}
@@ -376,17 +376,15 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     >
                       <Trash2 size={16} />
                     </button>
-                  </Squircle>
+                  </div>
                 ) : (
-                  <Squircle
-                    cornerRadius={12}
-                    as="button"
+                  <button
                     onClick={() => mediaInputRef.current?.click()}
-                    className="w-24 aspect-[4/3] border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
+                    className="w-24 aspect-[4/3] border-2 border-dashed border-[#efefef] rounded-[4px] flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
                   >
                     <Upload size={16} />
                     <span className="text-[8px] font-bold tracking-wide">UPLOAD</span>
-                  </Squircle>
+                  </button>
                 )}
                 <div className="flex-1">
                   <Input
@@ -422,7 +420,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
               </label>
               <div className="flex items-start gap-3">
                 {image ? (
-                  <Squircle cornerRadius={12} className="relative w-28 aspect-[4/3] overflow-hidden group/img shadow-md shrink-0 bg-gray-100">
+                  <div className="relative w-28 aspect-[4/3] rounded-[4px] overflow-hidden group/img shadow-md shrink-0 bg-gray-100 border border-[#efefef]">
                     {(mediaType === 'video' || isVideoUrl(image)) ? (
                       <video
                         src={image}
@@ -441,17 +439,15 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     >
                       <Trash2 size={20} />
                     </button>
-                  </Squircle>
+                  </div>
                 ) : (
-                  <Squircle
-                    cornerRadius={12}
-                    as="button"
+                  <button
                     onClick={() => mediaInputRef.current?.click()}
-                    className="w-28 aspect-[4/3] border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
+                    className="w-28 aspect-[4/3] border-2 border-dashed border-[#efefef] rounded-[4px] flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
                   >
                     <Upload size={20} />
                     <span className="text-[9px] font-bold tracking-wide">UPLOAD</span>
-                  </Squircle>
+                  </button>
                 )}
                 <div className="flex-1 space-y-2">
                   <Input
@@ -652,11 +648,10 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
         }
       `}</style>
 
-      <Squircle
+      <div
         ref={popoverRef}
-        cornerRadius={16}
         className={cn(
-          "fixed z-[100] bg-white shadow-2xl border border-gray-100 overflow-hidden"
+          "fixed z-[100] bg-white shadow-card border border-[#efefef] rounded-[16px] isolate"
         )}
         style={{
           width: POPOVER_WIDTH,
@@ -668,57 +663,63 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
         }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50/50">
-          <div className="flex items-center gap-2 text-gray-700">
-            {typeConfig.icon}
-            <span className="font-bold text-sm">{state.mode === 'create' ? 'Add' : 'Edit'} {typeConfig.label}</span>
+        <Squircle
+          cornerRadius={16}
+          cornerSmoothing={0.6}
+          className="h-full w-full overflow-hidden"
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 border-b border-[#efefef] bg-gray-50/50">
+            <div className="flex items-center gap-2 text-gray-700">
+              {typeConfig.icon}
+              <span className="font-bold text-sm">{state.mode === 'create' ? 'Add' : 'Edit'} {typeConfig.label}</span>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onCancel}
+              className="h-8 w-8 rounded-full text-gray-400 hover:text-gray-700"
+            >
+              <X size={16} />
+            </Button>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onCancel}
-            className="h-8 w-8 rounded-full text-gray-400 hover:text-gray-700"
-          >
-            <X size={16} />
-          </Button>
-        </div>
 
-        {/* Form */}
-        <div className="p-4">
-          {renderFormFields()}
-        </div>
+          {/* Form */}
+          <div className="p-4">
+            {renderFormFields()}
+          </div>
 
-        {/* Hidden file input - available for all card types */}
-        <input
-          type="file"
-          ref={mediaInputRef}
-          onChange={handleMediaFileChange}
-          className="hidden"
-          accept="image/*,video/mp4,video/webm,video/quicktime"
-        />
+          {/* Hidden file input - available for all card types */}
+          <input
+            type="file"
+            ref={mediaInputRef}
+            onChange={handleMediaFileChange}
+            className="hidden"
+            accept="image/*,video/mp4,video/webm,video/quicktime"
+          />
 
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-2 px-4 py-3 border-t border-gray-100 bg-gray-50/50">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onCancel}
-            className="text-gray-500"
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="default"
-            size="sm"
-            onClick={handleSave}
-            className="gap-1"
-          >
-            <Check size={14} />
-            {state.mode === 'create' ? 'Add' : 'Save'}
-          </Button>
-        </div>
-      </Squircle>
+          {/* Footer */}
+          <div className="flex items-center justify-end gap-2 px-4 py-3 border-t border-[#efefef] bg-gray-50/50">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onCancel}
+              className="text-gray-500"
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={handleSave}
+              className="gap-1"
+            >
+              <Check size={14} />
+              {state.mode === 'create' ? 'Add' : 'Save'}
+            </Button>
+          </div>
+        </Squircle>
+      </div>
     </>
   );
 };

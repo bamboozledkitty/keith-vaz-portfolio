@@ -24,7 +24,7 @@ const EditControls: React.FC<EditControlsProps> = ({ onDelete, onResize, current
           variant="destructive"
           size="icon"
           onClick={(e) => { e.stopPropagation(); onDelete(); }}
-          className="rounded-full shadow-xl bg-white text-gray-600 hover:bg-red-50 hover:text-red-600 hover:scale-110 transition-all duration-200 w-10 h-10 border border-gray-200"
+          className="rounded-[4px] shadow-xl bg-white text-gray-600 hover:bg-red-50 hover:text-red-600 hover:scale-110 transition-all duration-200 w-10 h-10 border border-gray-200"
         >
           <Trash2 size={18} />
         </Button>
@@ -46,7 +46,7 @@ const EditControls: React.FC<EditControlsProps> = ({ onDelete, onResize, current
           size="icon"
           onClick={(e) => { e.stopPropagation(); onResize('1x1'); }}
           className={cn(
-            "w-8 h-8 rounded-lg transition-all duration-300 hover:bg-white/10 text-white",
+            "w-8 h-8 rounded-[4px] transition-all duration-300 hover:bg-white/10 text-white",
             currentSize === '1x1' && "bg-white text-black scale-110 hover:bg-white"
           )}
           title="Square (1x1)"
@@ -60,7 +60,7 @@ const EditControls: React.FC<EditControlsProps> = ({ onDelete, onResize, current
           size="icon"
           onClick={(e) => { e.stopPropagation(); onResize('1x0.5'); }}
           className={cn(
-            "w-8 h-8 rounded-lg transition-all duration-300 hover:bg-white/10 text-white",
+            "w-8 h-8 rounded-[4px] transition-all duration-300 hover:bg-white/10 text-white",
             currentSize === '1x0.5' && "bg-white text-black scale-110 hover:bg-white"
           )}
           title="Narrow (1x0.5)"
@@ -74,7 +74,7 @@ const EditControls: React.FC<EditControlsProps> = ({ onDelete, onResize, current
           size="icon"
           onClick={(e) => { e.stopPropagation(); onResize('2x1'); }}
           className={cn(
-            "w-8 h-8 rounded-lg transition-all duration-300 hover:bg-white/10 text-white",
+            "w-8 h-8 rounded-[4px] transition-all duration-300 hover:bg-white/10 text-white",
             currentSize === '2x1' && "bg-white text-black scale-110 hover:bg-white"
           )}
           title="Wide Rectangle (2x1)"
@@ -90,7 +90,7 @@ const EditControls: React.FC<EditControlsProps> = ({ onDelete, onResize, current
           size="icon"
           onClick={(e) => { e.stopPropagation(); onResize('1x2'); }}
           className={cn(
-            "w-8 h-8 rounded-lg transition-all duration-300 hover:bg-white/10 text-white",
+            "w-8 h-8 rounded-[4px] transition-all duration-300 hover:bg-white/10 text-white",
             currentSize === '1x2' && "bg-white text-black scale-110 hover:bg-white"
           )}
           title="Vertical Rectangle (1x2)"
@@ -106,7 +106,7 @@ const EditControls: React.FC<EditControlsProps> = ({ onDelete, onResize, current
           size="icon"
           onClick={(e) => { e.stopPropagation(); onResize('2x2'); }}
           className={cn(
-            "w-8 h-8 rounded-lg transition-all duration-300 hover:bg-white/10 text-white",
+            "w-8 h-8 rounded-[4px] transition-all duration-300 hover:bg-white/10 text-white",
             currentSize === '2x2' && "bg-white text-black scale-110 hover:bg-white"
           )}
           title="Large Square (2x2)"

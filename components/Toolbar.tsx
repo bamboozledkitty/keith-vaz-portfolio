@@ -30,10 +30,10 @@ const Toolbar: React.FC<ToolbarProps> = ({ onStartCreate, currentView, onViewCha
     >
       
       {/* Main Action Bar */}
-      <div className="flex items-center bg-white p-1.5 rounded-full shadow-2xl border border-gray-100">
+      <div className="flex items-center bg-white p-1.5 rounded-[8px] shadow-2xl border border-[#efefef]">
         
         {/* Share Button (Primary) */}
-        <Button variant="primary" size="lg" className="rounded-full font-bold mr-2">
+        <Button variant="primary" size="lg" className="rounded-[4px] font-bold mr-2">
           Share my Portfolio
         </Button>
 
@@ -43,16 +43,16 @@ const Toolbar: React.FC<ToolbarProps> = ({ onStartCreate, currentView, onViewCha
 
             {/* Add Tools */}
             <div className="flex items-center gap-1 px-2">
-              <Button variant="icon" size="icon" onClick={() => handleAddClick('heading')} className="rounded-full" title="Add Section Heading">
+              <Button variant="icon" size="icon" onClick={() => handleAddClick('heading')} className="rounded-[4px]" title="Add Section Heading">
                 <Heading1 size={20} />
               </Button>
-              <Button variant="icon" size="icon" onClick={() => handleAddClick('link')} className="rounded-full" title="Add Link">
+              <Button variant="icon" size="icon" onClick={() => handleAddClick('link')} className="rounded-[4px]" title="Add Link">
                 <LinkIcon size={20} />
               </Button>
-              <Button variant="icon" size="icon" onClick={() => handleAddClick('image')} className="rounded-full" title="Add Media (Image/Video)">
+              <Button variant="icon" size="icon" onClick={() => handleAddClick('image')} className="rounded-[4px]" title="Add Media (Image/Video)">
                 <Film size={20} />
               </Button>
-              <Button variant="icon" size="icon" onClick={() => handleAddClick('text')} className="rounded-full" title="Add Text">
+              <Button variant="icon" size="icon" onClick={() => handleAddClick('text')} className="rounded-[4px]" title="Add Text">
                 <Type size={20} />
               </Button>
             </div>
@@ -66,7 +66,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ onStartCreate, currentView, onViewCha
                 size="icon" 
                 onClick={() => onViewChange('desktop')}
                 className={cn(
-                  "rounded-full transition-all",
+                  "rounded-[4px] transition-all",
                   currentView === 'desktop' ? "bg-black shadow-md text-white" : "text-gray-400 hover:text-gray-600"
                 )}
                 title="Desktop View"
@@ -78,7 +78,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ onStartCreate, currentView, onViewCha
                 size="icon" 
                 onClick={() => onViewChange('mobile')}
                 className={cn(
-                  "rounded-full transition-all",
+                  "rounded-[4px] transition-all",
                   currentView === 'mobile' ? "bg-black shadow-md text-white" : "text-gray-400 hover:text-gray-600"
                 )}
                 title="Mobile View"

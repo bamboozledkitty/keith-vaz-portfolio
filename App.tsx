@@ -66,6 +66,10 @@ const dropAnimationConfig: DropAnimation = {
       active: {
         opacity: '0.5',
       },
+      dragOverlay: {
+        rotate: '0deg',
+        scale: '1',
+      },
     },
   }),
 };
@@ -303,7 +307,7 @@ function App({ isAdmin = false }: AppProps) {
   const activeItem = sortedItems.find(item => item.id === activeId) || null;
 
   return (
-    <div className="min-h-screen bg-[#f7f6f3] text-gray-900 selection:bg-black selection:text-white pb-32">
+    <div className="min-h-screen bg-white text-gray-900 selection:bg-black selection:text-white pb-32">
       {/* Admin Header */}
       {canEdit && (
         <div className="bg-black text-white py-3 px-6 flex items-center justify-between">
@@ -355,14 +359,14 @@ function App({ isAdmin = false }: AppProps) {
         </div>
       )}
 
-      <div className="flex flex-col lg:flex-row w-full max-w-[1400px] mx-auto p-4 md:p-8 lg:p-16 lg:justify-between gap-6 items-start">
+      <div className="layout-container">
 
-        {/* Left Sidebar - Profile & Stats */}
-        <aside className="w-full lg:w-[340px] lg:sticky lg:top-20 shrink-0">
-          <div className="flex flex-col items-start text-left">
+        {/* Left Sidebar - Profile & Stats (ABSOLUTE left on desktop) */}
+        <aside className="about-section">
+          <div className="flex flex-col items-start text-left w-full">
             <div
               className={cn(
-                "w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden mb-8 transition-transform duration-500 ease-out relative group",
+                "w-[120px] h-[120px] md:w-[180px] md:h-[180px] rounded-full overflow-hidden mb-8 transition-transform duration-500 ease-out relative group",
                 canEdit && "hover:scale-[1.02] cursor-pointer hover:ring-4 hover:ring-black/20"
               )}
               onClick={canEdit ? () => profileInputRef.current?.click() : undefined}
@@ -399,7 +403,7 @@ function App({ isAdmin = false }: AppProps) {
               }}
             />
 
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-5 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-5 leading-tight w-full">
               Keith Vaz <span className="inline-block hover:rotate-12 transition-transform cursor-default duration-500">👋</span>
             </h1>
 
@@ -420,8 +424,8 @@ function App({ isAdmin = false }: AppProps) {
           </div>
         </aside>
 
-        {/* Right Section - Bento Grid (anchored to right edge) */}
-        <main className="w-full lg:w-auto lg:max-w-[800px] shrink">
+        {/* Right Section - Bento Grid (aligned to RIGHT on desktop) */}
+        <main className="grid-section">
           {/* Loading State */}
           {isLoading && (
             <div className="flex flex-col items-center justify-center py-20 text-gray-500">
@@ -460,11 +464,7 @@ function App({ isAdmin = false }: AppProps) {
                 strategy={rectSortingStrategy}
               >
                 <div
-                  className={cn(
-                    "bento-grid grid grid-flow-dense gap-3 lg:gap-5",
-                    currentView === 'desktop' ? "grid-cols-4" : "grid-cols-2"
-                  )}
-                  style={{ gridAutoRows: 'var(--bento-row)' }}
+                  className="bento-grid"
                 >
                   {sortedItems.map((item) => (
                     <SortableItem
@@ -483,7 +483,7 @@ function App({ isAdmin = false }: AppProps) {
 
               <DragOverlay adjustScale={false} dropAnimation={dropAnimationConfig}>
                 {activeItem ? (
-                  <div className="w-full h-full scale-105 cursor-grabbing">
+                  <div className="w-full h-full cursor-grabbing">
                     <BentoCard item={activeItem} currentView={currentView} isAdminRoute={isAdmin} isOverlay isDragging />
                   </div>
                 ) : null}
