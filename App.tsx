@@ -30,7 +30,7 @@ import { BentoItemData, ItemType, ItemSize, ViewMode, ViewLayout } from './types
 import { useAuth } from './contexts/AuthContext';
 import { Button } from './components/ui/button';
 import { cn } from './lib/utils';
-import { saveContentToGitHub, uploadMediaToGitHub } from './lib/github';
+import { saveContentToGitHub } from './lib/github';
 
 // Content data URL
 const CONTENT_URL = `${import.meta.env.BASE_URL}content/data.json`;
@@ -514,7 +514,6 @@ function App({ isAdmin = false }: AppProps) {
           state={editorState}
           onSave={handleEditorSave}
           onCancel={handleEditorCancel}
-          token={token || undefined}
         />
       )}
 
@@ -522,26 +521,8 @@ function App({ isAdmin = false }: AppProps) {
       {showProfileCropper && profileImageSrc && (
         <ProfilePictureCropperModal
           imageSrc={profileImageSrc}
-          onSave={async (croppedImage) => {
-            // If we have a token, upload the cropped image to GitHub
-            if (token) {
-              try {
-                // Convert data URL to Blob
-                const response = await fetch(croppedImage);
-                const blob = await response.blob();
-                const file = new File([blob], 'profile-pic.jpg', { type: 'image/jpeg' });
-                
-                const uploadedUrl = await uploadMediaToGitHub(token, file, 'profile');
-                setCroppedProfilePicture(uploadedUrl);
-              } catch (error) {
-                console.error('Failed to upload profile picture:', error);
-                // Fallback to local state if upload fails
-                setCroppedProfilePicture(croppedImage);
-              }
-            } else {
-              setCroppedProfilePicture(croppedImage);
-            }
-            
+          onSave={(croppedImage) => {
+            setCroppedProfilePicture(croppedImage);
             setShowProfileCropper(false);
             setProfileImageSrc(null);
             setHasUnsavedChanges(true);

@@ -332,7 +332,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
             </Squircle>
             <div>
               <h3 className="font-bold text-gray-900 leading-tight text-base tracking-tight line-clamp-2">{item.title}</h3>
-              <p className="text-xs text-gray-400 mt-1 font-medium truncate">{item.subtitle}</p>
+              {item.subtitle && <p className="text-xs text-gray-400 mt-1 font-medium truncate">{item.subtitle}</p>}
             </div>
           </div>
           {/* Image - right side, 100% height, ~48% width like bento.me */}
@@ -360,7 +360,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
             </Squircle>
             <div>
               <h3 className="font-bold text-gray-900 leading-tight text-base tracking-tight line-clamp-2">{item.title}</h3>
-              <p className="text-xs text-gray-400 mt-1.5 font-medium line-clamp-2">{item.subtitle}</p>
+              {item.subtitle && <p className="text-xs text-gray-400 mt-1.5 font-medium line-clamp-2">{item.subtitle}</p>}
             </div>
           </div>
           {/* Image - bottom, 55% height to match 2x1's 55% width ratio */}
@@ -395,7 +395,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
                   <SocialIcon name={item.icon} className="w-5 h-5 text-white" />
                 </Squircle>
                 <h3 className="text-white font-bold text-xl leading-tight tracking-tight">{item.title}</h3>
-                <p className="text-white/70 text-sm mt-2 font-medium">{item.subtitle}</p>
+                {item.subtitle && <p className="text-white/70 text-sm mt-2 font-medium">{item.subtitle}</p>}
               </div>
             </>
           ) : (
@@ -405,7 +405,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
               </Squircle>
               <div>
                 <h3 className="font-bold text-2xl text-gray-900 leading-tight tracking-tight">{item.title}</h3>
-                <p className="text-sm text-gray-400 mt-3 font-medium">{item.subtitle}</p>
+                {item.subtitle && <p className="text-sm text-gray-400 mt-3 font-medium">{item.subtitle}</p>}
               </div>
             </div>
           )}
