@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-01-15T16:39:35.855Z",
+  "lastUpdated": "2026-01-15T16:46:22.410Z",
   "items": [
     {
       "id": "3cgxucje1",
@@ -185,10 +185,10 @@
       "type": "link",
       "size": "2x1",
       "variant": "app",
-      "title": "Freely: Financial Freedom Calculator",
+      "title": "FreeBy: Financial Freedom Calculator",
       "subtitle": "apps.apple.com",
-      "icon": "https://cdn-icons-png.flaticon.com/512/3135/3135706.png",
-      "url": "#",
+      "icon": "",
+      "url": "https://apps.apple.com/in/app/freeby/id6746725315",
       "desktopLayout": {
         "size": "2x1",
         "order": 10
@@ -196,7 +196,8 @@
       "mobileLayout": {
         "size": "2x1",
         "order": 10
-      }
+      },
+      "image": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/48/eb/16/48eb16a9-f886-fc8c-08a5-30bb03a727b8/Placeholder.mill/1200x630wa.jpg"
     },
     {
       "id": "app-2",
