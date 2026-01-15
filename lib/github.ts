@@ -112,18 +112,27 @@ export async function saveContentToGitHub(
     }
 }
 
-// Size threshold for using Git Blobs API (1MB in bytes)
-const CONTENTS_API_SIZE_LIMIT = 1_000_000;
+// GitHub Contents API file size limit (1MB)
+const MAX_FILE_SIZE = 1_000_000;
 
 /**
  * Upload a media file to the GitHub repository
- * Uses Contents API for files under 1MB, Git Blobs API for larger files (up to 100MB)
+ * Note: GitHub Contents API has a 1MB limit. For larger files, compress or upload via git locally.
  */
 export async function uploadMediaToGitHub(
     token: string,
     file: File,
     folder: 'profile' | 'case-studies' | 'visual-design/images' | 'visual-design/videos' | 'apps' | 'social'
 ): Promise<string> {
+    // Check file size limit
+    if (file.size > MAX_FILE_SIZE) {
+        const sizeMB = (file.size / 1_000_000).toFixed(1);
+        throw new Error(
+            `File is too large (${sizeMB}MB). Maximum size is 1MB. ` +
+            `Please compress the file or upload it manually via git.`
+        );
+    }
+
     const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
     const filePath = `${MEDIA_PATH}/${folder}/${fileName}`;
 
@@ -140,26 +149,6 @@ export async function uploadMediaToGitHub(
         reader.readAsDataURL(file);
     });
 
-    // Use Git Blobs API for files over 1MB
-    if (file.size > CONTENTS_API_SIZE_LIMIT) {
-        await uploadLargeFileViaBlobs(token, filePath, content, fileName);
-    } else {
-        await uploadSmallFileViaContents(token, filePath, content, fileName);
-    }
-
-    // Return the path relative to public folder for use in content
-    return `/media/${folder}/${fileName}`;
-}
-
-/**
- * Upload small files (< 1MB) via Contents API
- */
-async function uploadSmallFileViaContents(
-    token: string,
-    filePath: string,
-    content: string,
-    fileName: string
-): Promise<void> {
     // Check if file already exists (to get SHA for update)
     let sha: string | undefined;
     try {
@@ -202,137 +191,10 @@ async function uploadSmallFileViaContents(
         const error = await response.json();
         throw new Error(`Failed to upload media: ${error.message || response.status}`);
     }
-}
 
-/**
- * Upload large files (> 1MB, up to 100MB) via Git Blobs API
- * This requires: create blob → get current tree → create new tree → create commit → update ref
- */
-async function uploadLargeFileViaBlobs(
-    token: string,
-    filePath: string,
-    content: string,
-    fileName: string
-): Promise<void> {
-    const headers = {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json',
-    };
-
-    // Step 1: Create a blob with the file content
-    const blobResponse = await fetch(
-        `${GITHUB_API}/repos/${REPO_OWNER}/${REPO_NAME}/git/blobs`,
-        {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({
-                content,
-                encoding: 'base64',
-            }),
-        }
-    );
-
-    if (!blobResponse.ok) {
-        const error = await blobResponse.json();
-        throw new Error(`Failed to create blob: ${error.message || blobResponse.status}`);
-    }
-
-    const blob = await blobResponse.json();
-    const blobSha = blob.sha;
-
-    // Step 2: Get the current commit SHA for the main branch
-    const refResponse = await fetch(
-        `${GITHUB_API}/repos/${REPO_OWNER}/${REPO_NAME}/git/ref/heads/main`,
-        { headers }
-    );
-
-    if (!refResponse.ok) {
-        const error = await refResponse.json();
-        throw new Error(`Failed to get branch ref: ${error.message || refResponse.status}`);
-    }
-
-    const ref = await refResponse.json();
-    const currentCommitSha = ref.object.sha;
-
-    // Step 3: Get the current commit to find its tree
-    const commitResponse = await fetch(
-        `${GITHUB_API}/repos/${REPO_OWNER}/${REPO_NAME}/git/commits/${currentCommitSha}`,
-        { headers }
-    );
-
-    if (!commitResponse.ok) {
-        const error = await commitResponse.json();
-        throw new Error(`Failed to get commit: ${error.message || commitResponse.status}`);
-    }
-
-    const commit = await commitResponse.json();
-    const baseTreeSha = commit.tree.sha;
-
-    // Step 4: Create a new tree with the blob
-    const treeResponse = await fetch(
-        `${GITHUB_API}/repos/${REPO_OWNER}/${REPO_NAME}/git/trees`,
-        {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({
-                base_tree: baseTreeSha,
-                tree: [
-                    {
-                        path: filePath,
-                        mode: '100644', // Regular file
-                        type: 'blob',
-                        sha: blobSha,
-                    },
-                ],
-            }),
-        }
-    );
-
-    if (!treeResponse.ok) {
-        const error = await treeResponse.json();
-        throw new Error(`Failed to create tree: ${error.message || treeResponse.status}`);
-    }
-
-    const newTree = await treeResponse.json();
-
-    // Step 5: Create a new commit
-    const newCommitResponse = await fetch(
-        `${GITHUB_API}/repos/${REPO_OWNER}/${REPO_NAME}/git/commits`,
-        {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({
-                message: `Add media: ${fileName}`,
-                tree: newTree.sha,
-                parents: [currentCommitSha],
-            }),
-        }
-    );
-
-    if (!newCommitResponse.ok) {
-        const error = await newCommitResponse.json();
-        throw new Error(`Failed to create commit: ${error.message || newCommitResponse.status}`);
-    }
-
-    const newCommit = await newCommitResponse.json();
-
-    // Step 6: Update the branch reference to point to the new commit
-    const updateRefResponse = await fetch(
-        `${GITHUB_API}/repos/${REPO_OWNER}/${REPO_NAME}/git/refs/heads/main`,
-        {
-            method: 'PATCH',
-            headers,
-            body: JSON.stringify({
-                sha: newCommit.sha,
-            }),
-        }
-    );
-
-    if (!updateRefResponse.ok) {
-        const error = await updateRefResponse.json();
-        throw new Error(`Failed to update ref: ${error.message || updateRefResponse.status}`);
-    }
+    // Return path relative to public folder (without base URL)
+    // Base URL will be prepended at render time for GitHub Pages compatibility
+    return `/media/${folder}/${fileName}`;
 }
 
 /**

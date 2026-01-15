@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BentoItemData, ItemSize, MediaType, TextAlign, TextVAlign, TextSize, ViewMode } from '../types';
-import { cn } from '../lib/utils';
+import { cn, resolveMediaUrl } from '../lib/utils';
 import { Github, Linkedin, Twitter, Instagram, Youtube, Globe, Pencil, Film } from 'lucide-react';
 
 // Text card alignment and size utilities
@@ -66,7 +66,7 @@ interface BentoCardProps {
 
 const SocialIcon = ({ name, className }: { name?: string; className?: string }) => {
   if (name?.startsWith('data:') || name?.startsWith('http') || name?.startsWith('/') || name?.includes('drive')) {
-    return <img src={name} alt="icon" className={cn("object-contain", className)} />;
+    return <img src={resolveMediaUrl(name)} alt="icon" className={cn("object-contain", className)} />;
   }
   switch (name?.toLowerCase()) {
     case 'github': return <Github className={className} />;
@@ -148,7 +148,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
 
   // Render edge-to-edge media (image or video) with hover caption
   const renderMediaCard = () => {
-    const mediaUrl = item.image;
+    const mediaUrl = resolveMediaUrl(item.image);
     const mediaType = getMediaType(mediaUrl, item.mediaType);
     const hasMedia = !!mediaUrl;
 
@@ -339,7 +339,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
           {item.image && (
             <Squircle cornerRadius={12} className="w-[55%] h-full overflow-hidden bg-gray-50 shrink-0">
               <img 
-                src={item.image} 
+                src={resolveMediaUrl(item.image)} 
                 alt={item.title || ''} 
                 className="h-full w-full object-cover transition-transform duration-500" 
               />
@@ -367,7 +367,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
           {item.image && (
             <Squircle cornerRadius={12} className="h-[55%] w-full overflow-hidden bg-gray-50 shrink-0">
               <img 
-                src={item.image} 
+                src={resolveMediaUrl(item.image)} 
                 alt={item.title || ''} 
                 className="h-full w-full object-cover transition-transform duration-500" 
               />
@@ -385,7 +385,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
             <>
               {/* Full bleed image */}
               <img 
-                src={item.image} 
+                src={resolveMediaUrl(item.image)} 
                 alt={item.title || ''} 
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500" 
               />
