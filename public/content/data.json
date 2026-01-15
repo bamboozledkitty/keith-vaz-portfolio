@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-01-15T16:46:43.470Z",
+  "lastUpdated": "2026-01-15T16:52:30.854Z",
   "items": [
     {
       "id": "3cgxucje1",
@@ -203,7 +203,7 @@
       "id": "app-2",
       "type": "text",
       "size": "2x1",
-      "title": "",
+      "title": "Financial freedom starts with  knowing where you’re going…",
       "content": "Financial freedom starts with knowing where you're going...",
       "backgroundColor": "#ffffff",
       "desktopLayout": {
@@ -213,7 +213,10 @@
       "mobileLayout": {
         "size": "2x1",
         "order": 11
-      }
+      },
+      "textAlign": "left",
+      "textVAlign": "middle",
+      "textSize": "large"
     },
     {
       "id": "heading-visual-design",
