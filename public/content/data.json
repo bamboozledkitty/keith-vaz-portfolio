@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-01-15T16:46:22.410Z",
+  "lastUpdated": "2026-01-15T16:46:43.470Z",
   "items": [
     {
       "id": "3cgxucje1",
@@ -187,7 +187,7 @@
       "variant": "app",
       "title": "FreeBy: Financial Freedom Calculator",
       "subtitle": "apps.apple.com",
-      "icon": "",
+      "icon": "https://apps.apple.com/assets/favicon/favicon-180.png",
       "url": "https://apps.apple.com/in/app/freeby/id6746725315",
       "desktopLayout": {
         "size": "2x1",
