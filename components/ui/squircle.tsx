@@ -1,6 +1,34 @@
 import * as React from "react";
 import { cn } from "../../lib/utils";
 
+// Simple debounce utility
+function debounce<T extends (...args: unknown[]) => void>(
+  fn: T,
+  delay: number,
+  options?: { leading?: boolean }
+): T {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  let hasCalledLeading = false;
+
+  return ((...args: Parameters<T>) => {
+    if (options?.leading && !hasCalledLeading) {
+      fn(...args);
+      hasCalledLeading = true;
+    }
+
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(() => {
+      if (!options?.leading) {
+        fn(...args);
+      }
+      hasCalledLeading = false;
+    }, delay);
+  }) as T;
+}
+
 interface SquircleProps extends React.HTMLAttributes<HTMLDivElement> {
   cornerRadius: number;
   cornerSmoothing?: number; // 0-1, default 0.6 for iOS feel
@@ -42,7 +70,7 @@ const Squircle = React.forwardRef<HTMLDivElement, SquircleProps>(
     // Merge refs
     React.useImperativeHandle(ref, () => innerRef.current!);
 
-    // Track element dimensions with ResizeObserver
+    // Track element dimensions with ResizeObserver (debounced for performance)
     React.useEffect(() => {
       const element = innerRef.current;
       if (!element) return;
@@ -52,11 +80,14 @@ const Squircle = React.forwardRef<HTMLDivElement, SquircleProps>(
         setDimensions({ width, height });
       };
 
-      // Initial measurement
+      // Debounced version for resize events
+      const debouncedUpdate = debounce(updateDimensions, 100, { leading: true });
+
+      // Initial measurement (immediate)
       updateDimensions();
 
-      // Observe resize
-      const resizeObserver = new ResizeObserver(updateDimensions);
+      // Observe resize with debounced callback
+      const resizeObserver = new ResizeObserver(debouncedUpdate);
       resizeObserver.observe(element);
 
       return () => resizeObserver.disconnect();
@@ -130,9 +161,13 @@ export function useSquircleClipPath(
       }
     };
 
+    // Debounced version for resize events
+    const debouncedUpdate = debounce(updateClipPath, 100, { leading: true });
+
+    // Initial measurement
     updateClipPath();
 
-    const resizeObserver = new ResizeObserver(updateClipPath);
+    const resizeObserver = new ResizeObserver(debouncedUpdate);
     resizeObserver.observe(element);
 
     return () => resizeObserver.disconnect();

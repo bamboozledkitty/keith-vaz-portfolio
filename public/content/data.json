@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-01-16T05:18:46.988Z",
+"lastUpdated": "2026-01-16T10:00:00.000Z",
   "items": [
     {
       "id": "cwwvdb2tz",
@@ -343,7 +343,7 @@
       "id": "app-2",
       "type": "text",
       "size": "2x1",
-      "title": "Financial freedom starts with  knowing where you’re going…",
+      "title": "Financial freedom starts with  knowing where you\u2019re going\u2026",
       "content": "Financial freedom starts with knowing where you're going...",
       "backgroundColor": "#ffffff",
       "desktopLayout": {
@@ -414,7 +414,7 @@
       "type": "link",
       "size": "1x0.5",
       "variant": "social-card",
-      "title": "Check out more of my work →",
+      "title": "Check out more of my work \u2192",
       "subtitle": "dribbble.com",
       "icon": "https://cdn.dribbble.com/assets/favicon-192x192-d70ad402693bdd1a8460da7f9f3c590e817da7369c5287789ac968cf6947d214.png",
       "backgroundColor": "#ea4c89",
@@ -505,7 +505,7 @@
       "type": "link",
       "size": "1x0.5",
       "variant": "article",
-      "title": "The ‘AI assistant dream’ we are still far from…",
+      "title": "The \u2018AI assistant dream\u2019 we are still far from\u2026",
       "subtitle": "",
       "icon": "https://miro.medium.com/v2/resize:fill:304:304/10fd5c419ac61637245384e7099e131627900034828f4f386bdaa47a74eae156",
       "desktopLayout": {
@@ -543,7 +543,7 @@
       "type": "link",
       "size": "1x0.5",
       "variant": "article",
-      "title": "What if time zones were countries — a thought experiment",
+      "title": "What if time zones were countries\u200a\u2014 a thought experiment",
       "subtitle": "",
       "icon": "https://miro.medium.com/v2/resize:fill:304:304/10fd5c419ac61637245384e7099e131627900034828f4f386bdaa47a74eae156",
       "image": "",
@@ -674,7 +674,7 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 37
+        "order": 41
       }
     },
     {
@@ -692,7 +692,7 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 38
+        "order": 42
       }
     },
     {
@@ -728,7 +728,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 40
+        "order": 44
       }
     },
     {

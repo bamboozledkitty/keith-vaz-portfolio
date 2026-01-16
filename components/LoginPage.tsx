@@ -6,6 +6,7 @@ import { ADMIN_USERNAME } from '../config/auth';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
 import { Squircle } from './ui/squircle';
+import { logError } from '../lib/logger';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ const LoginPage: React.FC = () => {
         window.history.replaceState({}, '', window.location.pathname);
         navigate('/admin');
       } catch (err) {
-        console.error('Auth error:', err);
+        logError('Auth error:', err);
         setError(err instanceof Error ? err.message : 'Authentication failed');
       } finally {
         setIsLoading(false);
@@ -122,13 +123,15 @@ const LoginPage: React.FC = () => {
               {isLoading ? 'Redirecting to GitHub...' : 'Login with GitHub'}
             </Button>
 
-            <Button
-              onClick={handleTestAuth}
-              variant="secondary"
-              className="w-full border border-gray-200 text-gray-700 font-semibold py-3 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              Use Test Account (Dev Only)
-            </Button>
+            {import.meta.env.DEV && (
+              <Button
+                onClick={handleTestAuth}
+                variant="secondary"
+                className="w-full border border-gray-200 text-gray-700 font-semibold py-3 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Use Test Account (Dev Only)
+              </Button>
+            )}
           </div>
 
           <Squircle cornerRadius={8} className="mt-8 p-4 bg-blue-50 border border-blue-200">

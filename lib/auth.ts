@@ -20,7 +20,16 @@ const USER_KEY = 'github_user';
 export const getAuthState = (): AuthState => {
   const token = localStorage.getItem(TOKEN_KEY);
   const userJson = localStorage.getItem(USER_KEY);
-  const user = userJson ? JSON.parse(userJson) : null;
+  let user: GitHubUser | null = null;
+
+  if (userJson) {
+    try {
+      user = JSON.parse(userJson);
+    } catch {
+      // Invalid JSON in localStorage, clear it
+      localStorage.removeItem(USER_KEY);
+    }
+  }
 
   return {
     isAuthenticated: !!token && !!user,
@@ -42,7 +51,11 @@ export const getGitHubOAuthUrl = (redirectUri: string): string => {
 };
 
 export const generateState = (): string => {
-  const state = Math.random().toString(36).substring(7);
+  const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  const state = Array.from(array, byte => 
+    byte.toString(16).padStart(2, '0')
+  ).join('');
   sessionStorage.setItem('oauth_state', state);
   return state;
 };

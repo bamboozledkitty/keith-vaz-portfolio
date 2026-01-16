@@ -2,6 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { BentoItemData, ItemSize, MediaType, TextAlign, TextVAlign, TextSize, ViewMode } from '../types';
 import { cn, resolveMediaUrl } from '../lib/utils';
 import { Github, Linkedin, Twitter, Instagram, Youtube, Globe, Pencil, Film } from 'lucide-react';
+import EditControls from './EditControls';
+import LazyVideo from './LazyVideo';
+import { Card } from './ui/card';
+import { Input } from './ui/input';
+import { Squircle } from './ui/squircle';
+import { useAuth } from '../contexts/AuthContext';
 
 // Text card alignment and size utilities
 const getTextAlignClass = (align?: TextAlign): string => {
@@ -27,11 +33,6 @@ const getTextSizeClass = (size?: TextSize): string => {
     default: return 'text-base';
   }
 };
-import EditControls from './EditControls';
-import { Card } from './ui/card';
-import { Input } from './ui/input';
-import { Squircle } from './ui/squircle';
-import { useAuth } from '../contexts/AuthContext';
 
 // Video file extensions
 const VIDEO_EXTENSIONS = ['.mp4', '.webm', '.mov', '.m4v', '.ogg'];
@@ -157,7 +158,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
         {/* Media - Container should fill the card */}
         <div className="relative w-full h-full">
           {hasMedia && mediaType === 'video' ? (
-            <video
+            <LazyVideo
               src={mediaUrl}
               className="absolute inset-0 w-full h-full object-cover"
               autoPlay
@@ -169,6 +170,8 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
             <img
               src={mediaUrl}
               alt={item.caption || item.title || 'Media'}
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
             />
           ) : (
@@ -350,6 +353,8 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
               <img 
                 src={resolveMediaUrl(item.image)} 
                 alt={item.title || ''} 
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover transition-transform duration-500" 
               />
             </Squircle>
@@ -381,6 +386,8 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
               <img 
                 src={resolveMediaUrl(item.image)} 
                 alt={item.title || ''} 
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover transition-transform duration-500" 
               />
             </Squircle>
@@ -399,6 +406,8 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
               <img 
                 src={resolveMediaUrl(item.image)} 
                 alt={item.title || ''} 
+                loading="lazy"
+                decoding="async"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500" 
               />
               {/* Overlay with text */}
