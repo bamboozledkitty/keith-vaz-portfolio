@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-01-16T04:15:19.272Z",
+  "lastUpdated": "2026-01-16T10:00:00.000Z",
   "items": [
     {
       "id": "cwwvdb2tz",
@@ -343,7 +343,7 @@
       "id": "app-2",
       "type": "text",
       "size": "2x1",
-      "title": "Financial freedom starts with  knowing where you’re going…",
+      "title": "Financial freedom starts with  knowing where you\u2019re going\u2026",
       "content": "Financial freedom starts with knowing where you're going...",
       "backgroundColor": "#ffffff",
       "desktopLayout": {
@@ -414,7 +414,7 @@
       "type": "link",
       "size": "1x0.5",
       "variant": "social-card",
-      "title": "Check out more of my work →",
+      "title": "Check out more of my work \u2192",
       "subtitle": "dribbble.com",
       "icon": "https://cdn.dribbble.com/assets/favicon-192x192-d70ad402693bdd1a8460da7f9f3c590e817da7369c5287789ac968cf6947d214.png",
       "backgroundColor": "#ea4c89",
@@ -505,7 +505,7 @@
       "type": "link",
       "size": "1x0.5",
       "variant": "article",
-      "title": "The ‘AI assistant dream’ we are still far from…",
+      "title": "The \u2018AI assistant dream\u2019 we are still far from\u2026",
       "subtitle": "",
       "icon": "https://miro.medium.com/v2/resize:fill:304:304/10fd5c419ac61637245384e7099e131627900034828f4f386bdaa47a74eae156",
       "desktopLayout": {
@@ -543,7 +543,7 @@
       "type": "link",
       "size": "1x0.5",
       "variant": "article",
-      "title": "What if time zones were countries — a thought experiment",
+      "title": "What if time zones were countries\u200a\u2014 a thought experiment",
       "subtitle": "",
       "icon": "https://miro.medium.com/v2/resize:fill:304:304/10fd5c419ac61637245384e7099e131627900034828f4f386bdaa47a74eae156",
       "image": "",
@@ -624,15 +624,16 @@
       }
     },
     {
-      "id": "sl-1",
-      "type": "social",
+      "id": "8e98d6cb9",
+      "type": "link",
       "size": "1x1",
-      "variant": "social-card",
       "title": "Linkedin",
-      "subtitle": "linkedin.com",
-      "icon": "linkedin",
+      "subtitle": "",
+      "url": "https://www.linkedin.com/in/keeithvaz/",
+      "icon": "https://static.licdn.com/aero-v1/sc/h/al2o9zrvru7aqj8e1x2rzsrca",
+      "image": "https://media.licdn.com/dms/image/v2/D5603AQEKAnGY4MBzSQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1690302979979?e=2147483647&v=beta&t=JKHPzcF1Gt8Pgor9CN623Xdqt3fZeFdXr2igpWMIdSc",
       "desktopLayout": {
-        "size": "1x1",
+        "size": "1x0.5",
         "order": 36
       },
       "mobileLayout": {
@@ -641,15 +642,16 @@
       }
     },
     {
-      "id": "sl-2",
-      "type": "social",
-      "size": "1x1",
-      "variant": "social-card",
-      "title": "Design Mentor at ADPList",
-      "subtitle": "adplist.org",
-      "icon": "https://cdn-images-1.medium.com/max/1200/1*D-7U7af-j6h6b7b7b7b7b7.png",
+      "id": "hmqiq9xb6",
+      "type": "link",
+      "size": "1x0.5",
+      "title": "Keith Vaz Resume.pdf",
+      "subtitle": "",
+      "url": "https://drive.google.com/file/d/1Y6YtU49A0ycsmXOXzF88Uqc_YwMLVaGA/view",
+      "icon": "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png",
+      "image": "",
       "desktopLayout": {
-        "size": "1x1",
+        "size": "1x0.5",
         "order": 37
       },
       "mobileLayout": {
@@ -658,47 +660,50 @@
       }
     },
     {
-      "id": "sl-3",
-      "type": "social",
-      "size": "1x1",
-      "variant": "social-card",
-      "title": "Figma Community",
-      "subtitle": "@keithvaz",
-      "icon": "https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg",
+      "id": "ki0zp8g51",
+      "type": "link",
+      "size": "1x0.5",
+      "title": "Instagram",
+      "subtitle": "",
+      "url": "https://www.instagram.com/keeithvz/",
+      "icon": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.instagram.com/keeithvz/&size=128",
+      "image": "",
       "desktopLayout": {
-        "size": "1x1",
+        "size": "1x0.5",
         "order": 38
       },
       "mobileLayout": {
-        "size": "1x1",
+        "size": "1x0.5",
         "order": 41
       }
     },
     {
-      "id": "sl-4",
-      "type": "social",
-      "size": "1x1",
-      "variant": "social-card",
-      "title": "Resume",
-      "subtitle": "drive.google.com",
-      "icon": "https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo_%282020%29.svg",
+      "id": "i6k39if64",
+      "type": "link",
+      "size": "1x0.5",
+      "title": "Figma Community",
+      "subtitle": "",
+      "url": "https://www.figma.com/@keithvaz",
+      "icon": "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.figma.com/@keithvaz&size=128",
+      "image": "",
       "desktopLayout": {
-        "size": "1x1",
+        "size": "1x0.5",
         "order": 39
       },
       "mobileLayout": {
-        "size": "1x1",
+        "size": "1x0.5",
         "order": 42
       }
     },
     {
-      "id": "sl-5",
+      "id": "925nxcbqq",
       "type": "link",
       "size": "2x1",
-      "variant": "media",
       "title": "Speaker at Figma Config 2022",
-      "image": "https://i.ytimg.com/vi/w6W8w6w8w6w/maxresdefault.jpg",
-      "url": "#",
+      "subtitle": "",
+      "url": "https://www.youtube.com/watch?v=NRUVUdAUNQU",
+      "icon": "https://www.youtube.com/s/desktop/f604ca94/img/favicon_144x144.png",
+      "image": "",
       "desktopLayout": {
         "size": "2x1",
         "order": 40
@@ -709,30 +714,32 @@
       }
     },
     {
-      "id": "sl-6",
-      "type": "social",
-      "size": "1x0.5",
-      "variant": "social-card",
-      "title": "Instagram",
-      "subtitle": "instagram.com",
-      "icon": "instagram",
+      "id": "exu9xuyus",
+      "type": "link",
+      "size": "2x1",
+      "title": "Keith Vaz on ADPList",
+      "subtitle": "",
+      "url": "https://adplist.org/mentors/keith-vaz",
+      "icon": "https://adplist.org/favicon.ico",
+      "image": "https://hcti.io/v1/image/3c5077ed-bc55-4560-9d58-7808bbcce7ec",
       "desktopLayout": {
-        "size": "1x0.5",
+        "size": "2x1",
         "order": 41
       },
       "mobileLayout": {
-        "size": "1x0.5",
+        "size": "2x1",
         "order": 44
       }
     },
     {
-      "id": "sl-7",
-      "type": "social",
+      "id": "1scnu8ft0",
+      "type": "link",
       "size": "1x0.5",
-      "variant": "social-card",
-      "title": "Twitter",
-      "subtitle": "twitter.com",
-      "icon": "twitter",
+      "title": "X (Twitter)",
+      "subtitle": "",
+      "url": "https://x.com/keeithlv",
+      "icon": "https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png",
+      "image": "https://pbs.twimg.com/profile_images/1488579130711244800/Sj_j0aKu_400x400.jpg",
       "desktopLayout": {
         "size": "1x0.5",
         "order": 42
