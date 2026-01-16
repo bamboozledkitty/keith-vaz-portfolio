@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Secrets (explicit protection)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
