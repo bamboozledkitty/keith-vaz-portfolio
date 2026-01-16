@@ -135,7 +135,7 @@ const LoginPage: React.FC = () => {
           </div>
 
           <Squircle cornerRadius={8} className="mt-8 p-4 bg-blue-50 border border-blue-200">
-            <h3 className="font-semibold text-sm text-blue-900 mb-2">Setup Instructions:</h3>
+            <h3 className="font-medium text-sm text-blue-900 mb-2">Setup Instructions:</h3>
             <ol className="text-xs text-blue-800 space-y-2 list-decimal list-inside">
               <li>Create a GitHub OAuth App in your settings</li>
               <li>Set redirect URI to: {`${window.location.origin}${import.meta.env.BASE_URL || '/'}#/admin/callback`}</li>

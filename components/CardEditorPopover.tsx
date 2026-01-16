@@ -333,7 +333,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 placeholder="Display title"
-                className="font-semibold"
+                className="font-medium"
               />
             </div>
 
@@ -695,7 +695,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
           <div className="flex items-center justify-between px-4 py-3 border-b border-[#efefef] bg-gray-50/50">
             <div className="flex items-center gap-2 text-gray-700">
               {typeConfig.icon}
-              <span className="font-semibold text-sm">{state.mode === 'create' ? 'Add' : 'Edit'} {typeConfig.label}</span>
+              <span className="font-medium text-sm">{state.mode === 'create' ? 'Add' : 'Edit'} {typeConfig.label}</span>
             </div>
             <Button
               variant="ghost"

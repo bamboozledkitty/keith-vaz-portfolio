@@ -97,7 +97,7 @@ const ProfilePictureCropperModal: React.FC<ProfilePictureCropperModalProps> = ({
             >
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-                    <h2 className="text-lg font-semibold text-gray-900">Edit Profile Picture</h2>
+                    <h2 className="text-lg font-medium text-gray-900">Edit Profile Picture</h2>
                         <Button
                         variant="ghost"
                         size="icon"
