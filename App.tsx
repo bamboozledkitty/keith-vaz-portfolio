@@ -418,7 +418,7 @@ function App({ isAdmin = false }: AppProps) {
               Keith Vaz <span className="inline-block hover:rotate-12 transition-transform cursor-default duration-500">👋</span>
             </h1>
 
-            <div className="flex flex-col gap-2 text-gray-500 text-xl font-medium mb-8">
+            <div className="flex flex-col gap-2 text-gray-500 text-xl font-normal mb-8">
               <div className="flex items-center gap-3">
                 <span className="text-xl">👨🏽‍💻</span>
                 <span>Design Systems Designer</span>
