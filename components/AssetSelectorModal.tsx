@@ -86,7 +86,7 @@ const AssetSelectorModal: React.FC<AssetSelectorModalProps> = ({ isOpen, onClose
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Browse Assets</h2>
+            <h2 className="text-lg font-semibold text-gray-900">Browse Assets</h2>
             <p className="text-sm text-gray-500 mt-0.5">Select an image or video from your library</p>
           </div>
           <Button
