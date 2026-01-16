@@ -39,6 +39,3 @@ npm run build
 
 View the live portfolio: [keithvaz.github.io/keith-vaz-portfolio](https://keithvaz.github.io/keith-vaz-portfolio/)
 
----
-
-Built with precision and a focus on design systems.
