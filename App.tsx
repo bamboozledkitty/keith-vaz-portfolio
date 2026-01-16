@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef, Suspense, lazy } from 'react';
 import { LogOut, Loader2, AlertCircle, Save, Camera } from 'lucide-react';
 import {
   DndContext,
@@ -24,13 +24,17 @@ import { useNavigate } from 'react-router-dom';
 import SortableItem from './components/SortableItem';
 import BentoCard from './components/BentoCard';
 import Toolbar from './components/Toolbar';
-import CardEditorPopover, { EditorState } from './components/CardEditorPopover';
-import ProfilePictureCropperModal from './components/ProfilePictureCropperModal';
+import type { EditorState } from './components/CardEditorPopover';
 import { BentoItemData, ItemType, ItemSize, ViewMode, ViewLayout } from './types';
 import { useAuth } from './contexts/AuthContext';
 import { Button } from './components/ui/button';
 import { cn } from './lib/utils';
 import { saveContentToGitHub } from './lib/github';
+import { logError } from './lib/logger';
+
+// Lazy load admin-only components to reduce initial bundle size
+const CardEditorPopover = lazy(() => import('./components/CardEditorPopover'));
+const ProfilePictureCropperModal = lazy(() => import('./components/ProfilePictureCropperModal'));
 
 // Content data URL
 const CONTENT_URL = `${import.meta.env.BASE_URL}content/data.json`;
@@ -116,7 +120,7 @@ function App({ isAdmin = false }: AppProps) {
         );
         setItems(migratedItems);
       } catch (error) {
-        console.error('Error loading content:', error);
+        logError('Error loading content:', error);
         setLoadError(error instanceof Error ? error.message : 'Failed to load content');
       } finally {
         setIsLoading(false);
@@ -323,7 +327,7 @@ function App({ isAdmin = false }: AppProps) {
               <Button
                 onClick={async () => {
                   if (!token) {
-                    console.error('No auth token available');
+                    logError('No auth token available');
                     return;
                   }
                   
@@ -337,7 +341,7 @@ function App({ isAdmin = false }: AppProps) {
                     await saveContentToGitHub(token, items);
                     setHasUnsavedChanges(false);
                   } catch (error) {
-                    console.error('Failed to save:', error);
+                    logError('Failed to save:', error);
                     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
                     alert(`Failed to save changes: ${errorMessage}\n\nPlease check your token permissions or try logging in again.`);
                   } finally {
@@ -435,7 +439,7 @@ function App({ isAdmin = false }: AppProps) {
         <main className="grid-section">
           {/* Loading State */}
           {isLoading && (
-            <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+            <div className="flex flex-col items-center justify-center py-20 text-gray-500 w-full">
               <Loader2 size={48} className="animate-spin mb-4" />
               <p className="text-lg font-medium">Loading content...</p>
             </div>
@@ -443,7 +447,7 @@ function App({ isAdmin = false }: AppProps) {
 
           {/* Error State */}
           {loadError && !isLoading && (
-            <div className="flex flex-col items-center justify-center py-20 text-red-500">
+            <div className="flex flex-col items-center justify-center py-20 text-red-500 w-full">
               <AlertCircle size={48} className="mb-4" />
               <p className="text-lg font-medium">Failed to load content</p>
               <p className="text-sm text-gray-500 mt-2">{loadError}</p>
@@ -508,30 +512,34 @@ function App({ isAdmin = false }: AppProps) {
         />
       )}
 
-      {/* Card Editor Popover */}
+      {/* Card Editor Popover - Lazy loaded */}
       {editorState && (
-        <CardEditorPopover
-          state={editorState}
-          onSave={handleEditorSave}
-          onCancel={handleEditorCancel}
-        />
+        <Suspense fallback={null}>
+          <CardEditorPopover
+            state={editorState}
+            onSave={handleEditorSave}
+            onCancel={handleEditorCancel}
+          />
+        </Suspense>
       )}
 
-      {/* Profile Picture Cropper Modal */}
+      {/* Profile Picture Cropper Modal - Lazy loaded */}
       {showProfileCropper && profileImageSrc && (
-        <ProfilePictureCropperModal
-          imageSrc={profileImageSrc}
-          onSave={(croppedImage) => {
-            setCroppedProfilePicture(croppedImage);
-            setShowProfileCropper(false);
-            setProfileImageSrc(null);
-            setHasUnsavedChanges(true);
-          }}
-          onCancel={() => {
-            setShowProfileCropper(false);
-            setProfileImageSrc(null);
-          }}
-        />
+        <Suspense fallback={null}>
+          <ProfilePictureCropperModal
+            imageSrc={profileImageSrc}
+            onSave={(croppedImage) => {
+              setCroppedProfilePicture(croppedImage);
+              setShowProfileCropper(false);
+              setProfileImageSrc(null);
+              setHasUnsavedChanges(true);
+            }}
+            onCancel={() => {
+              setShowProfileCropper(false);
+              setProfileImageSrc(null);
+            }}
+          />
+        </Suspense>
       )}
     </div>
   );
