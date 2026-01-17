@@ -136,8 +136,16 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     }
   };
 
+  // Check if this is a media-only card (edge-to-edge media with caption)
+  const isMediaCard = item.variant === 'media' || item.type === 'image';
+
+  // Check if this is a text card
+  const isTextCard = item.type === 'text';
+
   // Determine if card is interactive (needs tabIndex and role)
-  const isInteractive = !!item.url || canEdit;
+  // Text cards without URLs are not interactive in public view
+  const isTextCardWithoutUrl = isTextCard && !item.url;
+  const isInteractive = (!!item.url || canEdit) && !(isTextCardWithoutUrl && !canEdit);
 
   // Save caption inline
   const handleSaveCaption = () => {
@@ -258,11 +266,6 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     );
   };
 
-  // Check if this is a media-only card (edge-to-edge media with caption)
-  const isMediaCard = item.variant === 'media' || item.type === 'image';
-
-  // Check if this is a text card
-  const isTextCard = item.type === 'text';
 
   // Render text card with alignment options
   const renderTextCard = () => {
@@ -364,12 +367,12 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
           {/* Image - right side, 100% height, ~48% width like bento.me */}
           {item.image && (
             <Squircle cornerRadius={12} className="w-[55%] h-full overflow-hidden bg-gray-50 shrink-0">
-              <img 
-                src={resolveMediaUrl(item.image)} 
-                alt={item.title || ''} 
+              <img
+                src={resolveMediaUrl(item.image)}
+                alt={item.title || ''}
                 loading="lazy"
                 decoding="async"
-                className="h-full w-full object-cover transition-transform duration-500" 
+                className="h-full w-full object-cover transition-transform duration-500"
               />
             </Squircle>
           )}
@@ -397,12 +400,12 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
           {/* Image - bottom, 55% height to match 2x1's 55% width ratio */}
           {item.image && (
             <Squircle cornerRadius={12} className="h-[55%] w-full overflow-hidden bg-gray-50 shrink-0">
-              <img 
-                src={resolveMediaUrl(item.image)} 
-                alt={item.title || ''} 
+              <img
+                src={resolveMediaUrl(item.image)}
+                alt={item.title || ''}
                 loading="lazy"
                 decoding="async"
-                className="h-full w-full object-cover transition-transform duration-500" 
+                className="h-full w-full object-cover transition-transform duration-500"
               />
             </Squircle>
           )}
@@ -417,12 +420,12 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
           {item.image ? (
             <>
               {/* Full bleed image */}
-              <img 
-                src={resolveMediaUrl(item.image)} 
-                alt={item.title || ''} 
+              <img
+                src={resolveMediaUrl(item.image)}
+                alt={item.title || ''}
                 loading="lazy"
                 decoding="async"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500" 
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
               />
               {/* Overlay with text */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-6">
@@ -481,7 +484,12 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
       ) : (
         <Card className={cn(
           "h-full w-full shadow-card transition-[transform,box-shadow,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] p-0 relative",
-          isDragging ? "shadow-card-drag" : "hover:shadow-card-hover cursor-grab active:scale-[0.98]"
+          isDragging ? "shadow-card-drag" : (
+            // Text cards without URLs in public view should have no interactive styling
+            (isTextCardWithoutUrl && !canEdit)
+              ? "" // No hover/click effects
+              : "hover:shadow-card-hover cursor-grab active:scale-[0.98]"
+          )
         )}>
           {renderContent()}
         </Card>
