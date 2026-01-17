@@ -37,5 +37,5 @@ npm run build
 
 ## Live Site
 
-View the live portfolio: [keithvaz.github.io/keith-vaz-portfolio](https://keithvaz.github.io/keith-vaz-portfolio/)
+View the live portfolio: [keithvaz.xyz](https://keithvaz.xyz/)
 
