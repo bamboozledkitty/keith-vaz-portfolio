@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+  <script>
+    // SPA redirect for GitHub Pages
+    // Converts path-based URLs to hash-based URLs for HashRouter compatibility
+    // e.g., /admin/callback?code=xxx -> /#/admin/callback?code=xxx
+    (function() {
+      var loc = window.location;
+      
+      // For custom domain (no repo path prefix needed)
+      // pathSegmentsToKeep = 0 means we redirect the entire path
+      var pathSegmentsToKeep = 0;
+      
+      // Get the path after the base (everything after /)
+      var pathParts = loc.pathname.split('/');
+      var routePath = pathParts.slice(1 + pathSegmentsToKeep).join('/');
+      
+      // Build the new URL with hash routing
+      // Original: /admin/callback?code=xxx&state=yyy
+      // Becomes:  /#/admin/callback?code=xxx&state=yyy
+      var newUrl = loc.protocol + '//' + loc.hostname + 
+        (loc.port ? ':' + loc.port : '') +
+        '/' +
+        '#/' + routePath +
+        loc.search +
+        (loc.hash ? loc.hash.slice(1) : ''); // Preserve any existing hash content
+      
+      // Replace the current URL (no back button to 404)
+      loc.replace(newUrl);
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting...</p>
+</body>
+</html>

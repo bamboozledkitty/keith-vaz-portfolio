@@ -73,7 +73,7 @@ const LoginPage: React.FC = () => {
     };
 
     handleCallback();
-  }, [setAuth, navigate]);
+  }, [setAuth, navigate, searchParams]);
 
   const handleLogin = async () => {
     setIsLoading(true);

@@ -268,6 +268,25 @@
   </script>
 
   <div id="root"></div>
+  
+  <!-- Handle OAuth redirect before React loads (for GitHub Pages compatibility) -->
+  <script>
+    (function() {
+      // Check if we have OAuth params in the URL (GitHub callback)
+      var search = window.location.search;
+      var hash = window.location.hash;
+      
+      // If we have ?code= and ?state= but no hash (or just #/), redirect to hash-based callback
+      if (search && search.indexOf('code=') !== -1 && search.indexOf('state=') !== -1) {
+        if (!hash || hash === '#' || hash === '#/') {
+          // Redirect to hash-based admin callback with the OAuth params
+          var newUrl = window.location.origin + window.location.pathname + '#/admin/callback' + search;
+          window.location.replace(newUrl);
+        }
+      }
+    })();
+  </script>
+  
   <script type="module" src="/index.tsx"></script>
 </body>
 
