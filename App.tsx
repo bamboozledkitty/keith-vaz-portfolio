@@ -137,12 +137,12 @@ function App({ isAdmin = false }: AppProps) {
       try {
         setIsLoading(true);
         setLoadError(null);
-        
+
         const response = await fetch(CONTENT_URL);
         if (!response.ok) {
           throw new Error(`Failed to load content: ${response.status}`);
         }
-        
+
         const data = await response.json();
         processLoadedData(data);
       } catch (error) {
@@ -379,7 +379,7 @@ function App({ isAdmin = false }: AppProps) {
                     logError('No auth token available');
                     return;
                   }
-                  
+
                   if (token.startsWith('test-token-')) {
                     alert('You are currently using a Test Account. Changes cannot be saved to GitHub in test mode. Please log out and sign in with your GitHub account to save changes.');
                     return;
@@ -463,21 +463,21 @@ function App({ isAdmin = false }: AppProps) {
               }}
             />
 
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-5 leading-tight w-full">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-5 leading-tight w-full">
               Keith Vaz <span className="inline-block hover:rotate-12 transition-transform cursor-default duration-500">👋</span>
             </h1>
 
-            <div className="flex flex-col gap-2 text-gray-500 text-xl font-normal mb-8">
+            <div className="flex flex-col gap-2 text-gray-500 text-base font-normal mb-8">
               <div className="flex items-center gap-3">
-                <span className="text-xl">👨🏽‍💻</span>
+                <span className="text-base">👨🏽‍💻</span>
                 <span>Design Systems Designer</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-xl">📍</span>
+                <span className="text-base">📍</span>
                 <span>Bangalore</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-xl">🏡</span>
+                <span className="text-base">🏡</span>
                 <span>Goa</span>
               </div>
             </div>
@@ -487,42 +487,42 @@ function App({ isAdmin = false }: AppProps) {
         {/* Right Section - Bento Grid (aligned to RIGHT on desktop) */}
         <main className="grid-section min-h-[60vh]">
           <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragStart={handleDragStart}
-              onDragOver={handleDragOver}
-              onDragEnd={handleDragEnd}
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={sortedItems.map(item => item.id)}
+              strategy={rectSortingStrategy}
             >
-              <SortableContext
-                items={sortedItems.map(item => item.id)}
-                strategy={rectSortingStrategy}
+              <div
+                className="bento-grid"
               >
-                <div
-                  className="bento-grid"
-                >
-                  {sortedItems.map((item) => (
-                    <SortableItem
-                      key={item.id}
-                      item={item}
-                      currentView={currentView}
-                      isAdminRoute={isAdmin}
-                      onDelete={handleDeleteItem}
-                      onResize={handleResize}
-                      onUpdate={handleUpdateItem}
-                      onStartEdit={handleStartEdit}
-                    />
-                  ))}
-                </div>
-              </SortableContext>
+                {sortedItems.map((item) => (
+                  <SortableItem
+                    key={item.id}
+                    item={item}
+                    currentView={currentView}
+                    isAdminRoute={isAdmin}
+                    onDelete={handleDeleteItem}
+                    onResize={handleResize}
+                    onUpdate={handleUpdateItem}
+                    onStartEdit={handleStartEdit}
+                  />
+                ))}
+              </div>
+            </SortableContext>
 
-              <DragOverlay adjustScale={false} dropAnimation={dropAnimationConfig}>
-                {activeItem ? (
-                  <div className="w-full h-full cursor-grabbing">
-                    <BentoCard item={activeItem} currentView={currentView} isAdminRoute={isAdmin} isOverlay isDragging />
-                  </div>
-                ) : null}
-              </DragOverlay>
-            </DndContext>
+            <DragOverlay adjustScale={false} dropAnimation={dropAnimationConfig}>
+              {activeItem ? (
+                <div className="w-full h-full cursor-grabbing">
+                  <BentoCard item={activeItem} currentView={currentView} isAdminRoute={isAdmin} isOverlay isDragging />
+                </div>
+              ) : null}
+            </DragOverlay>
+          </DndContext>
         </main>
       </div>
 

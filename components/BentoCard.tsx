@@ -257,7 +257,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
               maxLength={CAPTION_MAX_LENGTH}
               className="bg-white border-gray-300 shadow-lg text-sm h-10 max-w-[280px]"
             />
-            <p className="text-[10px] text-white/70 mt-1 ml-1">
+            <p className="text-2xs text-white/70 mt-1 ml-1">
               {tempCaption.length}/{CAPTION_MAX_LENGTH}
             </p>
           </div>
@@ -314,7 +314,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     // 1. Small Square (1x1) - Icon Top, Text Bottom with uniform padding
     if (currentSize === '1x1') {
       return (
-        <div className="h-full w-full flex flex-col justify-between p-5 group bg-white">
+        <div className="h-full w-full flex flex-col justify-between p-3 md:p-5 group bg-white">
           <Squircle cornerRadius={12} className="w-10 h-10 bg-gray-50 border border-[#f3f3f3] flex items-center justify-center text-gray-800 shrink-0 group-hover:scale-110 transition-transform duration-300">
             <SocialIcon name={item.icon || item.image} className="w-5 h-5" />
           </Squircle>
@@ -323,7 +323,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
               "font-medium text-gray-900 leading-snug text-sm",
               item.subtitle ? "line-clamp-2" : "line-clamp-3"
             )}>{item.title}</h3>
-            {item.subtitle && <p className="text-xs text-gray-500 mt-1 font-medium line-clamp-1">{item.subtitle}</p>}
+            {item.subtitle && <p className="text-xs text-gray-500 mt-1 font-normal line-clamp-1 bento-subtitle">{item.subtitle}</p>}
           </div>
         </div>
       );
@@ -332,16 +332,16 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     // 2. Narrow Rectangle (1x0.5) - Horizontal strip for quick links/stats
     if (currentSize === '1x0.5') {
       return (
-        <div className="flex items-center h-full w-full px-5 gap-4 bg-white">
+        <div className="flex items-center h-full w-full px-3 md:px-5 gap-3 md:gap-4 bg-white">
           <Squircle cornerRadius={10} className="w-10 h-10 bg-gray-50 border border-[#efefef] flex items-center justify-center shrink-0">
             <SocialIcon name={item.icon || item.image} className="w-5 h-5" />
           </Squircle>
           <div className="min-w-0 flex-1">
             <h3 className={cn(
-              "font-medium text-gray-900 text-sm leading-tight",
+              "font-medium text-gray-900 text-sm leading-snug",
               item.subtitle ? "truncate" : "line-clamp-2"
             )}>{item.title}</h3>
-            {item.subtitle && <p className="text-xs text-gray-500 mt-0.5 font-medium truncate">{item.subtitle}</p>}
+            {item.subtitle && <p className="text-xs text-gray-500 mt-0.5 font-normal truncate bento-subtitle">{item.subtitle}</p>}
           </div>
         </div>
       );
@@ -350,7 +350,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     // 3. Wide Rectangle (2x1) - bento.me style: icon + text grouped at top-left, image right
     if (currentSize === '2x1') {
       return (
-        <div className="flex h-full w-full bg-white group p-5 gap-4">
+        <div className="flex h-full w-full bg-white group p-3 md:p-5 gap-3 md:gap-4">
           {/* Text content - left side, icon + text grouped at top */}
           <div className="flex-1 flex flex-col justify-start min-w-0 gap-3">
             <Squircle cornerRadius={12} className="w-10 h-10 overflow-hidden flex items-center justify-center bg-gray-50 border border-[#efefef] shrink-0">
@@ -358,10 +358,10 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
             </Squircle>
             <div>
               <h3 className={cn(
-                "font-medium text-gray-900 leading-tight text-base tracking-tight",
+                "font-medium text-gray-900 leading-tight text-sm md:text-base tracking-tight",
                 item.subtitle ? "line-clamp-2" : (item.image ? "line-clamp-3" : "line-clamp-4")
               )}>{item.title}</h3>
-              {item.subtitle && <p className="text-xs text-gray-500 mt-1 font-medium truncate">{item.subtitle}</p>}
+              {item.subtitle && <p className="text-xs text-gray-500 mt-1 font-normal truncate bento-subtitle">{item.subtitle}</p>}
             </div>
           </div>
           {/* Image - right side, 100% height, ~48% width like bento.me */}
@@ -383,7 +383,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     // 4. Vertical Rectangle (1x2) - icon + text grouped at top, image at bottom (48% height)
     if (currentSize === '1x2') {
       return (
-        <div className="flex flex-col h-full w-full bg-white group p-5 gap-4">
+        <div className="flex flex-col h-full w-full bg-white group p-3 md:p-5 gap-3 md:gap-4">
           {/* Text content - top, icon + text grouped together */}
           <div className="flex-1 flex flex-col justify-start gap-3">
             <Squircle cornerRadius={12} className="w-10 h-10 overflow-hidden flex items-center justify-center bg-gray-50 border border-[#efefef] shrink-0">
@@ -391,10 +391,10 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
             </Squircle>
             <div>
               <h3 className={cn(
-                "font-medium text-gray-900 leading-tight text-base tracking-tight",
+                "font-medium text-gray-900 leading-tight text-sm md:text-base tracking-tight",
                 item.subtitle ? "line-clamp-2" : "line-clamp-5"
               )}>{item.title}</h3>
-              {item.subtitle && <p className="text-xs text-gray-500 mt-1.5 font-medium line-clamp-2">{item.subtitle}</p>}
+              {item.subtitle && <p className="text-xs text-gray-500 mt-1.5 font-normal line-clamp-2 bento-subtitle">{item.subtitle}</p>}
             </div>
           </div>
           {/* Image - bottom, 55% height to match 2x1's 55% width ratio */}
@@ -433,7 +433,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
                   <SocialIcon name={item.icon} className="w-5 h-5 text-white" />
                 </Squircle>
                 <h3 className="text-white font-medium text-xl leading-tight tracking-tight">{item.title}</h3>
-                {item.subtitle && <p className="text-white/70 text-sm mt-2 font-medium">{item.subtitle}</p>}
+                {item.subtitle && <p className="text-white/70 text-sm mt-2 font-normal bento-subtitle">{item.subtitle}</p>}
               </div>
             </>
           ) : (
@@ -443,7 +443,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
               </Squircle>
               <div>
                 <h3 className="font-medium text-2xl text-gray-900 leading-tight tracking-tight">{item.title}</h3>
-                {item.subtitle && <p className="text-sm text-gray-500 mt-3 font-medium">{item.subtitle}</p>}
+                {item.subtitle && <p className="text-sm text-gray-500 mt-3 font-normal bento-subtitle">{item.subtitle}</p>}
               </div>
             </div>
           )}

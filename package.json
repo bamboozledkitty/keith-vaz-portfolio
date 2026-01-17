@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "generate-llms": "node scripts/generate-llms-txt.js",
+    "prebuild": "npm run generate-llms",
     "build": "vite build",
     "preview": "vite preview"
   },

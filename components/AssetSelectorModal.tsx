@@ -76,7 +76,7 @@ const AssetSelectorModal: React.FC<AssetSelectorModalProps> = ({ isOpen, onClose
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
@@ -197,10 +197,10 @@ const AssetSelectorModal: React.FC<AssetSelectorModalProps> = ({ isOpen, onClose
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   )}
-                  
+
                   {/* Filename tooltip on hover */}
                   <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p className="text-[10px] text-white truncate font-medium">
+                    <p className="text-2xs text-white truncate font-medium">
                       {decodeURIComponent(asset.name)}
                     </p>
                   </div>

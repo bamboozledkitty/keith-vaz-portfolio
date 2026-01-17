@@ -4,8 +4,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' cdn.jsdelivr.net 'sha256-lyaj1If3A6E6D3YNdE7tjSfjoa63aXDujZU6vpB4WXw='; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' api.github.com *.workers.dev; font-src 'self' cdn.jsdelivr.net fonts.gstatic.com;">
-  <title>Keith Vaz Portfolio</title>
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' cdn.jsdelivr.net 'sha256-lyaj1If3A6E6D3YNdE7tjSfjoa63aXDujZU6vpB4WXw='; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' api.github.com *.workers.dev; font-src 'self' cdn.jsdelivr.net fonts.gstatic.com;">
+  <title>Keith Vaz</title>
+  <!-- Emoji favicon - no image file needed! -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👋</text></svg>">
   <!-- Preconnect to external resources for faster loading -->
   <link rel="preconnect" href="https://api.github.com">
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -13,7 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Preload font stylesheet, then load async to prevent render blocking -->
   <!-- Subset to only used weights: 400 (normal), 500 (medium), 600 (semibold), 700 (bold), 900 (black) -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
   <noscript>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
@@ -47,6 +52,12 @@
       --min-section-gap: 24px;
       /* Padding on sides */
       --layout-padding: 64px;
+
+      /* Small container (≤380px) - compact mobile layout */
+      --card-unit-sm: 140px;
+      --card-gap-sm: 16px;
+      --grid-width-sm: 296px;
+      /* 140*2 + 16 */
     }
 
     .bento-grid {
@@ -54,6 +65,11 @@
       flex-wrap: wrap;
       gap: var(--card-gap);
       width: var(--grid-width);
+      justify-content: center;
+
+      /* Register as container for queries */
+      container-type: inline-size;
+      container-name: bento;
     }
 
     /* Base card styles - NEVER shrink or grow */
@@ -69,7 +85,8 @@
     }
 
     .bento-card-2x1 {
-      width: 380px; /* 180*2 + 20 */
+      width: 380px;
+      /* 180*2 + 20 */
       height: 180px;
     }
 
@@ -110,9 +127,11 @@
 
     .about-section {
       width: 100%;
-      max-width: var(--grid-width-mobile);
+      max-width: var(--grid-width-sm);
+      /* Match card width, not grid width */
       margin-bottom: 24px;
       padding: 0;
+      box-sizing: border-box;
     }
 
     .grid-section {
@@ -120,6 +139,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
     }
 
     @media (min-width: 1372px) {
@@ -139,6 +159,7 @@
         max-width: none;
         margin-bottom: 0;
         padding: 0;
+        /* Reset padding for desktop */
       }
 
       .grid-section {
@@ -163,10 +184,102 @@
       }
     }
 
-    /* Proximity grouping: more space above section titles than below them */
-    .bento-grid > .bento-card-full:not(:first-child) {
-      margin-top: 40px; /* 40px extra + 20px gap = 60px total spacing above */
+    /* Narrow viewports - add horizontal margins */
+    @media (max-width: 420px) {
+      .layout-container {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .bento-grid {
+        width: calc(100vw - 32px);
+        max-width: var(--grid-width-mobile);
+      }
     }
+
+    /* Proximity grouping: more space above section titles than below them */
+    .bento-grid>.bento-card-full:not(:first-child) {
+      margin-top: 40px;
+      /* 40px extra + 20px gap = 60px total spacing above */
+    }
+
+    /* =========================================
+       CONTAINER QUERIES - Responsive Card Sizing
+       ========================================= */
+
+    /* Small container (380px and below) 
+       Typically mobile devices with narrow viewports */
+    @container bento (max-width: 380px) {
+      .bento-card-1x1 {
+        width: var(--card-unit-sm);
+        height: var(--card-unit-sm);
+      }
+
+      .bento-card-2x1 {
+        width: var(--grid-width-sm);
+        height: var(--card-unit-sm);
+      }
+
+      .bento-card-2x1.bento-card-half-height {
+        width: var(--grid-width-sm);
+        height: 72px;
+      }
+
+      .bento-card-1x2 {
+        width: var(--card-unit-sm);
+        height: var(--grid-width-sm);
+      }
+
+      .bento-card-2x2 {
+        width: var(--grid-width-sm);
+        height: var(--grid-width-sm);
+      }
+
+      .bento-card-full {
+        width: var(--grid-width-sm);
+        height: 54px;
+      }
+
+      /* Hide all subtitles on mobile to save space */
+      .bento-subtitle {
+        display: none;
+      }
+    }
+
+    /* Very small container (320px and below)
+       Very narrow devices, add extra scaling */
+    @container bento (max-width: 320px) {
+      .bento-card-1x1 {
+        width: 140px;
+        height: 140px;
+      }
+
+      .bento-card-2x1 {
+        width: 296px;
+        height: 140px;
+      }
+
+      .bento-card-2x1.bento-card-half-height {
+        width: 296px;
+        height: 64px;
+      }
+
+      .bento-card-1x2 {
+        width: 140px;
+        height: 296px;
+      }
+
+      .bento-card-2x2 {
+        width: 296px;
+        height: 296px;
+      }
+
+      .bento-card-full {
+        width: 296px;
+        height: 48px;
+      }
+    }
+
 
     /* Initial loader - shows before React loads */
     .initial-loader {
@@ -204,9 +317,20 @@
     }
 
     @keyframes indeterminate {
-      0% { width: 0%; margin-left: 0%; }
-      50% { width: 30%; margin-left: 35%; }
-      100% { width: 0%; margin-left: 100%; }
+      0% {
+        width: 0%;
+        margin-left: 0%;
+      }
+
+      50% {
+        width: 30%;
+        margin-left: 35%;
+      }
+
+      100% {
+        width: 0%;
+        margin-left: 100%;
+      }
     }
 
     /* Hide when React takes over */
@@ -228,7 +352,7 @@
   </div>
 
   <script>
-    (function() {
+    (function () {
       const phrases = [
         "Aligning tokens...", "Polishing squircles...", "Snap to grid...", "Kerning pixels...", "Distilling essence...",
         "Brewing components...", "Hydrating themes...", "Organizing chaos...", "Bezier curves...", "Smoothing corners...",
@@ -251,11 +375,11 @@
         "Service working...", "Offline ready...", "Progressive web...", "SPA routing...", "Client side...",
         "Server side...", "Static site...", "Dynamic data...", "API fetching...", "Portfolio loading..."
       ];
-      
+
       const textElement = document.getElementById('loader-text');
       const loaderElement = document.getElementById('initial-loader');
       let index = Math.floor(Math.random() * phrases.length);
-      
+
       const interval = setInterval(() => {
         if (!loaderElement || !document.body.contains(loaderElement) || loaderElement.classList.contains('hidden')) {
           clearInterval(interval);
@@ -268,14 +392,14 @@
   </script>
 
   <div id="root"></div>
-  
+
   <!-- Handle OAuth redirect before React loads (for GitHub Pages compatibility) -->
   <script>
-    (function() {
+    (function () {
       // Check if we have OAuth params in the URL (GitHub callback)
       var search = window.location.search;
       var hash = window.location.hash;
-      
+
       // If we have ?code= and ?state= but no hash (or just #/), redirect to hash-based callback
       if (search && search.indexOf('code=') !== -1 && search.indexOf('state=') !== -1) {
         if (!hash || hash === '#' || hash === '#/') {
@@ -286,7 +410,7 @@
       }
     })();
   </script>
-  
+
   <script type="module" src="/index.tsx"></script>
 </body>
 
