@@ -1,26 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { Github, AlertCircle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getGitHubOAuthUrl, verifyState, fetchGitHubUser, saveAuthState, requestAccessToken } from '../lib/auth';
 import { ADMIN_USERNAME } from '../config/auth';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
 import { Squircle } from './ui/squircle';
 import { logError } from '../lib/logger';
+import { hideInitialLoader } from '../lib/utils';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { setAuth } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Hide initial loader on mount
+  useEffect(() => {
+    hideInitialLoader();
+  }, []);
+
   // Handle OAuth callback
   useEffect(() => {
     const handleCallback = async () => {
-      const params = new URLSearchParams(window.location.search);
-      const code = params.get('code');
-      const state = params.get('state');
-      const errorParam = params.get('error');
+      // Try to get params from searchParams (HashRouter) or window.location.search
+      const code = searchParams.get('code') || new URLSearchParams(window.location.search).get('code');
+      const state = searchParams.get('state') || new URLSearchParams(window.location.search).get('state');
+      const errorParam = searchParams.get('error') || new URLSearchParams(window.location.search).get('error');
 
       if (errorParam) {
         setError(`GitHub authorization failed: ${errorParam}`);

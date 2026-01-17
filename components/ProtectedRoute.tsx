@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { hideInitialLoader } from '../lib/utils';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -9,7 +10,16 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isAuthenticated, isAdmin, isLoading } = useAuth();
 
+  // Hide initial loader when auth state is determined
+  React.useEffect(() => {
+    if (!isLoading) {
+      hideInitialLoader();
+    }
+  }, [isLoading]);
+
   if (isLoading) {
+    // Also hide loader if we are showing the protected route's loading state
+    hideInitialLoader();
     return (
       <div className="min-h-screen bg-[#f7f6f3] flex items-center justify-center">
         <div className="text-center">

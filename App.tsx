@@ -28,7 +28,7 @@ import type { EditorState } from './components/CardEditorPopover';
 import { BentoItemData, ItemType, ItemSize, ViewMode, ViewLayout } from './types';
 import { useAuth } from './contexts/AuthContext';
 import { Button } from './components/ui/button';
-import { cn } from './lib/utils';
+import { cn, hideInitialLoader } from './lib/utils';
 import { saveContentToGitHub } from './lib/github';
 import { logError } from './lib/logger';
 
@@ -107,12 +107,7 @@ function App({ isAdmin = false }: AppProps) {
   // Hide inline loader when content is loaded
   useEffect(() => {
     if (!isLoading) {
-      const loader = document.getElementById('initial-loader');
-      if (loader) {
-        loader.classList.add('hidden');
-        // Remove from DOM after transition
-        setTimeout(() => loader.remove(), 300);
-      }
+      hideInitialLoader();
     }
   }, [isLoading]);
 

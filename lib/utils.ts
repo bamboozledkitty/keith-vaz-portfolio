@@ -6,6 +6,17 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Hides the initial HTML loader
+ */
+export function hideInitialLoader() {
+  const loader = document.getElementById('initial-loader');
+  if (loader && !loader.classList.contains('hidden')) {
+    loader.classList.add('hidden');
+    setTimeout(() => loader.remove(), 300);
+  }
+}
+
+/**
  * Resolves media URLs for proper display on GitHub Pages
  * Local paths (/media/...) need BASE_URL prepended
  * External URLs (https://...) are returned as-is
