@@ -11,7 +11,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
     title: "Keith Vaz",
-    description: "Portfolio showcasing projects and skills",
+    description: "A human in love with systems, innovating and automating.",
     metadataBase: new URL("https://keithvaz.xyz"),
     icons: {
         icon: [
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     },
     openGraph: {
         title: "Keith Vaz",
-        description: "Portfolio showcasing projects and skills",
+        description: "A human in love with systems, innovating and automating.",
         url: "https://keithvaz.xyz",
         siteName: "Keith Vaz Portfolio",
         images: [
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     twitter: {
         card: "summary_large_image",
         title: "Keith Vaz",
-        description: "Portfolio showcasing projects and skills",
+        description: "A human in love with systems, innovating and automating.",
         images: ["/media/profile/profile-pic/IMG_5823.jpg"],
     },
 };
