@@ -57,3 +57,7 @@ export interface DragItem {
   id: string;
   index: number;
 }
+
+export interface PortfolioData {
+  items: BentoItemData[];
+}

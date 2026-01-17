@@ -4,7 +4,7 @@
  */
 
 export const logError = (...args: unknown[]): void => {
-  if (import.meta.env.DEV) {
+  if (process.env.NODE_ENV === 'development') {
     console.error(...args);
   }
   // In production, you could send errors to a tracking service like Sentry:
@@ -14,13 +14,13 @@ export const logError = (...args: unknown[]): void => {
 };
 
 export const logWarn = (...args: unknown[]): void => {
-  if (import.meta.env.DEV) {
+  if (process.env.NODE_ENV === 'development') {
     console.warn(...args);
   }
 };
 
 export const logInfo = (...args: unknown[]): void => {
-  if (import.meta.env.DEV) {
+  if (process.env.NODE_ENV === 'development') {
     console.info(...args);
   }
 };

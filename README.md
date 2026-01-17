@@ -7,8 +7,8 @@ A personal bento-style portfolio showcasing design systems work, apps, visual de
 - 🎨 **Bento-style Grid**: A modular layout inspired by [bento.me](https://bento.me), featuring drag-and-drop customization.
 - 📱 **Responsive Design**: Fluid transitions between desktop and mobile layouts.
 - 🔐 **Admin Interface**: A secure dashboard for real-time content management, built with GitHub OAuth and Cloudflare Workers.
-- ⚡ **Performance**: Optimized with lazy-loading videos, compressed assets, and Gzip/Brotli support.
-- 🚀 **Automation**: CI/CD pipeline with GitHub Actions for deployment and automated security scanning.
+- 🔍 **SEO & AI Ready**: Statically generated (SSG) for instant loading, full search engine visibility, and LLM discoverability via `llms.txt`.
+- 🚀 **Automation**: CI/CD pipeline with GitHub Actions for automated static export and deployment.
 
 ## Design Inspiration
 
@@ -16,7 +16,7 @@ This project is a tribute to the original [bento.me](https://bento.me). When the
 
 ## Tech Stack
 
-- **Frontend**: React 19, TypeScript, Vite
+- **Framework**: Next.js 15 (App Router), React 19, TypeScript
 - **Styling**: Tailwind CSS 4, Radix UI
 - **Drag & Drop**: @dnd-kit
 - **Backend/Auth**: Cloudflare Workers, GitHub OAuth

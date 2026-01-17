@@ -18,6 +18,14 @@ const TOKEN_KEY = 'github_oauth_token';
 const USER_KEY = 'github_user';
 
 export const getAuthState = (): AuthState => {
+  if (typeof window === 'undefined') {
+    return {
+      isAuthenticated: false,
+      isAdmin: false,
+      user: null,
+      token: null,
+    };
+  }
   const token = localStorage.getItem(TOKEN_KEY);
   const userJson = localStorage.getItem(USER_KEY);
   let user: GitHubUser | null = null;
@@ -53,7 +61,7 @@ export const getGitHubOAuthUrl = (redirectUri: string): string => {
 export const generateState = (): string => {
   const array = new Uint8Array(32);
   crypto.getRandomValues(array);
-  const state = Array.from(array, byte => 
+  const state = Array.from(array, byte =>
     byte.toString(16).padStart(2, '0')
   ).join('');
   sessionStorage.setItem('oauth_state', state);
@@ -82,18 +90,20 @@ export const fetchGitHubUser = async (token: string): Promise<GitHubUser> => {
 };
 
 export const saveAuthState = (token: string, user: GitHubUser): void => {
+  if (typeof window === 'undefined') return;
   localStorage.setItem(TOKEN_KEY, token);
   localStorage.setItem(USER_KEY, JSON.stringify(user));
 };
 
 export const clearAuthState = (): void => {
+  if (typeof window === 'undefined') return;
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
 };
 
 // Cloudflare Worker URL for token exchange
 // Hardcoded as fallback since .env.local is not available in GitHub Actions builds
-const WORKER_URL = import.meta.env.VITE_CLOUDFLARE_WORKER_URL || 'https://portfolio-auth.keith-klv.workers.dev';
+const WORKER_URL = process.env.NEXT_PUBLIC_CLOUDFLARE_WORKER_URL || 'https://portfolio-auth.keith-klv.workers.dev';
 
 // Exchange OAuth code for access token via Cloudflare Worker
 export const requestAccessToken = async (

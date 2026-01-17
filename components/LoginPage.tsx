@@ -1,25 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Github, AlertCircle } from 'lucide-react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { getGitHubOAuthUrl, verifyState, fetchGitHubUser, saveAuthState, requestAccessToken } from '../lib/auth';
 import { ADMIN_USERNAME } from '../config/auth';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
 import { Squircle } from './ui/squircle';
 import { logError } from '../lib/logger';
-import { hideInitialLoader } from '../lib/utils';
 
 const LoginPage: React.FC = () => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { setAuth } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Hide initial loader on mount
-  useEffect(() => {
-    hideInitialLoader();
-  }, []);
 
   // Handle OAuth callback
   useEffect(() => {
@@ -63,7 +58,7 @@ const LoginPage: React.FC = () => {
 
         // Clear URL params and navigate
         window.history.replaceState({}, '', window.location.pathname);
-        navigate('/admin');
+        router.push('/admin');
       } catch (err) {
         logError('Auth error:', err);
         setError(err instanceof Error ? err.message : 'Authentication failed');
@@ -73,12 +68,12 @@ const LoginPage: React.FC = () => {
     };
 
     handleCallback();
-  }, [setAuth, navigate, searchParams]);
+  }, [setAuth, router, searchParams]);
 
   const handleLogin = async () => {
     setIsLoading(true);
     // Use the root URL as the redirect URI to avoid 404 issues with fragments on GitHub Pages
-    const redirectUri = new URL(import.meta.env.BASE_URL || '/', window.location.origin).toString();
+    const redirectUri = new URL('/admin/callback/', window.location.origin).toString();
     const oauthUrl = getGitHubOAuthUrl(redirectUri);
     window.location.href = oauthUrl;
   };
@@ -95,7 +90,7 @@ const LoginPage: React.FC = () => {
 
     saveAuthState(testToken, testUser);
     setAuth(testToken, testUser);
-    navigate('/admin');
+    router.push('/admin');
   };
 
   return (
@@ -129,7 +124,7 @@ const LoginPage: React.FC = () => {
               {isLoading ? 'Redirecting to GitHub...' : 'Login with GitHub'}
             </Button>
 
-            {import.meta.env.DEV && (
+            {process.env.NODE_ENV === 'development' && (
               <Button
                 onClick={handleTestAuth}
                 variant="secondary"
@@ -144,8 +139,8 @@ const LoginPage: React.FC = () => {
             <h3 className="font-medium text-sm text-blue-900 mb-2">Setup Instructions:</h3>
             <ol className="text-xs text-blue-800 space-y-2 list-decimal list-inside">
               <li>Create a GitHub OAuth App in your settings</li>
-              <li>Set redirect URI to: <code className="bg-blue-100 px-1 rounded">{`${window.location.origin}${import.meta.env.BASE_URL || '/'}`}</code></li>
-              <li>Add Client ID to environment variable VITE_GITHUB_CLIENT_ID</li>
+              <li>Set redirect URI to: <code className="bg-blue-100 px-1 rounded">{`${window.location.origin}/admin/callback/`}</code></li>
+              <li>Add Client ID to environment variable NEXT_PUBLIC_GITHUB_CLIENT_ID</li>
               <li>Setup a backend to exchange code for access token</li>
             </ol>
           </Squircle>
