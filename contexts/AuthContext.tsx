@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getAuthState, clearAuthState, saveAuthState, GitHubUser, fetchGitHubUser } from '../lib/auth';
 

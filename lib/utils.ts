@@ -5,16 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-/**
- * Hides the initial HTML loader
- */
-export function hideInitialLoader() {
-  const loader = document.getElementById('initial-loader');
-  if (loader && !loader.classList.contains('hidden')) {
-    loader.classList.add('hidden');
-    setTimeout(() => loader.remove(), 300);
-  }
-}
 
 /**
  * Resolves media URLs for proper display on GitHub Pages
@@ -23,18 +13,18 @@ export function hideInitialLoader() {
  */
 export function resolveMediaUrl(url?: string): string | undefined {
   if (!url) return undefined;
-  
+
   // External URLs - return as-is
   if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
     return url;
   }
-  
+
   // Local paths starting with / need BASE_URL
   if (url.startsWith('/')) {
-    const baseUrl = import.meta.env.BASE_URL || '/';
+    const baseUrl = '/';
     // Remove leading slash from url since BASE_URL ends with /
     return `${baseUrl}${url.slice(1)}`;
   }
-  
+
   return url;
 }

@@ -32,7 +32,7 @@ const AssetSelectorModal: React.FC<AssetSelectorModalProps> = ({ isOpen, onClose
       setIsLoading(true);
       setError(null);
       try {
-        const baseUrl = import.meta.env.BASE_URL || '/';
+        const baseUrl = '/';
         const response = await fetch(`${baseUrl}media-assets/manifest.json`);
         if (!response.ok) throw new Error('Failed to load assets');
         const data = await response.json();

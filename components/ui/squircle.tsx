@@ -32,7 +32,7 @@ function debounce<T extends (...args: unknown[]) => void>(
 interface SquircleProps extends React.HTMLAttributes<HTMLDivElement> {
   cornerRadius: number;
   cornerSmoothing?: number; // 0-1, default 0.6 for iOS feel
-  as?: keyof JSX.IntrinsicElements;
+  as?: React.ElementType;
   children?: React.ReactNode;
 }
 
@@ -50,11 +50,11 @@ function generateSquirclePath(
   const h = height;
   const r = Math.min(cornerRadius, w / 2, h / 2);
   const n = 2 + 2 * cornerSmoothing; // Superellipse power (2 = circle, 4 = squircle, higher = more square)
-  
+
   // Generate smooth corner path using cubic bezier approximation
   // This creates a continuous curve similar to iOS corners
   const c = r * (1 - 0.5522847498); // Magic number for smooth bezier approximation
-  
+
   return `M ${r},0 L ${w - r},0 C ${w - c},0 ${w},${c} ${w},${r} L ${w},${h - r} C ${w},${h - c} ${w - c},${h} ${w - r},${h} L ${r},${h} C ${c},${h} 0,${h - c} 0,${h - r} L 0,${r} C 0,${c} ${c},0 ${r},0 Z`;
 }
 
@@ -66,7 +66,7 @@ const Squircle = React.forwardRef<HTMLDivElement, SquircleProps>(
   ({ cornerRadius, cornerSmoothing = 0.6, className, style, children, as: Component = "div", ...props }, ref) => {
     const [dimensions, setDimensions] = React.useState({ width: 0, height: 0 });
     const innerRef = React.useRef<HTMLDivElement>(null);
-    
+
     // Merge refs
     React.useImperativeHandle(ref, () => innerRef.current!);
 
