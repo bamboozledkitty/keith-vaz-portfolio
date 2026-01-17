@@ -104,7 +104,7 @@ const ProfilePictureCropperModal: React.FC<ProfilePictureCropperModalProps> = ({
                         onClick={onCancel}
                         className="h-8 w-8 rounded-[4px] text-gray-400 hover:text-gray-700"
                     >
-                        <X size={18} />
+                        <X size={20} />
                     </Button>
                 </div>
 
@@ -133,7 +133,7 @@ const ProfilePictureCropperModal: React.FC<ProfilePictureCropperModalProps> = ({
                             disabled={zoom <= 1}
                             className="h-9 w-9 rounded-[4px]"
                         >
-                            <ZoomOut size={18} />
+                            <ZoomOut size={20} />
                         </Button>
 
                         <div className="flex-1">
@@ -155,7 +155,7 @@ const ProfilePictureCropperModal: React.FC<ProfilePictureCropperModalProps> = ({
                             disabled={zoom >= 3}
                             className="h-9 w-9 rounded-[4px]"
                         >
-                            <ZoomIn size={18} />
+                            <ZoomIn size={20} />
                         </Button>
                     </div>
                     <p className="text-xs text-gray-500 text-center mt-2">

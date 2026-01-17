@@ -135,6 +135,17 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
     }
   };
 
+  // Handle keyboard activation (Enter/Space)
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleCardClick(e as unknown as React.MouseEvent);
+    }
+  };
+
+  // Determine if card is interactive (needs tabIndex and role)
+  const isInteractive = !!item.url || canEdit;
+
   // Save caption inline
   const handleSaveCaption = () => {
     onUpdate?.(item.id, { caption: tempCaption });
@@ -176,7 +187,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
             />
           ) : (
             <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100">
-              <Film size={48} className="text-gray-300" />
+              <Film size={32} className="text-gray-300" />
             </div>
           )}
         </div>
@@ -189,9 +200,19 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
               // Always show if caption exists, otherwise only on hover for edit mode
               item.caption ? "opacity-100" : (canEdit && isHovered ? "opacity-100" : "opacity-0")
             )}
+            role={canEdit ? "button" : undefined}
+            aria-label={canEdit ? "Edit caption" : undefined}
+            tabIndex={canEdit ? 0 : undefined}
             onClick={canEdit ? (e) => {
               e.stopPropagation();
               setIsEditingCaption(true);
+            } : undefined}
+            onKeyDown={canEdit ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsEditingCaption(true);
+              }
             } : undefined}
           >
             {item.caption ? (
@@ -200,14 +221,14 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
                 "inline-flex items-center gap-2 px-3 py-2 bg-black/60 backdrop-blur-sm rounded-lg max-w-full",
                 canEdit && "cursor-text hover:bg-black/70 transition-colors"
               )}>
-                {canEdit && isHovered && <Pencil size={12} className="text-white/70 shrink-0" />}
+                {canEdit && isHovered && <Pencil size={16} className="text-white/70 shrink-0" />}
                 <span className="text-sm text-white truncate">{item.caption}</span>
               </div>
             ) : canEdit ? (
               // No caption - show add prompt (only in edit mode on hover)
               <div className="inline-flex items-center gap-2 px-3 py-2 bg-white/95 backdrop-blur-sm rounded-lg border border-gray-200 shadow-sm cursor-text hover:bg-white transition-colors max-w-full">
-                <Pencil size={12} className="text-gray-400 shrink-0" />
-                <span className="text-sm text-gray-400 italic">Add caption...</span>
+                <Pencil size={16} className="text-gray-500 shrink-0" />
+                <span className="text-sm text-gray-500 italic">Add caption...</span>
               </div>
             ) : null}
           </div>
@@ -306,7 +327,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
               "font-medium text-gray-900 leading-snug text-sm",
               item.subtitle ? "line-clamp-2" : "line-clamp-3"
             )}>{item.title}</h3>
-            {item.subtitle && <p className="text-xs text-gray-400 mt-1 font-medium line-clamp-1">{item.subtitle}</p>}
+            {item.subtitle && <p className="text-xs text-gray-500 mt-1 font-medium line-clamp-1">{item.subtitle}</p>}
           </div>
         </div>
       );
@@ -324,7 +345,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
               "font-medium text-gray-900 text-sm leading-tight",
               item.subtitle ? "truncate" : "line-clamp-2"
             )}>{item.title}</h3>
-            {item.subtitle && <p className="text-xs text-gray-400 mt-0.5 font-medium truncate">{item.subtitle}</p>}
+            {item.subtitle && <p className="text-xs text-gray-500 mt-0.5 font-medium truncate">{item.subtitle}</p>}
           </div>
         </div>
       );
@@ -344,7 +365,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
                 "font-medium text-gray-900 leading-tight text-base tracking-tight",
                 item.subtitle ? "line-clamp-2" : (item.image ? "line-clamp-3" : "line-clamp-4")
               )}>{item.title}</h3>
-              {item.subtitle && <p className="text-xs text-gray-400 mt-1 font-medium truncate">{item.subtitle}</p>}
+              {item.subtitle && <p className="text-xs text-gray-500 mt-1 font-medium truncate">{item.subtitle}</p>}
             </div>
           </div>
           {/* Image - right side, 100% height, ~48% width like bento.me */}
@@ -377,7 +398,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
                 "font-medium text-gray-900 leading-tight text-base tracking-tight",
                 item.subtitle ? "line-clamp-2" : "line-clamp-5"
               )}>{item.title}</h3>
-              {item.subtitle && <p className="text-xs text-gray-400 mt-1.5 font-medium line-clamp-2">{item.subtitle}</p>}
+              {item.subtitle && <p className="text-xs text-gray-500 mt-1.5 font-medium line-clamp-2">{item.subtitle}</p>}
             </div>
           </div>
           {/* Image - bottom, 55% height to match 2x1's 55% width ratio */}
@@ -426,7 +447,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
               </Squircle>
               <div>
                 <h3 className="font-medium text-2xl text-gray-900 leading-tight tracking-tight">{item.title}</h3>
-                {item.subtitle && <p className="text-sm text-gray-400 mt-3 font-medium">{item.subtitle}</p>}
+                {item.subtitle && <p className="text-sm text-gray-500 mt-3 font-medium">{item.subtitle}</p>}
               </div>
             </div>
           )}
@@ -442,14 +463,18 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
   return (
     <div
       ref={cardRef}
+      tabIndex={isInteractive ? 0 : undefined}
+      role={item.url ? 'link' : canEdit ? 'button' : undefined}
       className={cn(
         "relative h-full w-full group select-none transition-[transform,box-shadow,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
         isDragging ? "z-[100]" : "",
-        isOverlay ? "rotate-[3deg] scale-[1.02]" : "rotate-0"
+        isOverlay ? "rotate-[3deg] scale-[1.02]" : "rotate-0",
+        isInteractive && "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 rounded-2xl"
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleCardClick}
+      onKeyDown={isInteractive ? handleKeyDown : undefined}
     >
       {isHeading ? (
         // Heading - no card wrapper, just the content

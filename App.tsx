@@ -440,7 +440,7 @@ function App({ isAdmin = false }: AppProps) {
           {/* Loading State */}
           {isLoading && (
             <div className="flex flex-col items-center justify-center py-20 text-gray-500 w-full">
-              <Loader2 size={48} className="animate-spin mb-4" />
+              <Loader2 size={32} className="animate-spin mb-4" />
               <p className="text-lg font-medium">Loading content...</p>
             </div>
           )}
@@ -448,7 +448,7 @@ function App({ isAdmin = false }: AppProps) {
           {/* Error State */}
           {loadError && !isLoading && (
             <div className="flex flex-col items-center justify-center py-20 text-red-500 w-full">
-              <AlertCircle size={48} className="mb-4" />
+              <AlertCircle size={32} className="mb-4" />
               <p className="text-lg font-medium">Failed to load content</p>
               <p className="text-sm text-gray-500 mt-2">{loadError}</p>
               <Button

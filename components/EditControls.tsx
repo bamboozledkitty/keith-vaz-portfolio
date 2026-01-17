@@ -25,8 +25,9 @@ const EditControls: React.FC<EditControlsProps> = ({ onDelete, onResize, current
           size="icon"
           onClick={(e) => { e.stopPropagation(); onDelete(); }}
           className="rounded-[4px] shadow-xl bg-white text-gray-600 hover:bg-red-50 hover:text-red-600 hover:scale-110 transition-all duration-200 w-10 h-10 border border-gray-200"
+          aria-label="Delete card"
         >
-          <Trash2 size={18} />
+          <Trash2 size={20} />
         </Button>
       </div>
 
@@ -50,6 +51,8 @@ const EditControls: React.FC<EditControlsProps> = ({ onDelete, onResize, current
             currentSize === '1x1' && "bg-white text-black scale-110 hover:bg-white"
           )}
           title="Square (1x1)"
+          aria-label="Resize to small square (1x1)"
+          aria-pressed={currentSize === '1x1'}
         >
           <div className="w-4 h-4 border-2 border-current rounded-[2px]" />
         </Button>
@@ -64,6 +67,8 @@ const EditControls: React.FC<EditControlsProps> = ({ onDelete, onResize, current
             currentSize === '1x0.5' && "bg-white text-black scale-110 hover:bg-white"
           )}
           title="Narrow (1x0.5)"
+          aria-label="Resize to narrow strip (1x0.5)"
+          aria-pressed={currentSize === '1x0.5'}
         >
           <div className="w-4 h-2.5 border-2 border-current rounded-[1px]" />
         </Button>
@@ -78,6 +83,8 @@ const EditControls: React.FC<EditControlsProps> = ({ onDelete, onResize, current
             currentSize === '2x1' && "bg-white text-black scale-110 hover:bg-white"
           )}
           title="Wide Rectangle (2x1)"
+          aria-label="Resize to wide rectangle (2x1)"
+          aria-pressed={currentSize === '2x1'}
         >
           <div className="w-6 h-4 border-2 border-current rounded-[2px] flex items-center justify-end pr-0.5">
             <div className="w-2 h-3 bg-current rounded-[1px] opacity-60" />
@@ -94,6 +101,8 @@ const EditControls: React.FC<EditControlsProps> = ({ onDelete, onResize, current
             currentSize === '1x2' && "bg-white text-black scale-110 hover:bg-white"
           )}
           title="Vertical Rectangle (1x2)"
+          aria-label="Resize to vertical rectangle (1x2)"
+          aria-pressed={currentSize === '1x2'}
         >
           <div className="w-3 h-5.5 border-2 border-current rounded-[2px] flex flex-col items-center justify-end pb-0.5">
             <div className="w-2 h-2.5 bg-current rounded-[1px] opacity-60" />
@@ -110,6 +119,8 @@ const EditControls: React.FC<EditControlsProps> = ({ onDelete, onResize, current
             currentSize === '2x2' && "bg-white text-black scale-110 hover:bg-white"
           )}
           title="Large Square (2x2)"
+          aria-label="Resize to large square (2x2)"
+          aria-pressed={currentSize === '2x2'}
         >
           <div className="w-5.5 h-5.5 border-2 border-current rounded-[2px] flex items-center justify-center">
             <div className="w-3 h-3 bg-current rounded-[1px] opacity-60" />

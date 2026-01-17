@@ -15,7 +15,7 @@ const ProtectedRoute = lazy(() => import('./components/ProtectedRoute'));
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center bg-white">
     <div className="flex flex-col items-center text-gray-500">
-      <Loader2 size={48} className="animate-spin mb-4" />
+      <Loader2 size={32} className="animate-spin mb-4" />
       <p className="text-lg font-medium">Loading...</p>
     </div>
   </div>

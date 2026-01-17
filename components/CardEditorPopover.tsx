@@ -97,12 +97,12 @@ const POPOVER_GAP = 16;
 
 // Type labels and icons
 const TYPE_CONFIG: Record<ItemType, { label: string; icon: React.ReactNode }> = {
-  heading: { label: 'Section Heading', icon: <Heading1 size={18} /> },
-  link: { label: 'Link', icon: <Link2 size={18} /> },
-  image: { label: 'Media', icon: <Film size={18} /> },
-  text: { label: 'Text', icon: <Type size={18} /> },
-  social: { label: 'Social', icon: <Globe size={18} /> },
-  map: { label: 'Location', icon: <Globe size={18} /> },
+  heading: { label: 'Section Heading', icon: <Heading1 size={20} /> },
+  link: { label: 'Link', icon: <Link2 size={20} /> },
+  image: { label: 'Media', icon: <Film size={20} /> },
+  text: { label: 'Text', icon: <Type size={20} /> },
+  social: { label: 'Social', icon: <Globe size={20} /> },
+  map: { label: 'Location', icon: <Globe size={20} /> },
 };
 
 // Custom keyframe animation styles
@@ -281,7 +281,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
       case 'heading':
         return (
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Title</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Title</label>
             <Input
               value={title}
               onChange={e => setTitle(e.target.value)}
@@ -297,10 +297,10 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
           <div className="space-y-4">
             {/* URL Input with Auto-fetch */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">URL</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">URL</label>
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <Link2 size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Link2 size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                   <Input
                     value={url}
                     onChange={e => setUrl(e.target.value)}
@@ -322,13 +322,13 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                 </Button>
               </div>
               {isFetchingMeta && (
-                <p className="text-xs text-gray-400">Fetching metadata...</p>
+                <p className="text-xs text-gray-500">Fetching metadata...</p>
               )}
             </div>
 
             {/* Title */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Title</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Title</label>
               <Input
                 value={title}
                 onChange={e => setTitle(e.target.value)}
@@ -339,13 +339,13 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
 
             {/* Icon */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Icon</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Icon</label>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gray-50 border border-[#efefef] rounded-[4px] flex items-center justify-center overflow-hidden shrink-0">
                   {icon ? (
                     <img src={icon} alt="icon" className="w-6 h-6 object-contain" />
                   ) : (
-                    <Globe size={18} className="text-gray-400" />
+                    <Globe size={20} className="text-gray-500" />
                   )}
                 </div>
                 <Input
@@ -359,7 +359,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     variant="ghost"
                     size="icon"
                     onClick={() => setIcon('')}
-                    className="shrink-0 text-gray-400 hover:text-red-500"
+                    className="shrink-0 text-gray-500 hover:text-red-500"
                   >
                     <X size={16} />
                   </Button>
@@ -369,7 +369,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
 
             {/* Cover Image */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Cover Image</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Cover Image</label>
               <div className="flex items-start gap-3">
                 {image ? (
                   <div className="relative w-24 aspect-[4/3] rounded-[4px] overflow-hidden group/img shadow-md shrink-0 bg-gray-100 border border-[#efefef]">
@@ -384,7 +384,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                 ) : (
                   <button
                     onClick={() => mediaInputRef.current?.click()}
-                    className="w-24 aspect-[4/3] border-2 border-dashed border-[#efefef] rounded-[4px] flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
+                    className="w-24 aspect-[4/3] border-2 border-dashed border-[#efefef] rounded-[4px] flex flex-col items-center justify-center text-gray-500 hover:border-black/20 hover:text-gray-900 transition-all gap-1 bg-gray-50/50 shrink-0"
                   >
                     <Upload size={16} />
                     <span className="text-[8px] font-bold tracking-wide">UPLOAD</span>
@@ -397,14 +397,14 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     placeholder="Image URL (auto-fetched)"
                     className="text-sm"
                   />
-                  <p className="text-[10px] text-gray-400 mt-1">Used as card background</p>
+                  <p className="text-[10px] text-gray-500 mt-1">Used as card background</p>
                 </div>
               </div>
             </div>
 
             {/* Subtitle */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Subtitle</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Subtitle</label>
               <Input
                 value={subtitle}
                 onChange={e => setSubtitle(e.target.value)}
@@ -419,7 +419,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
           <div className="space-y-4">
             {/* Media Upload/URL */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">
                 Media {mediaType === 'video' || isVideoUrl(image) ? '(Video)' : '(Image)'}
               </label>
               <div className="flex items-start gap-3">
@@ -448,14 +448,14 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                   <div className="flex gap-2 shrink-0">
                     <button
                       onClick={() => mediaInputRef.current?.click()}
-                      className="w-14 aspect-square border-2 border-dashed border-[#efefef] rounded-[4px] flex flex-col items-center justify-center text-gray-400 hover:border-black/20 hover:text-gray-900 transition-all gap-0.5 bg-gray-50/50"
+                      className="w-14 aspect-square border-2 border-dashed border-[#efefef] rounded-[4px] flex flex-col items-center justify-center text-gray-500 hover:border-black/20 hover:text-gray-900 transition-all gap-0.5 bg-gray-50/50"
                     >
                       <Upload size={16} />
                       <span className="text-[7px] font-bold tracking-wide">UPLOAD</span>
                     </button>
                     <button
                       onClick={() => setShowAssetSelector(true)}
-                      className="w-14 aspect-square border-2 border-dashed border-[#efefef] rounded-[4px] flex flex-col items-center justify-center text-gray-400 hover:border-blue-400 hover:text-blue-500 transition-all gap-0.5 bg-gray-50/50"
+                      className="w-14 aspect-square border-2 border-dashed border-[#efefef] rounded-[4px] flex flex-col items-center justify-center text-gray-500 hover:border-blue-400 hover:text-blue-500 transition-all gap-0.5 bg-gray-50/50"
                     >
                       <FolderOpen size={16} />
                       <span className="text-[7px] font-bold tracking-wide">BROWSE</span>
@@ -474,7 +474,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                     className="text-sm"
                     autoFocus={!image}
                   />
-                  <p className="text-[10px] text-gray-400">Paste URL, upload, or browse assets</p>
+                  <p className="text-[10px] text-gray-500">Paste URL, upload, or browse assets</p>
                 </div>
               </div>
             </div>
@@ -491,7 +491,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
 
             {/* Caption */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Caption</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Caption</label>
               <Input
                 value={caption}
                 onChange={e => setCaption(e.target.value.slice(0, CAPTION_MAX_LENGTH))}
@@ -499,7 +499,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
                 className="text-sm"
                 maxLength={CAPTION_MAX_LENGTH}
               />
-              <p className="text-[10px] text-gray-400">{caption.length}/{CAPTION_MAX_LENGTH}</p>
+              <p className="text-[10px] text-gray-500">{caption.length}/{CAPTION_MAX_LENGTH}</p>
             </div>
           </div>
         );
@@ -509,7 +509,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
           <div className="space-y-4">
             {/* Text Content */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Text</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Text</label>
               <Input
                 value={title}
                 onChange={e => setTitle(e.target.value)}
@@ -521,7 +521,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
 
             {/* Alignment Controls */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Alignment</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Alignment</label>
               <div className="flex items-center gap-2">
                 {/* Horizontal Alignment */}
                 <div className="flex items-center bg-gray-100 rounded-lg p-1 gap-0.5">
@@ -603,7 +603,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
 
             {/* Font Size Controls */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Size</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Size</label>
               <div className="flex items-center bg-gray-100 rounded-lg p-1 gap-0.5">
                 <button
                   type="button"
@@ -643,7 +643,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
       default:
         return (
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Title</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Title</label>
             <Input
               value={title}
               onChange={e => setTitle(e.target.value)}
@@ -701,7 +701,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
               variant="ghost"
               size="icon"
               onClick={onCancel}
-              className="h-8 w-8 rounded-full text-gray-400 hover:text-gray-700"
+              className="h-8 w-8 rounded-full text-gray-500 hover:text-gray-700"
             >
               <X size={16} />
             </Button>
@@ -737,7 +737,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
               onClick={handleSave}
               className="gap-1"
             >
-              <Check size={14} />
+              <Check size={16} />
               {state.mode === 'create' ? 'Add' : 'Save'}
             </Button>
           </div>

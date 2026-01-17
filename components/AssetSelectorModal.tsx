@@ -127,7 +127,7 @@ const AssetSelectorModal: React.FC<AssetSelectorModalProps> = ({ isOpen, onClose
                 filter === 'image' ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700"
               )}
             >
-              <ImageIcon size={12} />
+              <ImageIcon size={16} />
               Images
             </button>
             <button
@@ -137,7 +137,7 @@ const AssetSelectorModal: React.FC<AssetSelectorModalProps> = ({ isOpen, onClose
                 filter === 'video' ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700"
               )}
             >
-              <Film size={12} />
+              <Film size={16} />
               Videos
             </button>
           </div>
@@ -157,8 +157,8 @@ const AssetSelectorModal: React.FC<AssetSelectorModalProps> = ({ isOpen, onClose
               </Button>
             </div>
           ) : filteredAssets.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-              <ImageIcon size={48} strokeWidth={1} />
+            <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+              <ImageIcon size={32} />
               <p className="mt-3 font-medium">No assets found</p>
               {searchQuery && <p className="text-sm">Try a different search term</p>}
             </div>
@@ -186,7 +186,7 @@ const AssetSelectorModal: React.FC<AssetSelectorModalProps> = ({ isOpen, onClose
                       />
                       <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
                         <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
-                          <Play size={18} className="text-gray-900 ml-0.5" fill="currentColor" />
+                          <Play size={20} className="text-gray-900 ml-0.5" fill="currentColor" />
                         </div>
                       </div>
                     </>
