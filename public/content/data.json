@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-01-17T11:01:36.452Z",
+  "lastUpdated": "2026-01-17T11:02:08.461Z",
   "items": [
     {
       "id": "usyl7etn1",
@@ -13,7 +13,7 @@
       },
       "mobileLayout": {
         "size": "full",
-        "order": 0
+        "order": 33
       }
     },
     {
@@ -31,7 +31,7 @@
       },
       "mobileLayout": {
         "size": "1x1",
-        "order": 33
+        "order": 32
       }
     },
     {
@@ -49,7 +49,7 @@
       },
       "mobileLayout": {
         "size": "1x1",
-        "order": 32
+        "order": 31
       }
     },
     {
@@ -67,7 +67,7 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 22
+        "order": 21
       }
     },
     {
@@ -85,7 +85,7 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 24
+        "order": 23
       }
     },
     {
@@ -102,7 +102,7 @@
       },
       "mobileLayout": {
         "size": "2x2",
-        "order": 18
+        "order": 17
       }
     },
     {
@@ -119,7 +119,7 @@
       },
       "mobileLayout": {
         "size": "2x2",
-        "order": 19
+        "order": 18
       }
     },
     {
@@ -136,7 +136,7 @@
       },
       "mobileLayout": {
         "size": "2x2",
-        "order": 16
+        "order": 15
       }
     },
     {
@@ -153,7 +153,7 @@
       },
       "mobileLayout": {
         "size": "2x2",
-        "order": 17
+        "order": 16
       }
     },
     {
@@ -171,7 +171,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 9
+        "order": 8
       }
     },
     {
@@ -189,7 +189,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 8
+        "order": 7
       }
     },
     {
@@ -203,7 +203,7 @@
       },
       "mobileLayout": {
         "size": "full",
-        "order": 1
+        "order": 0
       }
     },
     {
@@ -222,7 +222,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 2
+        "order": 1
       }
     },
     {
@@ -241,7 +241,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 3
+        "order": 2
       }
     },
     {
@@ -260,7 +260,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 4
+        "order": 3
       }
     },
     {
@@ -276,7 +276,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 5
+        "order": 4
       },
       "textAlign": "left",
       "textVAlign": "middle",
@@ -298,7 +298,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 7
+        "order": 6
       }
     },
     {
@@ -317,7 +317,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 6
+        "order": 5
       }
     },
     {
@@ -331,7 +331,7 @@
       },
       "mobileLayout": {
         "size": "full",
-        "order": 10
+        "order": 9
       }
     },
     {
@@ -349,7 +349,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 12
+        "order": 11
       },
       "image": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/48/eb/16/48eb16a9-f886-fc8c-08a5-30bb03a727b8/Placeholder.mill/1200x630wa.jpg"
     },
@@ -366,7 +366,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 11
+        "order": 10
       },
       "textAlign": "left",
       "textVAlign": "middle",
@@ -383,7 +383,7 @@
       },
       "mobileLayout": {
         "size": "full",
-        "order": 13
+        "order": 12
       }
     },
     {
@@ -400,7 +400,7 @@
       },
       "mobileLayout": {
         "size": "2x2",
-        "order": 14
+        "order": 13
       },
       "caption": "",
       "mediaType": "video"
@@ -418,7 +418,7 @@
       },
       "mobileLayout": {
         "size": "2x2",
-        "order": 15
+        "order": 14
       },
       "caption": "",
       "mediaType": "image"
@@ -434,7 +434,7 @@
       },
       "mobileLayout": {
         "size": "full",
-        "order": 20
+        "order": 19
       }
     },
     {
@@ -452,7 +452,7 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 21
+        "order": 20
       },
       "url": "https://keithvaz.medium.com/rethinking-ai-the-overdue-upgrade-to-humanity-bc4e98782a99"
     },
@@ -471,7 +471,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 23
+        "order": 22
       },
       "url": "https://keithvaz.medium.com/the-hidden-costs-of-ride-hailing-bidding-models-a-ticking-time-bomb-29f32920daa0"
     },
@@ -489,7 +489,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 25
+        "order": 24
       },
       "url": "https://www.linkedin.com/posts/keeithvaz_ai-llm-pricing-activity-7165287698524557312-5_tY/",
       "image": "https://media.licdn.com/dms/image/v2/D5622AQFiJUI2YLxlwg/feedshare-shrink_800/feedshare-shrink_800/0/1708337709993?e=2147483647&v=beta&t=AfwdznEEUotrqupMrU4RK-cjfsxxkS4fGuMBl3sw03s"
@@ -508,7 +508,7 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 26
+        "order": 25
       },
       "url": "https://keithvaz.medium.com/the-ai-assistant-dream-we-are-still-far-from-ed94ba0d1e4e",
       "image": ""
@@ -528,7 +528,7 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 27
+        "order": 26
       },
       "url": "https://keithvaz.medium.com/reimagining-governance-the-potential-of-a-kanban-board-system-e64c6b622ffb"
     },
@@ -547,7 +547,7 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 28
+        "order": 27
       },
       "url": "https://keithvaz.medium.com/what-if-time-zones-were-countries-a-thought-experiment-cdbfcca498c9"
     },
@@ -566,7 +566,7 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 29
+        "order": 28
       },
       "url": "https://keithvaz.medium.com/fair-er-promotions-with-a-transparent-logic-based-system-b1b0b1d4570b"
     },
@@ -585,7 +585,7 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 30
+        "order": 29
       },
       "url": "https://keithvaz.medium.com/the-founders-dilemma-why-visionary-leaders-are-vital-for-nations-and-corporations-fb381c883484"
     },
@@ -600,7 +600,7 @@
       },
       "mobileLayout": {
         "size": "full",
-        "order": 31
+        "order": 30
       }
     },
     {
