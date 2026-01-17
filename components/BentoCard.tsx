@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BentoItemData, ItemSize, MediaType, TextAlign, TextVAlign, TextSize, ViewMode } from '../types';
 import { cn, resolveMediaUrl } from '../lib/utils';
-import { Github, Linkedin, Twitter, Instagram, Youtube, Globe, Pencil, Film } from 'lucide-react';
+import { Globe, Pencil, Film } from 'lucide-react';
 import EditControls from './EditControls';
 import LazyVideo from './LazyVideo';
 import { Card } from './ui/card';
@@ -69,14 +69,7 @@ const SocialIcon = ({ name, className }: { name?: string; className?: string }) 
   if (name?.startsWith('data:') || name?.startsWith('http') || name?.startsWith('/') || name?.includes('drive')) {
     return <img src={resolveMediaUrl(name)} alt="icon" className={cn("object-contain", className)} />;
   }
-  switch (name?.toLowerCase()) {
-    case 'github': return <Github className={className} />;
-    case 'linkedin': return <Linkedin className={className} />;
-    case 'twitter': return <Twitter className={className} />;
-    case 'instagram': return <Instagram className={className} />;
-    case 'youtube': return <Youtube className={className} />;
-    default: return <Globe className={className} />;
-  }
+  return <Globe className={className} />;
 };
 
 const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', isAdminRoute = false, isOverlay, isDragging, onDelete, onResize, onUpdate, onStartEdit }) => {

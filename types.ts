@@ -2,9 +2,9 @@ import { ReactNode } from "react";
 
 export type ItemSize = '1x1' | '1x0.5' | '2x1' | '1x2' | '2x2' | 'full';
 
-export type ItemType = 'social' | 'link' | 'image' | 'text' | 'map' | 'heading';
+export type ItemType = 'link' | 'image' | 'text' | 'map' | 'heading';
 
-export type CardVariant = 'default' | 'case-study' | 'app' | 'article' | 'media' | 'social-card';
+export type CardVariant = 'default' | 'case-study' | 'app' | 'article' | 'media';
 
 export type MediaType = 'image' | 'video';
 

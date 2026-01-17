@@ -410,26 +410,6 @@
       "mediaType": "image"
     },
     {
-      "id": "vd-5",
-      "type": "link",
-      "size": "1x0.5",
-      "variant": "social-card",
-      "title": "Check out more of my work →",
-      "subtitle": "dribbble.com",
-      "icon": "https://cdn.dribbble.com/assets/favicon-192x192-d70ad402693bdd1a8460da7f9f3c590e817da7369c5287789ac968cf6947d214.png",
-      "backgroundColor": "#ea4c89",
-      "image": "https://cdn.dribbble.com/userupload/33273438/file/still-feba7c4ddd652eff9cc8100b032f1e08.png?resize=1600x1200",
-      "desktopLayout": {
-        "size": "1x0.5",
-        "order": 19
-      },
-      "mobileLayout": {
-        "size": "2x1",
-        "order": 19
-      },
-      "url": "http://dribbble.com/keithvaz"
-    },
-    {
       "id": "heading-ideas",
       "type": "heading",
       "size": "full",
@@ -607,20 +587,6 @@
       "mobileLayout": {
         "size": "full",
         "order": 31
-      }
-    },
-    {
-      "id": "heading-social",
-      "type": "heading",
-      "size": "full",
-      "title": "Social links",
-      "desktopLayout": {
-        "size": "full",
-        "order": 34
-      },
-      "mobileLayout": {
-        "size": "full",
-        "order": 34
       }
     },
     {

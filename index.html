@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' api.github.com *.workers.dev; font-src 'self' cdn.jsdelivr.net fonts.gstatic.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' cdn.jsdelivr.net 'sha256-lyaj1If3A6E6D3YNdE7tjSfjoa63aXDujZU6vpB4WXw='; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' api.github.com *.workers.dev; font-src 'self' cdn.jsdelivr.net fonts.gstatic.com;">
   <title>Keith Vaz Portfolio</title>
   <!-- Preconnect to external resources for faster loading -->
   <link rel="preconnect" href="https://api.github.com">
@@ -14,7 +14,7 @@
   <!-- Preload font stylesheet, then load async to prevent render blocking -->
   <!-- Subset to only used weights: 400 (normal), 500 (medium), 600 (semibold), 700 (bold), 900 (black) -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
   <noscript>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
   </noscript>
@@ -167,10 +167,106 @@
     .bento-grid > .bento-card-full:not(:first-child) {
       margin-top: 40px; /* 40px extra + 20px gap = 60px total spacing above */
     }
+
+    /* Initial loader - shows before React loads */
+    .initial-loader {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      z-index: 9999;
+    }
+
+    .loader-text {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      margin-bottom: 16px;
+    }
+
+    .loader-bar {
+      width: 192px;
+      height: 4px;
+      background: #e5e7eb;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .loader-bar-fill {
+      height: 100%;
+      background: #111827;
+      width: 0%;
+      animation: indeterminate 1.5s ease-in-out infinite;
+    }
+
+    @keyframes indeterminate {
+      0% { width: 0%; margin-left: 0%; }
+      50% { width: 30%; margin-left: 35%; }
+      100% { width: 0%; margin-left: 100%; }
+    }
+
+    /* Hide when React takes over */
+    .initial-loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease-out;
+    }
   </style>
 </head>
 
 <body>
+  <!-- Inline loader - shows immediately, hidden by React when ready -->
+  <div id="initial-loader" class="initial-loader">
+    <p id="loader-text" class="loader-text">Waking up...</p>
+    <div class="loader-bar">
+      <div class="loader-bar-fill"></div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const phrases = [
+        "Aligning tokens...", "Polishing squircles...", "Snap to grid...", "Kerning pixels...", "Distilling essence...",
+        "Brewing components...", "Hydrating themes...", "Organizing chaos...", "Bezier curves...", "Smoothing corners...",
+        "Optimizing glyphs...", "Loading variants...", "Setting standards...", "Normalizing scale...", "Grid locking...",
+        "Balancing whitespace...", "Fixing widows...", "Hunting orphans...", "Compiling assets...", "Rendering magic...",
+        "Defining states...", "Hovering icons...", "Focus ringing...", "Transitioning states...", "Animating ease...",
+        "Elastic loading...", "Layering depth...", "Shadow boxing...", "Glow effect...", "Color grading...",
+        "Hue shifting...", "Saturation boosting...", "Contrast checking...", "A11y auditing...", "Tab indexing...",
+        "Voice over...", "Screen reading...", "Semantic markup...", "DOM walking...", "Tree shaking...",
+        "Bundle sizing...", "Minifying code...", "Compressing pngs...", "Vectorizing svg...", "SVG pathing...",
+        "Font loading...", "Type setting...", "Leading lines...", "Tracking text...", "Ligature check...",
+        "Ascender rising...", "Descender falling...", "Baseline grid...", "Vertical rhythm...", "Horizontal flow...",
+        "Flexing boxes...", "Grid layout...", "Auto layout...", "Component mapping...", "Storybook reading...",
+        "Documenting design...", "Spec checking...", "Redlining pixels...", "Measurement units...", "Rem sizing...",
+        "Em padding...", "Percent width...", "Viewport height...", "Media querying...", "Breakpoint hits...",
+        "Responsive rendering...", "Desktop first...", "Mobile first...", "Dark mode...", "Light mode...",
+        "System default...", "User preference...", "Motion reduced...", "High contrast...", "Custom props...",
+        "CSS variables...", "SASS nesting...", "Tailwind purging...", "PostCSSing...", "Autoprefixing...",
+        "Webpack building...", "Vite speed...", "HMR updating...", "Refreshing page...", "Cache busting...",
+        "Service working...", "Offline ready...", "Progressive web...", "SPA routing...", "Client side...",
+        "Server side...", "Static site...", "Dynamic data...", "API fetching...", "Portfolio loading..."
+      ];
+      
+      const textElement = document.getElementById('loader-text');
+      const loaderElement = document.getElementById('initial-loader');
+      let index = Math.floor(Math.random() * phrases.length);
+      
+      const interval = setInterval(() => {
+        if (!loaderElement || !document.body.contains(loaderElement) || loaderElement.classList.contains('hidden')) {
+          clearInterval(interval);
+          return;
+        }
+        index = (index + 1) % phrases.length;
+        textElement.innerText = phrases[index];
+      }, 1500);
+    })();
+  </script>
+
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>

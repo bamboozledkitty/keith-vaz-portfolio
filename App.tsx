@@ -104,21 +104,40 @@ function App({ isAdmin = false }: AppProps) {
   const [showProfileCropper, setShowProfileCropper] = useState(false);
   const [croppedProfilePicture, setCroppedProfilePicture] = useState<string | null>(null);
 
+  // Hide inline loader when content is loaded
+  useEffect(() => {
+    if (!isLoading) {
+      const loader = document.getElementById('initial-loader');
+      if (loader) {
+        loader.classList.add('hidden');
+        // Remove from DOM after transition
+        setTimeout(() => loader.remove(), 300);
+      }
+    }
+  }, [isLoading]);
+
+  // Helper to process loaded data
+  const processLoadedData = (data: { items?: BentoItemData[] }) => {
+    const migratedItems = (data.items || []).map((item: BentoItemData, index: number) =>
+      migrateItem(item, index)
+    );
+    setItems(migratedItems);
+  };
+
   // Load content from JSON on mount
   useEffect(() => {
     const loadContent = async () => {
       try {
         setIsLoading(true);
         setLoadError(null);
+        
         const response = await fetch(CONTENT_URL);
         if (!response.ok) {
           throw new Error(`Failed to load content: ${response.status}`);
         }
+        
         const data = await response.json();
-        const migratedItems = (data.items || []).map((item: BentoItemData, index: number) =>
-          migrateItem(item, index)
-        );
-        setItems(migratedItems);
+        processLoadedData(data);
       } catch (error) {
         logError('Error loading content:', error);
         setLoadError(error instanceof Error ? error.message : 'Failed to load content');
@@ -310,6 +329,29 @@ function App({ isAdmin = false }: AppProps) {
 
   const activeItem = sortedItems.find(item => item.id === activeId) || null;
 
+  // Return null while loading - inline HTML loader handles the visual
+  if (isLoading) {
+    return null;
+  }
+
+  // Full-screen error state
+  if (loadError) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center">
+        <AlertCircle size={32} className="text-red-500 mb-4" />
+        <p className="text-lg font-medium text-red-500">Failed to load content</p>
+        <p className="text-sm text-gray-500 mt-2">{loadError}</p>
+        <Button
+          onClick={() => window.location.reload()}
+          variant="secondary"
+          className="mt-4"
+        >
+          Retry
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white text-gray-900 selection:bg-black selection:text-white pb-32">
       {/* Admin Header */}
@@ -436,34 +478,8 @@ function App({ isAdmin = false }: AppProps) {
         </aside>
 
         {/* Right Section - Bento Grid (aligned to RIGHT on desktop) */}
-        <main className="grid-section">
-          {/* Loading State */}
-          {isLoading && (
-            <div className="flex flex-col items-center justify-center py-20 text-gray-500 w-full">
-              <Loader2 size={32} className="animate-spin mb-4" />
-              <p className="text-lg font-medium">Loading content...</p>
-            </div>
-          )}
-
-          {/* Error State */}
-          {loadError && !isLoading && (
-            <div className="flex flex-col items-center justify-center py-20 text-red-500 w-full">
-              <AlertCircle size={32} className="mb-4" />
-              <p className="text-lg font-medium">Failed to load content</p>
-              <p className="text-sm text-gray-500 mt-2">{loadError}</p>
-              <Button
-                onClick={() => window.location.reload()}
-                variant="secondary"
-                className="mt-4"
-              >
-                Retry
-              </Button>
-            </div>
-          )}
-
-          {/* Content */}
-          {!isLoading && !loadError && (
-            <DndContext
+        <main className="grid-section min-h-[60vh]">
+          <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
               onDragStart={handleDragStart}
@@ -500,7 +516,6 @@ function App({ isAdmin = false }: AppProps) {
                 ) : null}
               </DragOverlay>
             </DndContext>
-          )}
         </main>
       </div>
 

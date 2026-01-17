@@ -122,7 +122,7 @@ const MAX_FILE_SIZE = 1_000_000;
 export async function uploadMediaToGitHub(
     token: string,
     file: File,
-    folder: 'profile' | 'case-studies' | 'visual-design/images' | 'visual-design/videos' | 'apps' | 'social'
+    folder: 'profile' | 'case-studies' | 'visual-design/images' | 'visual-design/videos' | 'apps'
 ): Promise<string> {
     // Check file size limit
     if (file.size > MAX_FILE_SIZE) {

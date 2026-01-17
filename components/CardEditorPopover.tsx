@@ -101,7 +101,6 @@ const TYPE_CONFIG: Record<ItemType, { label: string; icon: React.ReactNode }> = 
   link: { label: 'Link', icon: <Link2 size={20} /> },
   image: { label: 'Media', icon: <Film size={20} /> },
   text: { label: 'Text', icon: <Type size={20} /> },
-  social: { label: 'Social', icon: <Globe size={20} /> },
   map: { label: 'Location', icon: <Globe size={20} /> },
 };
 
