@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-01-17T10:24:12.725Z",
+  "lastUpdated": "2026-01-17T10:24:23.938Z",
   "items": [
     {
       "id": "cwwvdb2tz",
@@ -335,7 +335,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 10
+        "order": 11
       },
       "image": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/48/eb/16/48eb16a9-f886-fc8c-08a5-30bb03a727b8/Placeholder.mill/1200x630wa.jpg"
     },
@@ -352,7 +352,7 @@
       },
       "mobileLayout": {
         "size": "2x1",
-        "order": 11
+        "order": 10
       },
       "textAlign": "left",
       "textVAlign": "middle",
