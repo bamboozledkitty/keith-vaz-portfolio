@@ -77,9 +77,8 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async () => {
     setIsLoading(true);
-    // Use BASE_URL to ensure correct path on GitHub Pages
-    const basePath = import.meta.env.BASE_URL || '/';
-    const redirectUri = new URL(`${basePath}#/admin/callback`, window.location.origin).toString();
+    // Use the root URL as the redirect URI to avoid 404 issues with fragments on GitHub Pages
+    const redirectUri = new URL(import.meta.env.BASE_URL || '/', window.location.origin).toString();
     const oauthUrl = getGitHubOAuthUrl(redirectUri);
     window.location.href = oauthUrl;
   };
@@ -145,7 +144,7 @@ const LoginPage: React.FC = () => {
             <h3 className="font-medium text-sm text-blue-900 mb-2">Setup Instructions:</h3>
             <ol className="text-xs text-blue-800 space-y-2 list-decimal list-inside">
               <li>Create a GitHub OAuth App in your settings</li>
-              <li>Set redirect URI to: {`${window.location.origin}${import.meta.env.BASE_URL || '/'}#/admin/callback`}</li>
+              <li>Set redirect URI to: <code className="bg-blue-100 px-1 rounded">{`${window.location.origin}${import.meta.env.BASE_URL || '/'}`}</code></li>
               <li>Add Client ID to environment variable VITE_GITHUB_CLIENT_ID</li>
               <li>Setup a backend to exchange code for access token</li>
             </ol>

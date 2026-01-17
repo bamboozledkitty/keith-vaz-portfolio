@@ -98,6 +98,18 @@ function App({ isAdmin = false }: AppProps) {
   const [editorState, setEditorState] = useState<EditorState | null>(null);
   const [currentView, setCurrentView] = useState<ViewMode>('desktop');
 
+  // Handle OAuth redirect from root (for GitHub Pages support)
+  useEffect(() => {
+    // Only check if we are on the root route
+    if (window.location.hash === '' || window.location.hash === '#/') {
+      const searchParams = new URLSearchParams(window.location.search);
+      if (searchParams.has('code') && searchParams.has('state')) {
+        // Redirect to the hash-based callback route
+        navigate(`/admin/callback?${searchParams.toString()}`, { replace: true });
+      }
+    }
+  }, [navigate]);
+
   // Profile picture editing state
   const profileInputRef = useRef<HTMLInputElement>(null);
   const [profileImageSrc, setProfileImageSrc] = useState<string | null>(null);
