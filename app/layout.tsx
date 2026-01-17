@@ -28,7 +28,7 @@ export const metadata: Metadata = {
         siteName: "Keith Vaz Portfolio",
         images: [
             {
-                url: "/media/profile-picture.jpg",
+                url: "/media/profile/profile-pic/IMG_5823.jpg",
                 width: 1200,
                 height: 630,
                 alt: "Keith Vaz",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
         card: "summary_large_image",
         title: "Keith Vaz",
         description: "Portfolio showcasing projects and skills",
-        images: ["/media/profile-picture.jpg"],
+        images: ["/media/profile/profile-pic/IMG_5823.jpg"],
     },
 };
 
