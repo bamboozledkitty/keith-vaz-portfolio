@@ -9,6 +9,10 @@ export default {
       fontFamily: {
         sans: ['"Inter"', 'sans-serif'],
       },
+      fontSize: {
+        '2xs': ['0.625rem', { lineHeight: '1rem' }], // 10px
+        '3xs': ['0.5rem', { lineHeight: '0.75rem' }], // 8px
+      },
       colors: {
         card: {
           bg: '#ffffff',
