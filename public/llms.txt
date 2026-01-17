@@ -1,0 +1,51 @@
+# Keith Vaz
+
+> A personal portfolio page featuring fluid drag-and-drop grid layout, resizable widgets, and rich content support.
+
+## General
+
+- [Asphalt - Color Grading (based on USWDS)](https://www.figma.com/community/plugin/1134704770739880058/asphalt-color-grading-based-on-uswds): 
+- [Screen Size Tester Figma Plugin](https://www.figma.com/community/plugin/1237078592990041446/screen-size-tester): 
+- [Why People Avoid Taxes](https://www.perplexity.ai/page/Why-People-Avoid-rEW0J0jOSJWFewGwjpUY1g): 
+- [If you cant change the app-store, make one](https://keithvaz.medium.com/if-you-cant-change-the-app-store-make-one-c01ccf50619c): 
+- [A11y-friendly Color Grading ](https://keithvaz.notion.site/Accessible-color-grading-with-a-Figma-plugin-0202e94bce054915b616d355e2ec2930): keithvaz.notion.site
+- [Design patterns at Gojek](https://keithvaz.notion.site/Introducing-design-patterns-at-Gojek-f48ad44a155b43e3969afb4ec47f9bbc): keithvaz.notion.site
+
+## Project case studies
+
+- [Expanding color tokens at Gojek](https://keithvaz.notion.site/Expanding-color-tokens-at-Gojek-c70242cee19e4b40936fad98a44d1b18?pvs=143): keithvaz.notion.site
+- [Design systems impact](https://keithvaz.notion.site/Quantifying-design-systems-impact-6cc2c7b43e4f47db91777fca6af0915e): keithvaz.notion.site
+- [Permission patterns](https://keithvaz.notion.site/Standardising-system-permission-patterns-ddfeb15d3b8845b9a86f1ec971a1315d): keithvaz.notion.site
+- "Systemise, automate, innovate": Systemize, automate, innovate
+- [Accessibility menu for Gojek](https://keithvaz.notion.site/Accessibility-menu-for-Gojek-e71115d8c76b4969877022911c9a16ad): keithvaz.notion.site
+- [GoTo's Unified Accounts](https://keithvaz.notion.site/Unifying-Gojek-Tokopedia-user-accounts-85500b908fbc4c9ebd55ca014b9942e6): keithvaz.notion.site
+
+## My Apps
+
+- [FreeBy: Financial Freedom Calculator](https://apps.apple.com/in/app/freeby/id6746725315): apps.apple.com
+- Financial freedom starts with  knowing where you’re going…: Financial freedom starts with knowing where you're going...
+
+## Visual design samples
+
+
+## Ideas and questions
+
+- [Rethinking AI: The Overdue Upgrade to Humanity](https://keithvaz.medium.com/rethinking-ai-the-overdue-upgrade-to-humanity-bc4e98782a99): 
+- [Ride-hailing bidding models: a ticking time bomb](https://keithvaz.medium.com/the-hidden-costs-of-ride-hailing-bidding-models-a-ticking-time-bomb-29f32920daa0): 
+- [Unfair LLM Pricing](https://www.linkedin.com/posts/keeithvaz_ai-llm-pricing-activity-7165287698524557312-5_tY/): 
+- [The ‘AI assistant dream’ we are still far from…](https://keithvaz.medium.com/the-ai-assistant-dream-we-are-still-far-from-ed94ba0d1e4e): 
+- [Reimagining Governance: The Potential of a Kanban Board System](https://keithvaz.medium.com/reimagining-governance-the-potential-of-a-kanban-board-system-e64c6b622ffb): 
+- [What if time zones were countries — a thought experiment](https://keithvaz.medium.com/what-if-time-zones-were-countries-a-thought-experiment-cdbfcca498c9): 
+- [Fair(er) promotions with a transparent, logic-based System](https://keithvaz.medium.com/fair-er-promotions-with-a-transparent-logic-based-system-b1b0b1d4570b): 
+- [Do Founder-Led Nations & Organizations Outperform the Rest?](https://keithvaz.medium.com/the-founders-dilemma-why-visionary-leaders-are-vital-for-nations-and-corporations-fb381c883484): 
+
+## Coding escapades
+
+- [Linkedin](https://www.linkedin.com/in/keeithvaz/): 
+- [Keith Vaz Resume.pdf](https://drive.google.com/file/d/1nqzer9beumZheL9x6zUXdeSwVQ-dUwGa/view?usp=sharing): drive.google.com
+- [Instagram](https://www.instagram.com/keeithvz/): 
+- [Figma Community](https://www.figma.com/@keithvaz): 
+- [Speaker at Figma Config 2022](https://www.youtube.com/watch?v=NRUVUdAUNQU): 
+- [Keith Vaz on ADPList](https://adplist.org/mentors/keith-vaz): 
+- [X (Twitter)](https://x.com/keeithlv): 
+
