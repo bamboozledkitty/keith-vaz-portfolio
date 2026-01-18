@@ -366,7 +366,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
           </div>
           {/* Image - right side, 100% height, ~48% width like bento.me */}
           {item.image && (
-            <Squircle cornerRadius={12} className="w-[55%] h-full overflow-hidden bg-gray-50 shrink-0">
+            <Squircle cornerRadius={12} className="w-[55%] h-full overflow-hidden bg-gray-50 border border-[#efefef] shrink-0">
               <img
                 src={resolveMediaUrl(item.image)}
                 alt={item.title || ''}
@@ -399,7 +399,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ item, currentView = 'desktop', is
           </div>
           {/* Image - bottom, 55% height to match 2x1's 55% width ratio */}
           {item.image && (
-            <Squircle cornerRadius={12} className="h-[55%] w-full overflow-hidden bg-gray-50 shrink-0">
+            <Squircle cornerRadius={12} className="h-[55%] w-full overflow-hidden bg-gray-50 border border-[#efefef] shrink-0">
               <img
                 src={resolveMediaUrl(item.image)}
                 alt={item.title || ''}
