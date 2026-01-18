@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-01-18T11:00:17.657Z",
+  "lastUpdated": "2026-01-18T11:19:39.832Z",
   "items": [
     {
       "id": "usyl7etn1",
@@ -85,7 +85,7 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 23
+        "order": 29
       }
     },
     {
@@ -508,7 +508,7 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 25
+        "order": 23
       },
       "url": "https://keithvaz.medium.com/the-ai-assistant-dream-we-are-still-far-from-ed94ba0d1e4e",
       "image": ""
@@ -528,52 +528,52 @@
       },
       "mobileLayout": {
         "size": "1x0.5",
-        "order": 26
+        "order": 25
       },
       "url": "https://keithvaz.medium.com/reimagining-governance-the-potential-of-a-kanban-board-system-e64c6b622ffb"
     },
     {
       "id": "iq-6",
       "type": "link",
-      "size": "1x0.5",
+      "size": "2x1",
       "variant": "article",
-      "title": "What if time zones were countries — a thought experiment",
-      "subtitle": "",
+      "title": "What if time zones were countries ",
+      "subtitle": "keithvaz.medium.com",
       "icon": "https://miro.medium.com/v2/resize:fill:304:304/10fd5c419ac61637245384e7099e131627900034828f4f386bdaa47a74eae156",
-      "image": "",
+      "image": "https://miro.medium.com/v2/resize:fit:1200/1*iVtsx7ztIoq40zS5TWpZcQ.jpeg",
       "desktopLayout": {
-        "size": "1x0.5",
+        "size": "2x1",
         "order": 26
       },
       "mobileLayout": {
-        "size": "1x0.5",
-        "order": 27
+        "size": "2x1",
+        "order": 26
       },
       "url": "https://keithvaz.medium.com/what-if-time-zones-were-countries-a-thought-experiment-cdbfcca498c9"
     },
     {
       "id": "iq-7",
       "type": "link",
-      "size": "1x0.5",
+      "size": "1x1",
       "variant": "article",
       "title": "Fair(er) promotions with a transparent, logic-based System",
       "subtitle": "",
       "icon": "https://miro.medium.com/v2/resize:fill:304:304/10fd5c419ac61637245384e7099e131627900034828f4f386bdaa47a74eae156",
       "image": "https://miro.medium.com/v2/resize:fit:1200/1*NABCCNE02kdGdZWUSyJ_Lw.png",
       "desktopLayout": {
-        "size": "1x0.5",
+        "size": "2x1",
         "order": 27
       },
       "mobileLayout": {
-        "size": "1x0.5",
-        "order": 28
+        "size": "1x1",
+        "order": 27
       },
       "url": "https://keithvaz.medium.com/fair-er-promotions-with-a-transparent-logic-based-system-b1b0b1d4570b"
     },
     {
       "id": "iq-8",
       "type": "link",
-      "size": "1x0.5",
+      "size": "1x1",
       "variant": "article",
       "title": "Do Founder-Led Nations & Organizations Outperform the Rest?",
       "subtitle": "",
@@ -584,8 +584,8 @@
         "order": 28
       },
       "mobileLayout": {
-        "size": "1x0.5",
-        "order": 29
+        "size": "1x1",
+        "order": 28
       },
       "url": "https://keithvaz.medium.com/the-founders-dilemma-why-visionary-leaders-are-vital-for-nations-and-corporations-fb381c883484"
     },
