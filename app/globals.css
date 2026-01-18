@@ -156,33 +156,41 @@ body {
 
 @container bento (max-width: 380px) {
   .bento-card-1x1 {
-    width: var(--card-unit-sm);
-    height: var(--card-unit-sm);
+    width: calc(50% - 10px);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    max-width: 180px;
   }
 
   .bento-card-2x1 {
-    width: var(--grid-width-sm);
-    height: var(--card-unit-sm);
+    width: 100%;
+    height: auto;
+    aspect-ratio: 380 / 180;
   }
 
   .bento-card-2x1.bento-card-half-height {
-    width: var(--grid-width-sm);
-    height: 72px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 380 / 80;
   }
 
   .bento-card-1x2 {
-    width: var(--card-unit-sm);
-    height: var(--grid-width-sm);
+    width: calc(50% - 10px);
+    height: auto;
+    aspect-ratio: 180 / 380;
+    max-width: 180px;
   }
 
   .bento-card-2x2 {
-    width: var(--grid-width-sm);
-    height: var(--grid-width-sm);
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
   }
 
   .bento-card-full {
-    width: var(--grid-width-sm);
-    height: 54px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 780 / 60;
   }
 
   .bento-subtitle {
@@ -191,34 +199,13 @@ body {
 }
 
 @container bento (max-width: 320px) {
-  .bento-card-1x1 {
-    width: 140px;
-    height: 140px;
-  }
 
-  .bento-card-2x1 {
-    width: 296px;
-    height: 140px;
-  }
-
-  .bento-card-2x1.bento-card-half-height {
-    width: 296px;
-    height: 64px;
-  }
-
+  /* Inherit fluid behavior, but allow cards to shrink further if needed without breaking layout */
+  .bento-card-1x1,
   .bento-card-1x2 {
-    width: 140px;
-    height: 296px;
-  }
-
-  .bento-card-2x2 {
-    width: 296px;
-    height: 296px;
-  }
-
-  .bento-card-full {
-    width: 296px;
-    height: 48px;
+    width: calc(50% - 10px);
+    max-width: 140px;
+    /* Optional: Keep the small size constraint for very small screens if desired, or remove to be purely fluid. Sticking to fluid for now. */
   }
 }
 

@@ -69,7 +69,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ item, currentView, isAdminR
 
       {/* Actual Content */}
       <div className={cn(
-        "h-full w-full transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+        "absolute inset-0 h-full w-full transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
         isDragging ? "opacity-0" : "opacity-100"
       )}>
         <BentoCard

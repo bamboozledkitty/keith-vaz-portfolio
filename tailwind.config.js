@@ -32,10 +32,11 @@ export default {
         'card-drag': '0 15px 30px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)',
       },
       borderRadius: {
-        'card': '16px',        // Card containers, modals
+        'card': '24px',        // Card containers, modals (was 16px)
         'card-inner': '12px',  // Squircle icons, inner media
-        'button': '8px',       // Buttons, toolbar
-        'input': '6px',        // Form inputs
+        'card-sm': '10px',     // Small cards/elements
+        'button': '4px',       // Buttons, toolbar (was 8px)
+        'input': '4px',        // Form inputs (was 6px)
         'chip': '4px',         // Small UI elements
       },
       animation: {
