@@ -26,6 +26,7 @@ interface ContentData {
     version: number;
     lastUpdated: string;
     items: BentoItemData[];
+    profileImage?: string;
 }
 
 /**
@@ -58,7 +59,8 @@ export async function fetchContentFromGitHub(token: string): Promise<ContentData
 export async function saveContentToGitHub(
     token: string,
     items: BentoItemData[],
-    commitMessage = 'Update portfolio content'
+    commitMessage = 'Update portfolio content',
+    profileImage?: string
 ): Promise<void> {
     // First, get the current file SHA (required for updates)
     const currentFile = await fetch(
@@ -82,6 +84,7 @@ export async function saveContentToGitHub(
         version: 1,
         lastUpdated: new Date().toISOString(),
         items,
+        ...(profileImage && { profileImage }),
     };
 
     // UTF-8 safe base64 encoding

@@ -31,7 +31,7 @@ import { BentoItemData, ItemType, ItemSize, ViewMode, ViewLayout, PortfolioData 
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
 import { cn } from '../lib/utils';
-import { saveContentToGitHub } from '../lib/github';
+import { saveContentToGitHub, uploadMediaToGitHub } from '../lib/github';
 import { logError } from '../lib/logger';
 
 // Lazy load admin-only components to reduce initial bundle size
@@ -39,6 +39,15 @@ const CardEditorPopover = lazy(() => import('./CardEditorPopover'));
 const ProfilePictureCropperModal = lazy(() => import('./ProfilePictureCropperModal'));
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
+
+function dataUrlToFile(dataUrl: string, filename: string): File {
+    const [header, base64] = dataUrl.split(',');
+    const mime = header.match(/:(.*?);/)?.[1] || 'image/jpeg';
+    const binary = atob(base64);
+    const array = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) array[i] = binary.charCodeAt(i);
+    return new File([array], filename, { type: mime });
+}
 
 const getItemLayout = (item: BentoItemData, view: ViewMode): ViewLayout => {
     const layout = view === 'desktop' ? item.desktopLayout : item.mobileLayout;
@@ -92,6 +101,7 @@ export function PortfolioContent({ initialData, isAdmin = false }: PortfolioCont
 
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
     const [activeId, setActiveId] = useState<string | null>(null);
     const [editorState, setEditorState] = useState<EditorState | null>(null);
     const [currentView, setCurrentView] = useState<ViewMode>('desktop');
@@ -100,7 +110,9 @@ export function PortfolioContent({ initialData, isAdmin = false }: PortfolioCont
     const profileInputRef = useRef<HTMLInputElement>(null);
     const [profileImageSrc, setProfileImageSrc] = useState<string | null>(null);
     const [showProfileCropper, setShowProfileCropper] = useState(false);
-    const [croppedProfilePicture, setCroppedProfilePicture] = useState<string | null>(null);
+    const [croppedProfilePicture, setCroppedProfilePicture] = useState<string | null>(
+        initialData?.profileImage || null
+    );
 
     // Auto-detect viewport size for public view (non-admin)
     useEffect(() => {
@@ -264,18 +276,28 @@ export function PortfolioContent({ initialData, isAdmin = false }: PortfolioCont
                         Admin Mode {hasUnsavedChanges ? '- Unsaved Changes' : '- Editing Enabled'}
                     </div>
                     <div className="flex items-center gap-2">
+                        {saveError && (
+                            <span className="text-red-400 text-sm">{saveError}</span>
+                        )}
                         {hasUnsavedChanges && (
                             <Button
                                 onClick={async () => {
                                     if (!token) return;
-                                    if (token.startsWith('test-token-')) {
-                                        alert('Use GitHub account to save changes.');
-                                        return;
-                                    }
                                     setIsSaving(true);
+                                    setSaveError(null);
                                     try {
-                                        await saveContentToGitHub(token, items);
+                                        let profileImagePath: string | undefined;
+                                        if (croppedProfilePicture?.startsWith('data:')) {
+                                            const file = dataUrlToFile(croppedProfilePicture, 'profile-pic.jpg');
+                                            profileImagePath = await uploadMediaToGitHub(token, file, 'profile');
+                                            setCroppedProfilePicture(profileImagePath);
+                                        } else if (croppedProfilePicture) {
+                                            profileImagePath = croppedProfilePicture;
+                                        }
+                                        await saveContentToGitHub(token, items, 'Update portfolio content', profileImagePath);
                                         setHasUnsavedChanges(false);
+                                    } catch (error) {
+                                        setSaveError(error instanceof Error ? error.message : 'Save failed');
                                     } finally {
                                         setIsSaving(false);
                                     }

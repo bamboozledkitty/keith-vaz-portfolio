@@ -177,7 +177,7 @@ const AssetSelectorModal: React.FC<AssetSelectorModalProps> = ({ isOpen, onClose
                         className="w-full h-full object-cover"
                         muted
                         playsInline
-                        onMouseEnter={e => (e.target as HTMLVideoElement).play()}
+                        onMouseEnter={e => (e.target as HTMLVideoElement).play().catch(() => {})}
                         onMouseLeave={e => {
                           const video = e.target as HTMLVideoElement;
                           video.pause();

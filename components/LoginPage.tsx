@@ -1,74 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Github, AlertCircle } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { getGitHubOAuthUrl, verifyState, fetchGitHubUser, saveAuthState, requestAccessToken } from '../lib/auth';
-import { ADMIN_USERNAME } from '../config/auth';
-import { useAuth } from '../contexts/AuthContext';
+import { useSearchParams } from 'next/navigation';
+import { getGitHubOAuthUrl } from '../lib/auth';
 import { Button } from './ui/button';
 import { Squircle } from './ui/squircle';
-import { logError } from '../lib/logger';
 
 const LoginPage: React.FC = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const { setAuth } = useAuth();
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-
-  // Handle OAuth callback
-  useEffect(() => {
-    const handleCallback = async () => {
-      // Try to get params from searchParams (HashRouter) or window.location.search
-      const code = searchParams.get('code') || new URLSearchParams(window.location.search).get('code');
-      const state = searchParams.get('state') || new URLSearchParams(window.location.search).get('state');
-      const errorParam = searchParams.get('error') || new URLSearchParams(window.location.search).get('error');
-
-      if (errorParam) {
-        setError(`GitHub authorization failed: ${errorParam}`);
-        return;
-      }
-
-      if (!code || !state) {
-        return;
-      }
-
-      if (!verifyState(state)) {
-        setError('Invalid state parameter. Security verification failed.');
-        return;
-      }
-
-      setIsLoading(true);
-
-      try {
-        // Exchange code for access token via Cloudflare Worker
-        const token = await requestAccessToken(code, state);
-
-        // Fetch user info to verify admin status
-        const user = await fetchGitHubUser(token);
-
-        if (user.login !== ADMIN_USERNAME) {
-          setError(`User ${user.login} is not authorized as admin.`);
-          return;
-        }
-
-        // Save auth state and redirect to admin
-        saveAuthState(token, user);
-        setAuth(token, user);
-
-        // Clear URL params and navigate
-        window.history.replaceState({}, '', window.location.pathname);
-        router.push('/admin');
-      } catch (err) {
-        logError('Auth error:', err);
-        setError(err instanceof Error ? err.message : 'Authentication failed');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    handleCallback();
-  }, [setAuth, router, searchParams]);
+  // Show error from callback redirect query params
+  const errorParam = searchParams.get('error');
+  const error = errorParam
+    ? errorParam === 'invalid_state' ? 'Security verification failed. Please try again.'
+    : errorParam === 'not_authorized' ? 'You are not authorized as admin.'
+    : errorParam === 'auth_failed' ? 'Authentication failed. Please try again.'
+    : `Authorization error: ${errorParam}`
+    : null;
 
   const handleLogin = async () => {
     setIsLoading(true);
@@ -76,21 +24,6 @@ const LoginPage: React.FC = () => {
     const redirectUri = new URL('/admin/callback/', window.location.origin).toString();
     const oauthUrl = getGitHubOAuthUrl(redirectUri);
     window.location.href = oauthUrl;
-  };
-
-  const handleTestAuth = () => {
-    // For testing purposes, allow setting a test token
-    const testToken = 'test-token-' + Math.random().toString(36).substring(7);
-    const testUser = {
-      login: ADMIN_USERNAME,
-      id: 12345,
-      avatar_url: 'https://avatars.githubusercontent.com/u/12345?v=4',
-      name: 'Test Admin',
-    };
-
-    saveAuthState(testToken, testUser);
-    setAuth(testToken, testUser);
-    router.push('/admin');
   };
 
   return (
@@ -124,15 +57,6 @@ const LoginPage: React.FC = () => {
               {isLoading ? 'Redirecting to GitHub...' : 'Login with GitHub'}
             </Button>
 
-            {process.env.NODE_ENV === 'development' && (
-              <Button
-                onClick={handleTestAuth}
-                variant="secondary"
-                className="w-full border border-gray-200 text-gray-700 font-semibold py-3 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Use Test Account (Dev Only)
-              </Button>
-            )}
           </div>
 
           <Squircle cornerRadius={8} className="mt-8 p-4 bg-blue-50 border border-blue-200">

@@ -60,4 +60,5 @@ export interface DragItem {
 
 export interface PortfolioData {
   items: BentoItemData[];
+  profileImage?: string;
 }

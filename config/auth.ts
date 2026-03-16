@@ -11,5 +11,5 @@ if (!GITHUB_CLIENT_ID && typeof window !== 'undefined') {
 }
 
 // Scopes: user:email for auth, repo for content writing
-export const GITHUB_OAUTH_SCOPES = 'user:email repo';
+export const GITHUB_OAUTH_SCOPES = 'user:email public_repo';
 

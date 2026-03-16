@@ -6,15 +6,15 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 
 export default function AdminPage() {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { isAuthenticated, isAdmin, isLoading } = useAuth();
     const router = useRouter();
     const [portfolioData, setPortfolioData] = useState(null);
 
     useEffect(() => {
-        if (!isLoading && !isAuthenticated) {
+        if (!isLoading && (!isAuthenticated || !isAdmin)) {
             router.push('/admin/login');
         }
-    }, [isAuthenticated, isLoading, router]);
+    }, [isAuthenticated, isAdmin, isLoading, router]);
 
     useEffect(() => {
         // Load portfolio data client-side for admin to ensure freshness
@@ -32,7 +32,7 @@ export default function AdminPage() {
         );
     }
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !isAdmin) {
         return null;
     }
 

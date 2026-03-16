@@ -3,7 +3,9 @@
 import { useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { requestAccessToken, fetchGitHubUser } from '@/lib/auth';
+import { requestAccessToken, fetchGitHubUser, verifyState } from '@/lib/auth';
+import { ADMIN_USERNAME } from '@/config/auth';
+import { logError } from '@/lib/logger';
 
 import { Suspense } from 'react';
 
@@ -27,11 +29,23 @@ function CallbackContent() {
 
     async function handleOAuthCallback(code: string, state: string) {
         try {
+            // Verify CSRF state
+            if (!verifyState(state)) {
+                router.push('/admin/login?error=invalid_state');
+                return;
+            }
+
             // Exchange code for token via backend worker
             const token = await requestAccessToken(code, state);
 
             // Fetch user info
             const user = await fetchGitHubUser(token);
+
+            // Verify admin
+            if (user.login !== ADMIN_USERNAME) {
+                router.push('/admin/login?error=not_authorized');
+                return;
+            }
 
             // Store auth state
             setAuth(token, user);
@@ -39,7 +53,7 @@ function CallbackContent() {
             // Redirect to admin dashboard
             router.push('/admin');
         } catch (error) {
-            console.error('OAuth callback error:', error);
+            logError('OAuth callback error:', error);
             router.push('/admin/login?error=auth_failed');
         }
     }
