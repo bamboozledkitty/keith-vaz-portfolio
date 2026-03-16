@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getAuthState, clearAuthState, saveAuthState, GitHubUser, fetchGitHubUser } from '../lib/auth';
+import { ADMIN_USERNAME } from '../config/auth';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -13,7 +14,17 @@ interface AuthContextType {
   isLoading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const defaultAuthContext: AuthContextType = {
+  isAuthenticated: false,
+  isAdmin: false,
+  user: null,
+  token: null,
+  setAuth: () => {},
+  logout: () => {},
+  isLoading: true,
+};
+
+const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [authState, setAuthState] = useState(getAuthState());
@@ -23,17 +34,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const verifyToken = async () => {
       const state = getAuthState();
-      if (state.token && state.user) {
-        try {
-          // Verify token is still valid
-          await fetchGitHubUser(state.token);
-        } catch (error) {
-          // Token is invalid, clear auth state
-          clearAuthState();
+      try {
+        if (state.token && state.user) {
+          const verifiedUser = await fetchGitHubUser(state.token);
+          // Verify the token actually belongs to the admin
+          if (verifiedUser.login !== ADMIN_USERNAME) {
+            clearAuthState();
+            setAuthState(getAuthState());
+            return;
+          }
+          // Refresh stored user with verified data
+          saveAuthState(state.token, verifiedUser);
           setAuthState(getAuthState());
         }
+      } catch (error) {
+        // Token is invalid, clear auth state
+        clearAuthState();
+        setAuthState(getAuthState());
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     verifyToken();
@@ -66,11 +86,5 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
-  return context;
-};
+export const useAuth = () => useContext(AuthContext);
 

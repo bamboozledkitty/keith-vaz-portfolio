@@ -253,7 +253,7 @@ const CardEditorPopover: React.FC<CardEditorPopoverProps> = ({ state, onSave, on
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onCancel, title, subtitle, url, icon, image, caption]);
+  }, [onCancel, title, subtitle, url, icon, image, caption, mediaType, textAlign, textVAlign, textSize]);
 
   // Click outside to close
   useEffect(() => {
