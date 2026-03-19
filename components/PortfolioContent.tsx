@@ -371,7 +371,7 @@ export function PortfolioContent({ initialData, isAdmin = false }: PortfolioCont
                         <div className="flex flex-col gap-2 text-gray-500 text-base font-normal mb-8">
                             <div className="flex items-center gap-3">
                                 <span className="text-base">👨🏽‍💻</span>
-                                <span>Design Systems Designer</span>
+                                <span>Design Engineer</span>
                             </div>
                             <div className="flex items-center gap-3">
                                 <span className="text-base">📍</span>
